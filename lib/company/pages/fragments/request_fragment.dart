@@ -1,6 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:geocoder/geocoder.dart';
+import 'package:geocoder/model.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:truk_fleet/company/controller/request_controller.dart';
 import 'package:truk_fleet/company/pages/send_quote.dart';
@@ -33,6 +36,8 @@ class _RequestFragmentState extends State<RequestFragment> {
   @override
   void initState() {
     //Provider.of<MyRequest>(context, listen: false).getRequestList();
+    final pRequest = Provider.of<MyRequest>(context,listen: false);
+    pRequest.getQuoteList();
     super.initState();
   }
 
@@ -91,13 +96,26 @@ class _RequestFragmentState extends State<RequestFragment> {
     setState(() {});
   }
 
+  Future<String> getAdress(LatLng lateLng) async{
+    final coordinates = Coordinates(lateLng.latitude, lateLng.longitude);
+    print('Before time ${DateTime.now()}');
+    var address =  await Geocoder.local.findAddressesFromCoordinates(coordinates);
+    print('After time ${DateTime.now()}');
+    String street = address.first.featureName;
+    String area = address.first.subLocality;
+    String pincode = address.first.postalCode;
+    String city = address.first.subAdminArea;
+    return '$street, $area, $city, $pincode';
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final pRequest = Provider.of<MyRequest>(context);
+
     locale = AppLocalizations.of(context).locale;
     myList = pRequest.requests;
-    print(myList);
+    // print(myList);
     quotesList = pRequest.quotes;
     return Container(
       height: size.height,
@@ -117,13 +135,14 @@ class _RequestFragmentState extends State<RequestFragment> {
                   children: [
                     Expanded(
                       child: TextFormField(
-                        onChanged: (string) {
+                        onChanged: (string) async{
                           if (string.trim().length <= 0 || string.isEmpty) {
                             setState(() {
                               isFilter = false;
                               filteredList = [];
                             });
                           } else {
+
                             setState(() {
                               filteredList = pRequest.requests.where((element) {
                                 if (element['request']
@@ -137,19 +156,32 @@ class _RequestFragmentState extends State<RequestFragment> {
                                   return true;
                                 }
 
-                                if (element['user']
-                                    .name
-                                    .toLowerCase()
-                                    .contains(string.toLowerCase()))
-                                  return true;
-                                if (element['source']
-                                    .toLowerCase()
-                                    .contains(string.toLowerCase()))
-                                  return true;
-                                if (element['destination']
-                                    .toLowerCase()
-                                    .contains(string.toLowerCase()))
-                                  return true;
+                                // if (element['user']
+                                //     .name
+                                //     .toLowerCase()
+                                //     .contains(string.toLowerCase()))
+                                //   return true;
+                                RequestModel requestModel = element['request'];
+                                // String address = await getAdress(requestModel.source);
+
+
+                                Future.delayed(Duration(milliseconds: 100),() async{
+                                  String adress = await getAdress(requestModel.source);
+                                  if(adress.toLowerCase().contains(string.toLowerCase()))
+                                    return true;
+                                });
+
+                                getAdress(requestModel.source).then((value) {
+                                  print('Your condition is ${value.toLowerCase().contains(string.toLowerCase())}');
+
+                                  print('your value is ${value.toLowerCase()}');
+                                  if(value.toLowerCase().contains(string.toLowerCase()))
+                                    return true;
+                                });
+                                getAdress(requestModel.destination).then((value) {
+                                  if(value.toLowerCase().contains(string.toLowerCase()))
+                                    return true;
+                                });
                                 return false;
                               }).toList();
                               isFilter = true;
@@ -165,90 +197,90 @@ class _RequestFragmentState extends State<RequestFragment> {
                         ),
                       ),
                     ),
-                    // IconButton(
-                    //     icon: Icon(Icons.filter_alt_rounded),
-                    //     onPressed: () {
-                    //       Widget dialog = AlertDialog(
-                    //         backgroundColor: Colors.white,
-                    //         elevation: 8,
-                    //         title: Text(
-                    //           "Filter Requests",
-                    //           style: TextStyle(
-                    //             fontFamily: 'Maven',
-                    //             fontSize: 16,
-                    //             fontWeight: FontWeight.bold,
-                    //           ),
-                    //         ),
-                    //         content: Column(
-                    //           mainAxisSize: MainAxisSize.min,
-                    //           children: <Widget>[
-                    //             RadioListTile(
-                    //               activeColor: Colors.green,
-                    //               value: 'all',
-                    //               title: Text("All"),
-                    //               groupValue: _radioValue,
-                    //               onChanged: (a) {
-                    //                 _handleRadioValueChange(a);
-                    //                 Navigator.pop(context);
-                    //               },
-                    //             ),
-                    //             RadioListTile(
-                    //               activeColor: Colors.green,
-                    //               value: LocaleKey.pending,
-                    //               title: Text("Pending"),
-                    //               groupValue: _radioValue,
-                    //               onChanged: (a) {
-                    //                 _handleRadioValueChange(a);
-                    //                 Navigator.pop(context);
-                    //               },
-                    //             ),
-                    //             RadioListTile(
-                    //               activeColor: Colors.green,
-                    //               value: LocaleKey.accepted,
-                    //               title: Text("Accepted"),
-                    //               groupValue: _radioValue,
-                    //               onChanged: (a) {
-                    //                 _handleRadioValueChange(a);
-                    //                 Navigator.pop(context);
-                    //               },
-                    //             ),
-                    //             RadioListTile(
-                    //               activeColor: Colors.green,
-                    //               value: LocaleKey.rejected,
-                    //               title: Text("Rejected"),
-                    //               groupValue: _radioValue,
-                    //               onChanged: (a) {
-                    //                 _handleRadioValueChange(a);
-                    //                 Navigator.pop(context);
-                    //               },
-                    //             ),
-                    //             RadioListTile(
-                    //               activeColor: Colors.green,
-                    //               value: LocaleKey.cancelled,
-                    //               title: Text("Cancelled"),
-                    //               groupValue: _radioValue,
-                    //               onChanged: (a) {
-                    //                 _handleRadioValueChange(a);
-                    //                 Navigator.pop(context);
-                    //               },
-                    //             ),
-                    //           ],
-                    //         ),
-                    //       );
-                    //       showGeneralDialog(
-                    //           context: context,
-                    //           pageBuilder: (context, anim1, anim2) => dialog,
-                    //           barrierDismissible: true,
-                    //           barrierLabel: '',
-                    //           transitionBuilder: (context, anim1, anim2, child) {
-                    //             return Transform.scale(
-                    //               scale: anim1.value,
-                    //               origin: Offset(MediaQuery.of(context).size.width * 0.5, -200),
-                    //               child: child,
-                    //             );
-                    //           },
-                    //           transitionDuration: Duration(milliseconds: 400));
-                    //     }),
+                    IconButton(
+                        icon: Icon(Icons.filter_alt_rounded),
+                        onPressed: () {
+                          Widget dialog = AlertDialog(
+                            backgroundColor: Colors.white,
+                            elevation: 8,
+                            title: Text(
+                              "Filter Requests",
+                              style: TextStyle(
+                                fontFamily: 'Maven',
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            content: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                RadioListTile(
+                                  activeColor: Colors.green,
+                                  value: 'all',
+                                  title: Text("All"),
+                                  groupValue: _radioValue,
+                                  onChanged: (a) {
+                                    _handleRadioValueChange(a);
+                                    Navigator.pop(context);
+                                  },
+                                ),
+                                RadioListTile(
+                                  activeColor: Colors.green,
+                                  value: LocaleKey.pending,
+                                  title: Text("Pending"),
+                                  groupValue: _radioValue,
+                                  onChanged: (a) {
+                                    _handleRadioValueChange(a);
+                                    Navigator.pop(context);
+                                  },
+                                ),
+                                RadioListTile(
+                                  activeColor: Colors.green,
+                                  value: LocaleKey.accepted,
+                                  title: Text("Accepted"),
+                                  groupValue: _radioValue,
+                                  onChanged: (a) {
+                                    _handleRadioValueChange(a);
+                                    Navigator.pop(context);
+                                  },
+                                ),
+                                RadioListTile(
+                                  activeColor: Colors.green,
+                                  value: LocaleKey.rejected,
+                                  title: Text("Rejected"),
+                                  groupValue: _radioValue,
+                                  onChanged: (a) {
+                                    _handleRadioValueChange(a);
+                                    Navigator.pop(context);
+                                  },
+                                ),
+                                RadioListTile(
+                                  activeColor: Colors.green,
+                                  value: LocaleKey.cancelled,
+                                  title: Text("Cancelled"),
+                                  groupValue: _radioValue,
+                                  onChanged: (a) {
+                                    _handleRadioValueChange(a);
+                                    Navigator.pop(context);
+                                  },
+                                ),
+                              ],
+                            ),
+                          );
+                          showGeneralDialog(
+                              context: context,
+                              pageBuilder: (context, anim1, anim2) => dialog,
+                              barrierDismissible: true,
+                              barrierLabel: '',
+                              transitionBuilder: (context, anim1, anim2, child) {
+                                return Transform.scale(
+                                  scale: anim1.value,
+                                  origin: Offset(MediaQuery.of(context).size.width * 0.5, -200),
+                                  child: child,
+                                );
+                              },
+                              transitionDuration: Duration(milliseconds: 400));
+                        }),
                   ],
                 ),
                 SizedBox(
@@ -265,11 +297,15 @@ class _RequestFragmentState extends State<RequestFragment> {
                       Map<String, dynamic> data = isFilter
                           ? filteredList[index]
                           : pRequest.requests[index];
+                      print('Your data is ${data}');
                       UserModel userModel = data['user'];
                       RequestModel requestModel = data['request'];
                       QuoteModel quoteModel;
 
+                      print('element is ${pRequest.quotes}');
+
                       for (QuoteModel element in pRequest.quotes) {
+                        print('QuoteModel is $element');
                         if (element.bookingId == requestModel.bookingId) {
                           quoteModel = element;
                           break;
@@ -288,7 +324,7 @@ class _RequestFragmentState extends State<RequestFragment> {
   Widget buildRequestCard(
       RequestModel requestModel, UserModel userModel, QuoteModel quoteModel) {
     String status = RequestStatus.pending;
-
+print('Quet function ${quoteModel}');
     String paymentStatus = 'pending';
     if (quoteModel != null) {
       paymentStatus = quoteModel.paymentStatus;

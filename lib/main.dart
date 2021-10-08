@@ -125,11 +125,6 @@ class MyApp extends StatelessWidget {
                 locale: snapshot.locale,
                 theme: ThemeData(
                   appBarTheme: AppBarTheme(
-                    textTheme: TextTheme(
-                        headline6: TextStyle(
-                            color: Colors.black,
-                            fontSize: 20,
-                            fontWeight: FontWeight.w600)),
                     iconTheme: IconThemeData(color: Colors.black),
                     color: Colors.white,
                     elevation: 8.0,

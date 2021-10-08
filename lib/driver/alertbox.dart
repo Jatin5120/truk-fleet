@@ -8,26 +8,26 @@ import 'package:truk_fleet/locale/locale_keys.dart';
 import 'package:truk_fleet/models/quote_model.dart';
 import 'package:truk_fleet/models/shipment_model.dart';
 import 'package:truk_fleet/utils/constants.dart';
+
 class AB extends StatefulWidget {
-  ShipmentModel model;
-  AB({
-    @required this.model,
-});
+  final ShipmentModel model;
+  const AB({@required this.model});
   @override
   _ABState createState() => _ABState();
 }
 
 class _ABState extends State<AB> {
   bool isLoading = false;
-  TextEditingController amount =new TextEditingController();
-  var advance=0.0;
+  TextEditingController amount = new TextEditingController();
+  var advance = 0.0;
   Locale locale;
   @override
   void initState() {
-    // TODO: implement initState
     isLoading = true;
-    Future<QuerySnapshot> re =
-    FirebaseFirestore.instance.collection("Quote").where('bookingId', isEqualTo: widget.model.bookingId).get();
+    Future<QuerySnapshot> re = FirebaseFirestore.instance
+        .collection("Quote")
+        .where('bookingId', isEqualTo: widget.model.bookingId)
+        .get();
     re.then((value) {
       print(value.docs.length);
       if (value.docs.length > 0) {
@@ -35,26 +35,27 @@ class _ABState extends State<AB> {
           isLoading = false;
         });
         QuoteModel quoteModel = QuoteModel.fromSnapshot(value.docs[0]);
-        if (quoteModel.advance > 0.0 && widget.model.paymentStatus == PaymentType.cod) {
+        if (quoteModel.advance > 0.0 &&
+            widget.model.paymentStatus == PaymentType.cod) {
           setState(() {
-            advance=quoteModel.advance;
+            advance = quoteModel.advance;
           });
         }
       }
     });
     super.initState();
-
   }
+
   @override
   Widget build(BuildContext context) {
     locale = AppLocalizations.of(context).locale;
     return AlertDialog(
       content: Container(
-        height: MediaQuery.of(context).size.height/4,
+        height: MediaQuery.of(context).size.height / 4,
         child: Column(
           children: [
             Container(
-              width: MediaQuery.of(context).size.width/2,
+              width: MediaQuery.of(context).size.width / 2,
               child: TextField(
                 controller: amount,
                 decoration: InputDecoration(
@@ -63,7 +64,9 @@ class _ABState extends State<AB> {
                 keyboardType: TextInputType.number,
               ),
             ),
-            SizedBox(height: 20.0,),
+            SizedBox(
+              height: 20.0,
+            ),
             Padding(
               padding: const EdgeInsets.only(left: 8, right: 16),
               child: Row(
@@ -73,8 +76,11 @@ class _ABState extends State<AB> {
                       text: TextSpan(
                         children: [
                           TextSpan(
-                            text: "*** Amount should be between $advance to ${widget.model.price}",
-                            style: TextStyle(color:Colors.red, decoration: TextDecoration.none),
+                            text:
+                                "*** Amount should be between $advance to ${widget.model.price}",
+                            style: TextStyle(
+                                color: Colors.red,
+                                decoration: TextDecoration.none),
                           ),
                         ],
                       ),
@@ -83,7 +89,9 @@ class _ABState extends State<AB> {
                 ],
               ),
             ),
-            SizedBox(height: 10.0,),
+            SizedBox(
+              height: 10.0,
+            ),
             Padding(
               padding: const EdgeInsets.only(left: 8, right: 16),
               child: Row(
@@ -93,8 +101,11 @@ class _ABState extends State<AB> {
                       text: TextSpan(
                         children: [
                           TextSpan(
-                            text: "${AppLocalizations.getLocalizationValue(locale, LocaleKey.paymentConfirmation)}",
-                            style: TextStyle(color: primaryColor, decoration: TextDecoration.none),
+                            text:
+                                "${AppLocalizations.getLocalizationValue(locale, LocaleKey.paymentConfirmation)}",
+                            style: TextStyle(
+                                color: primaryColor,
+                                decoration: TextDecoration.none),
                           ),
                         ],
                       ),
@@ -103,12 +114,22 @@ class _ABState extends State<AB> {
                 ],
               ),
             ),
-            SizedBox(height: 20.0,),
-            RaisedButton(onPressed: (){
-              widget.model.status=='pending'?_pay(widget.model,advance):Fluttertoast.showToast(msg: "Trip Already Started");
-            },
-              color: widget.model.status=='pending'?primaryColor:Colors.grey,
-              child: Text(AppLocalizations.getLocalizationValue(locale, LocaleKey.done)),
+            SizedBox(
+              height: 20.0,
+            ),
+            ElevatedButton(
+              onPressed: () {
+                widget.model.status == 'pending'
+                    ? _pay(widget.model, advance)
+                    : Fluttertoast.showToast(msg: "Trip Already Started");
+              },
+              style: ElevatedButton.styleFrom(
+                primary: widget.model.status == 'pending'
+                    ? primaryColor
+                    : Colors.grey,
+              ),
+              child: Text(AppLocalizations.getLocalizationValue(
+                  locale, LocaleKey.done)),
             )
           ],
         ),
@@ -120,33 +141,34 @@ class _ABState extends State<AB> {
     showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          content: Container(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Text("Processing...."),
-                CircularProgressIndicator()
-              ],
-            ),
-          ),
-        )
-    );
-    if(amount.text.isEmpty){
+              content: Container(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Text("Processing...."),
+                    CircularProgressIndicator()
+                  ],
+                ),
+              ),
+            ));
+    if (amount.text.isEmpty) {
       Fluttertoast.showToast(msg: "Amount not received");
       Navigator.pop(context);
       Navigator.pop(context);
     }
-    if(double.parse(amount.text)>=advance&&int.parse(amount.text)<=int.parse(model.price)){
-      FirebaseFirestore.instance.collection(FirebaseHelper.shipment).doc(model.id).get().then((value){
-        value.reference.update({
-          'amountPaid':amount.text
-        });
+    if (double.parse(amount.text) >= advance &&
+        int.parse(amount.text) <= int.parse(model.price)) {
+      FirebaseFirestore.instance
+          .collection(FirebaseHelper.shipment)
+          .doc(model.id)
+          .get()
+          .then((value) {
+        value.reference.update({'amountPaid': amount.text});
       });
       Fluttertoast.showToast(msg: "Amount received : ${amount.text}");
       Navigator.pop(context);
       Navigator.pop(context);
-    }
-    else{
+    } else {
       Fluttertoast.showToast(msg: "Please Enter Valid Amount received amount");
       Navigator.pop(context);
     }

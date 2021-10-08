@@ -23,7 +23,7 @@ class _StatsScreenState extends State<StatsScreen> {
   int completedShipment = 0;
   int pendingShipment = 0;
   int transitShipment = 0;
-  int pendingQuotes =0;
+  int pendingQuotes = 0;
   Locale locale;
   @override
   Widget build(BuildContext context) {
@@ -37,7 +37,7 @@ class _StatsScreenState extends State<StatsScreen> {
     totalShipment = 0;
     completedShipment = 0;
     pendingShipment = 0;
-    pendingQuotes=0;
+    pendingQuotes = 0;
     transitShipment = 0;
     quotes = pQuotes.quotes.length;
     totalShipment = pShips.shipments.length;
@@ -65,17 +65,49 @@ class _StatsScreenState extends State<StatsScreen> {
     }
 
     gridList = [
-      {'title': 'Total Quotes Made', 'count': '${pQuotes.quotes.length}', 'color': Colors.blue},
-      {'title': 'Quotes Rejected', 'count': '$rejectedQuotes', 'color': Colors.red},
-      {'title': 'Quotes Accepted', 'count': '$acceptedQuotes', 'color': Colors.green.shade600},
-      {'title': 'Quotes Pending', 'count': '$pendingQuotes', 'color': Colors.yellow.shade900}
+      {
+        'title': 'Total Quotes Made',
+        'count': '${pQuotes.quotes.length}',
+        'color': Colors.blue
+      },
+      {
+        'title': 'Quotes Rejected',
+        'count': '$rejectedQuotes',
+        'color': Colors.red
+      },
+      {
+        'title': 'Quotes Accepted',
+        'count': '$acceptedQuotes',
+        'color': Colors.green.shade600
+      },
+      {
+        'title': 'Quotes Pending',
+        'count': '$pendingQuotes',
+        'color': Colors.yellow.shade900
+      }
     ];
 
     shipmentGridList = [
-      {'title': 'Total Shipments', 'count': '$totalShipment', 'color': Colors.blue},
-      {'title': 'In Transit Shipments', 'count': '$transitShipment', 'color': Colors.yellow.shade900},
-      {'title': 'Pending Shipments', 'count': '$pendingShipment', 'color': Colors.purple.shade600},
-      {'title': 'Completed Shipment', 'count': '$completedShipment', 'color': Colors.green.shade600},
+      {
+        'title': 'Total Shipments',
+        'count': '$totalShipment',
+        'color': Colors.blue
+      },
+      {
+        'title': 'In Transit Shipments',
+        'count': '$transitShipment',
+        'color': Colors.yellow.shade900
+      },
+      {
+        'title': 'Pending Shipments',
+        'count': '$pendingShipment',
+        'color': Colors.purple.shade600
+      },
+      {
+        'title': 'Completed Shipment',
+        'count': '$completedShipment',
+        'color': Colors.green.shade600
+      },
     ];
     myList = [
       {"title": "Quote Stats", "list": gridList},
@@ -85,9 +117,12 @@ class _StatsScreenState extends State<StatsScreen> {
       width: size.width,
       height: size.height,
       padding: const EdgeInsets.only(left: 16, right: 16),
-      child: ListView.builder(
+      child: ListView.separated(
           itemCount: myList.length,
           shrinkWrap: true,
+          separatorBuilder: (context, index) => Divider(
+                thickness: 1.5,
+              ),
           itemBuilder: (context, index) {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -102,11 +137,18 @@ class _StatsScreenState extends State<StatsScreen> {
                 GridView.builder(
                   shrinkWrap: true,
                   physics: BouncingScrollPhysics(),
-                  itemCount: index == 0 ? gridList.length : shipmentGridList.length,
+                  itemCount:
+                      index == 0 ? gridList.length : shipmentGridList.length,
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2, crossAxisSpacing: 5, mainAxisSpacing: 5, childAspectRatio: 1.5),
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 10,
+                    mainAxisSpacing: 10,
+                    childAspectRatio: 1.5,
+                  ),
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 5).copyWith(bottom: 15),
                   itemBuilder: (context, i) {
-                    List<Map<String, dynamic>> d = index == 0 ? gridList : shipmentGridList;
+                    List<Map<String, dynamic>> d = myList[index]["list"];
                     Color _color = d[i]['color'];
                     String _title = d[i]['title'];
                     String _count = d[i]['count'];
@@ -126,12 +168,14 @@ class _StatsScreenState extends State<StatsScreen> {
                               child: Text(
                                 _title,
                                 textAlign: TextAlign.center,
-                                style: TextStyle(color: Colors.white, fontSize: 18),
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 18),
                               ),
                             ),
                             Text(
                               _count,
-                              style: TextStyle(color: Colors.white, fontSize: 28),
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 28),
                             ),
                           ],
                         ),
@@ -139,9 +183,6 @@ class _StatsScreenState extends State<StatsScreen> {
                     );
                   },
                 ),
-                Divider(
-                  thickness: 1.5,
-                )
               ],
             );
           }),

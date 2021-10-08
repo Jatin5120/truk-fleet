@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -28,7 +26,6 @@ class _NotificationScreenState extends State<NotificationScreen> {
   SharedPref pref = SharedPref();
   String userType = LoginType.driver;
   Locale locale;
-  StreamSubscription s;
   @override
   void initState() {
     super.initState();
@@ -61,15 +58,18 @@ class _NotificationScreenState extends State<NotificationScreen> {
               Expanded(
                 flex: 0,
                 child: InkWell(
-                  onTap: (){
-                    if(notification.toLowerCase().contains('started')){
-                      Navigator.of(context).push(CupertinoPageRoute(builder: (context) => CompanyHomeFragment()));
+                  onTap: () {
+                    if (notification.toLowerCase().contains('started')) {
+                      Navigator.of(context).push(CupertinoPageRoute(
+                          builder: (context) => CompanyHomeFragment()));
                     }
-                    if(notification.toLowerCase().contains('completed')){
-                      Navigator.of(context).push(CupertinoPageRoute(builder: (context) => CompanyHomeFragment()));
+                    if (notification.toLowerCase().contains('completed')) {
+                      Navigator.of(context).push(CupertinoPageRoute(
+                          builder: (context) => CompanyHomeFragment()));
                     }
-                    if(notification.toLowerCase().contains('accepted')){
-                      Navigator.of(context).push(CupertinoPageRoute(builder: (context) => CompanyHome()));
+                    if (notification.toLowerCase().contains('accepted')) {
+                      Navigator.of(context).push(CupertinoPageRoute(
+                          builder: (context) => CompanyHome()));
                     }
                   },
                   child: Container(
@@ -77,7 +77,10 @@ class _NotificationScreenState extends State<NotificationScreen> {
                     width: width,
                     child: Text(
                       '$notification',
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400, color: Colors.white),
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w400,
+                          color: Colors.white),
                       overflow: TextOverflow.visible,
                     ),
                   ),
@@ -100,7 +103,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text(AppLocalizations.getLocalizationValue(locale, LocaleKey.notification)),
+        title: Text(AppLocalizations.getLocalizationValue(
+            locale, LocaleKey.notification)),
       ),
       body: Container(
         height: size.height,
@@ -122,12 +126,14 @@ class _NotificationScreenState extends State<NotificationScreen> {
             }
             if (snapshot.hasError || !snapshot.hasData) {
               return Center(
-                child: Text(AppLocalizations.getLocalizationValue(locale, LocaleKey.noData)),
+                child: Text(AppLocalizations.getLocalizationValue(
+                    locale, LocaleKey.noData)),
               );
             }
             List<NotificationModel> n = [];
             for (QueryDocumentSnapshot s in snapshot.data.docs) {
-              NotificationModel notificationModel = NotificationModel.fromSnap(s);
+              NotificationModel notificationModel =
+                  NotificationModel.fromSnap(s);
               if (userType == LoginType.company) {
                 if (notificationModel.isVendor) {
                   n.add(NotificationModel.fromSnap(s));
@@ -140,12 +146,14 @@ class _NotificationScreenState extends State<NotificationScreen> {
             }
             if (n.length <= 0) {
               return NoDataPage(
-                text: AppLocalizations.getLocalizationValue(locale, LocaleKey.noNotification),
+                text: AppLocalizations.getLocalizationValue(
+                    locale, LocaleKey.noNotification),
               );
             }
             if (snapshot.data.size <= 0) {
               return NoDataPage(
-                text: AppLocalizations.getLocalizationValue(locale, LocaleKey.noNotification),
+                text: AppLocalizations.getLocalizationValue(
+                    locale, LocaleKey.noNotification),
               );
             }
 
@@ -154,7 +162,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
             return ListView.builder(
               itemCount: count,
               itemBuilder: (context, index) {
-                NotificationModel notificationModel = NotificationModel.fromSnap(snapshot.data.docs[index]);
+                NotificationModel notificationModel =
+                    NotificationModel.fromSnap(snapshot.data.docs[index]);
                 if (userType == LoginType.company) {
                   if (notificationModel.isVendor) {
                     return Column(

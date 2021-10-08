@@ -1,6 +1,4 @@
 import 'dart:io';
-
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:focused_menu/focused_menu.dart';
@@ -11,7 +9,6 @@ import 'package:photo_view/photo_view.dart';
 import 'package:truk_fleet/company/controller/fleet_document_controller.dart';
 import 'package:truk_fleet/locale/app_localization.dart';
 import 'package:truk_fleet/locale/locale_keys.dart';
-import 'package:truk_fleet/utils/CustomImageChooser.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:truk_fleet/utils/constants.dart';
 import 'package:url_launcher/url_launcher.dart';

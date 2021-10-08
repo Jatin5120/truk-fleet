@@ -1,8 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:truk_fleet/driver/models/driver_model.dart';
-import 'package:truk_fleet/driver/pages/driver_homepage.dart';
 import 'package:truk_fleet/screens/fleetSelection_screen.dart';
 import 'package:truk_fleet/utils/constants.dart';
 import 'package:truk_fleet/utils/no_data_page.dart';

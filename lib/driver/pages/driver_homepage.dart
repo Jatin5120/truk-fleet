@@ -118,7 +118,7 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
               content:
                   const Text('Please make sure you enable GPS and try again'),
               actions: <Widget>[
-                FlatButton(
+                ElevatedButton(
                   child: Text('Ok'),
                   onPressed: () {
                     final intent = AndroidIntent(

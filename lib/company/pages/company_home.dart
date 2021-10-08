@@ -36,7 +36,8 @@ class _CompanyHomeState extends State<CompanyHome> {
   bool back = false;
   Locale locale;
   StreamSubscription streamSubscription;
-  static final PageController _pageController = PageController(initialPage: 0, keepPage: true);
+  static final PageController _pageController =
+      PageController(initialPage: 0, keepPage: true);
   final GlobalKey<ScaffoldState> _drawerKey = GlobalKey<ScaffoldState>();
   Future<bool> _onBackPress() async {
     if (_drawerKey.currentState.isDrawerOpen) {
@@ -50,7 +51,9 @@ class _CompanyHomeState extends State<CompanyHome> {
       _pageController.jumpToPage(currentIndex);
       return false;
     }
-    Fluttertoast.showToast(msg: AppLocalizations.getLocalizationValue(locale, LocaleKey.backAgain));
+    Fluttertoast.showToast(
+        msg:
+            AppLocalizations.getLocalizationValue(locale, LocaleKey.backAgain));
     Future.delayed(Duration(seconds: 3), () {
       setState(() {
         backTaps = 0;
@@ -115,7 +118,11 @@ class _CompanyHomeState extends State<CompanyHome> {
     }
   }
 
-  final List<Widget> children = [StatsScreen(), RequestFragment(), ChatFragment()];
+  final List<Widget> children = [
+    StatsScreen(),
+    RequestFragment(),
+    ChatFragment()
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -135,6 +142,7 @@ class _CompanyHomeState extends State<CompanyHome> {
             height: 100,
             width: 100,
           ),
+          elevation: 0,
           actions: [
             IconButton(
               icon: Badge(
@@ -177,7 +185,8 @@ class _CompanyHomeState extends State<CompanyHome> {
                   size: 22,
                 ),
               ),
-              label: AppLocalizations.getLocalizationValue(locale, LocaleKey.myStats),
+              label: AppLocalizations.getLocalizationValue(
+                  locale, LocaleKey.myStats),
             ),
             // BottomNavigationBarItem(
             //   icon: Padding(
@@ -200,7 +209,8 @@ class _CompanyHomeState extends State<CompanyHome> {
                   color: currentIndex == 1 ? primaryColor : Colors.grey,
                 ),
               ),
-              label: AppLocalizations.getLocalizationValue(locale, LocaleKey.requestButton),
+              label: AppLocalizations.getLocalizationValue(
+                  locale, LocaleKey.requestButton),
             ),
             BottomNavigationBarItem(
               icon: Padding(
@@ -211,7 +221,8 @@ class _CompanyHomeState extends State<CompanyHome> {
                   size: 22,
                 ),
               ),
-              label: AppLocalizations.getLocalizationValue(locale, LocaleKey.chat),
+              label:
+                  AppLocalizations.getLocalizationValue(locale, LocaleKey.chat),
             ),
             if (Platform.isIOS)
               BottomNavigationBarItem(
@@ -223,7 +234,8 @@ class _CompanyHomeState extends State<CompanyHome> {
                     size: 22,
                   ),
                 ),
-                label: AppLocalizations.getLocalizationValue(locale, LocaleKey.more),
+                label: AppLocalizations.getLocalizationValue(
+                    locale, LocaleKey.more),
               ),
           ],
         ),

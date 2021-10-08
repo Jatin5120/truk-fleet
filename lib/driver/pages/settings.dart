@@ -5,7 +5,6 @@ import 'package:truk_fleet/driver/models/driver_model.dart';
 import 'package:truk_fleet/locale/app_localization.dart';
 import 'package:truk_fleet/locale/locale_keys.dart';
 import 'package:truk_fleet/screens/change_language_screen.dart';
-import 'package:truk_fleet/utils/constants.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -52,7 +51,8 @@ class _SettingsPageState extends State<SettingsPage> {
                     child: SwitchListTile(
                       activeColor: Color.fromRGBO(255, 113, 1, 100),
                       title: Text(
-                        AppLocalizations.getLocalizationValue(locale, LocaleKey.notification),
+                        AppLocalizations.getLocalizationValue(
+                            locale, LocaleKey.notification),
                       ),
                       value: notificationOn,
                       onChanged: (bool value) async {
@@ -80,7 +80,8 @@ class _SettingsPageState extends State<SettingsPage> {
                 color: Colors.black,
               ),
               title: Text(
-                AppLocalizations.getLocalizationValue(locale, LocaleKey.language),
+                AppLocalizations.getLocalizationValue(
+                    locale, LocaleKey.language),
               ),
               trailing: Padding(
                 padding: const EdgeInsets.only(right: 10),
@@ -114,7 +115,8 @@ class _SettingsPageState extends State<SettingsPage> {
                 color: Colors.black,
               ),
               title: Text(
-                AppLocalizations.getLocalizationValue(locale, LocaleKey.insuranceText2),
+                AppLocalizations.getLocalizationValue(
+                    locale, LocaleKey.insuranceText2),
               ),
               trailing: Padding(
                 padding: const EdgeInsets.only(right: 10),
@@ -137,7 +139,8 @@ class _SettingsPageState extends State<SettingsPage> {
                 child: Text(
                   'Developed by Agumentik Software Pvt. Ltd.',
                   textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.black87, fontWeight: FontWeight.w300),
+                  style: TextStyle(
+                      color: Colors.black87, fontWeight: FontWeight.w300),
                 ),
               ),
             ),

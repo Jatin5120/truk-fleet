@@ -1,6 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:truk_fleet/auth/login_navigator.dart';
-
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/material.dart';
 import 'package:truk_fleet/locale/app_localization.dart';
@@ -94,8 +92,10 @@ class CarouselScreenState extends State<CarouselScreen> {
               ),
               width: width,
               padding: EdgeInsets.only(left: 20, right: 20, bottom: 20),
-              child: RaisedButton(
-                color: primaryColor,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  primary: primaryColor,
+                ),
                 onPressed: () async {
                   await SharedPref().setOld();
                   Navigator.of(context).pushReplacement(

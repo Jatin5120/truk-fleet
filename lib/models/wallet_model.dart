@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -56,7 +54,8 @@ class MyWallet extends ChangeNotifier {
   getWalletBalance() async {
     isLoading = true;
     final User user = FirebaseAuth.instance.currentUser;
-    CollectionReference reference = FirebaseFirestore.instance.collection('Wallet');
+    CollectionReference reference =
+        FirebaseFirestore.instance.collection('Wallet');
     Stream<DocumentSnapshot> data = reference.doc(user.uid).snapshots();
     data.listen((event) {
       if (event.exists) {

@@ -3,20 +3,16 @@ import 'dart:io';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:loading_overlay/loading_overlay.dart';
-import 'package:map_launcher/map_launcher.dart';
 import 'package:truk_fleet/driver/controller/start_ride_document.dart';
-import 'package:truk_fleet/driver/pages/driver_homepage.dart';
 import 'package:truk_fleet/driver/pages/final_payment_screen.dart';
 import 'package:truk_fleet/locale/app_localization.dart';
 import 'package:truk_fleet/locale/locale_keys.dart';
 import 'package:truk_fleet/models/shipment_model.dart';
 
 import 'package:truk_fleet/utils/constants.dart';
-import 'package:flutter_image_compress/flutter_image_compress.dart';
 
 class UploadEndTrip extends StatefulWidget {
   final ShipmentModel model;
@@ -30,7 +26,7 @@ class _UploadEndTripState extends State<UploadEndTrip> {
   bool isLoading = false;
   Locale locale;
   Future<void> getImage(ImageSource source, int index) async {
-    var image = await ImagePicker().getImage(source: source);
+    var image = await ImagePicker().pickImage(source: source);
     if (image != null && mounted) {
       setState(() {
         File f = File(image.path);
@@ -69,7 +65,12 @@ class _UploadEndTripState extends State<UploadEndTrip> {
         child: Container(
           child: Center(
             child: images.length >= index + 1
-                ? (images[index] != null ? Image.file(images[index],fit: BoxFit.fill,) : dummyText)
+                ? (images[index] != null
+                    ? Image.file(
+                        images[index],
+                        fit: BoxFit.fill,
+                      )
+                    : dummyText)
                 : dummyText,
           ),
         ),
@@ -96,9 +97,12 @@ class _UploadEndTripState extends State<UploadEndTrip> {
             height: 65,
             width: size.width,
             padding: EdgeInsets.only(left: 20, right: 20, bottom: 10, top: 10),
-            child: RaisedButton(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-              color: primaryColor,
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5)),
+                primary: primaryColor,
+              ),
               onPressed: () async {
                 if (images.any((element) => element == null)) {
                   Fluttertoast.showToast(msg: 'Please select all images');
@@ -108,18 +112,21 @@ class _UploadEndTripState extends State<UploadEndTrip> {
                   isLoading = true;
                 });
                 //print(images.length);
-                await StartRideDocument().uploadImages(images: images, model: widget.model, isEnd: true);
+                await StartRideDocument().uploadImages(
+                    images: images, model: widget.model, isEnd: true);
 
                 Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => FinalPaymentScreen(model: widget.model),
+                    builder: (context) =>
+                        FinalPaymentScreen(model: widget.model),
                   ),
                   (route) => false,
                 );
               },
               child: Text(
-                AppLocalizations.getLocalizationValue(locale, LocaleKey.endTrip),
+                AppLocalizations.getLocalizationValue(
+                    locale, LocaleKey.endTrip),
                 style: TextStyle(fontSize: 18, color: Colors.white),
               ),
             ),
@@ -129,10 +136,14 @@ class _UploadEndTripState extends State<UploadEndTrip> {
           padding: const EdgeInsets.only(top: 20, left: 16, right: 16),
           child: GridView(
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2, childAspectRatio: 1.0, mainAxisSpacing: 28, crossAxisSpacing: 28),
+                crossAxisCount: 2,
+                childAspectRatio: 1.0,
+                mainAxisSpacing: 28,
+                crossAxisSpacing: 28),
             children: [
               pickImage(
-                title: '${AppLocalizations.getLocalizationValue(locale, LocaleKey.pickupImage)} 1',
+                title:
+                    '${AppLocalizations.getLocalizationValue(locale, LocaleKey.pickupImage)} 1',
                 onTap: () async {
                   await getImage(ImageSource.camera, 0);
                   // Platform.isAndroid
@@ -163,7 +174,8 @@ class _UploadEndTripState extends State<UploadEndTrip> {
                 index: 0,
               ),
               pickImage(
-                title: '${AppLocalizations.getLocalizationValue(locale, LocaleKey.pickupImage)} 2',
+                title:
+                    '${AppLocalizations.getLocalizationValue(locale, LocaleKey.pickupImage)} 2',
                 index: 1,
                 onTap: () async {
                   await getImage(ImageSource.camera, 1);
@@ -194,7 +206,8 @@ class _UploadEndTripState extends State<UploadEndTrip> {
                 },
               ),
               pickImage(
-                title: AppLocalizations.getLocalizationValue(locale, LocaleKey.trukImage),
+                title: AppLocalizations.getLocalizationValue(
+                    locale, LocaleKey.trukImage),
                 index: 2,
                 onTap: () async {
                   await getImage(ImageSource.camera, 2);
@@ -225,7 +238,8 @@ class _UploadEndTripState extends State<UploadEndTrip> {
                 },
               ),
               pickImage(
-                title: AppLocalizations.getLocalizationValue(locale, LocaleKey.selfie),
+                title: AppLocalizations.getLocalizationValue(
+                    locale, LocaleKey.selfie),
                 index: 3,
                 onTap: () async {
                   await getImage(ImageSource.camera, 3);

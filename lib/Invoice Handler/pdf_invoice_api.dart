@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
@@ -14,7 +13,7 @@ import 'Invoice model/invoice.dart';
 import 'Invoice model/supplier.dart';
 
 class PdfInvoiceApi {
-  static Future<File> generate(Invoice invoice, String id) async {
+  static Future<void> generate(Invoice invoice, String id) async {
     final pdf = Document();
 
     pdf.addPage(MultiPage(
@@ -30,13 +29,15 @@ class PdfInvoiceApi {
     ));
     final file = await PdfApi.saveDocument(name: 'my_invoice.pdf', pdf: pdf);
     String fileName = Uuid().v4();
-    TaskSnapshot uploadTask = await FirebaseStorage.instance.ref().child('Invoices/$fileName.pdf').putFile(file);
+    TaskSnapshot uploadTask = await FirebaseStorage.instance
+        .ref()
+        .child('Invoices/$fileName.pdf')
+        .putFile(file);
     String downloadUrl = await uploadTask.ref.getDownloadURL();
-    FirebaseFirestore.instance.collection(FirebaseHelper.invoiceCollection).doc().set({
-      'invoice': downloadUrl,
-      'time': DateTime.now(),
-      'id':id
-    });
+    FirebaseFirestore.instance
+        .collection(FirebaseHelper.invoiceCollection)
+        .doc()
+        .set({'invoice': downloadUrl, 'time': DateTime.now(), 'id': id});
   }
 
   static Widget buildHeader(Invoice invoice) => Column(
@@ -101,7 +102,8 @@ class PdfInvoiceApi {
             style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
           ),
           SizedBox(height: 0.8 * PdfPageFormat.cm),
-          Text("This is system generated invoice and can't be treated as only receipt for any query contact TrukApp support team"),
+          Text(
+              "This is system generated invoice and can't be treated as only receipt for any query contact TrukApp support team"),
           SizedBox(height: 0.8 * PdfPageFormat.cm),
         ],
       );

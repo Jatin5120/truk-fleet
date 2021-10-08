@@ -10,7 +10,6 @@ import 'package:truk_fleet/company/controller/request_controller.dart';
 import 'package:truk_fleet/company/utils/chat_list_row.dart';
 import 'package:truk_fleet/firebase_helper/firebase_helper.dart';
 import 'package:truk_fleet/helper/helper.dart';
-import 'package:truk_fleet/helper/request_status.dart';
 import 'package:truk_fleet/locale/app_localization.dart';
 import 'package:truk_fleet/locale/locale_keys.dart';
 import 'package:truk_fleet/models/chatting_list_model.dart';
@@ -47,7 +46,8 @@ class _SupportState extends State<Support> {
       padding: EdgeInsets.only(left: 10, right: 10, bottom: 8),
       alignment: sender ? Alignment.centerRight : Alignment.centerLeft,
       child: Row(
-        mainAxisAlignment: sender ? MainAxisAlignment.end : MainAxisAlignment.start,
+        mainAxisAlignment:
+            sender ? MainAxisAlignment.end : MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.end,
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -72,7 +72,9 @@ class _SupportState extends State<Support> {
                       bottomRight: Radius.circular(15),
                     )
                   : BorderRadius.only(
-                      topRight: Radius.circular(15), bottomLeft: Radius.circular(15), bottomRight: Radius.circular(15)),
+                      topRight: Radius.circular(15),
+                      bottomLeft: Radius.circular(15),
+                      bottomRight: Radius.circular(15)),
               child: ClipRRect(
                 borderRadius: sender
                     ? BorderRadius.only(
@@ -85,10 +87,12 @@ class _SupportState extends State<Support> {
                         bottomLeft: Radius.circular(15),
                         bottomRight: Radius.circular(15)),
                 child: Container(
-                  padding: EdgeInsets.only(left: 10, right: 10, top: 15, bottom: 15),
+                  padding:
+                      EdgeInsets.only(left: 10, right: 10, top: 15, bottom: 15),
                   child: Align(
                     widthFactor: 1,
-                    alignment: sender ? Alignment.centerRight : Alignment.centerLeft,
+                    alignment:
+                        sender ? Alignment.centerRight : Alignment.centerLeft,
                     child: Text(
                       '$message',
                       style: sender ? senderStyle : receiverStyle,
@@ -145,7 +149,8 @@ class _SupportState extends State<Support> {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return Center(
                           child: CircularProgressIndicator(
-                            valueColor: AlwaysStoppedAnimation<Color>(primaryColor),
+                            valueColor:
+                                AlwaysStoppedAnimation<Color>(primaryColor),
                           ),
                         );
                       }
@@ -154,13 +159,19 @@ class _SupportState extends State<Support> {
                           text: 'Error',
                         );
                       }
-                      List<QueryDocumentSnapshot> documents = snapshot.data.docs;
+                      List<QueryDocumentSnapshot> documents =
+                          snapshot.data.docs;
                       List<ChattingModel> chats = [];
                       for (QueryDocumentSnapshot d in documents) {
                         ChattingModel model = ChattingModel.fromSnap(d);
-                        if (model.receiver == widget.chatListModel.userModel.uid || model.receiver == user.uid) {
-                          if (model.sender == widget.chatListModel.userModel.uid || model.sender == user.uid) {
-                            if (model.bookingId == widget.chatListModel.quoteModel.bookingId) {
+                        if (model.receiver ==
+                                widget.chatListModel.userModel.uid ||
+                            model.receiver == user.uid) {
+                          if (model.sender ==
+                                  widget.chatListModel.userModel.uid ||
+                              model.sender == user.uid) {
+                            if (model.bookingId ==
+                                widget.chatListModel.quoteModel.bookingId) {
                               chats.add(model);
                             }
                           }
@@ -168,7 +179,8 @@ class _SupportState extends State<Support> {
                       }
                       return documents.length <= 0
                           ? NoDataPage(
-                              text: AppLocalizations.getLocalizationValue(locale, LocaleKey.noData),
+                              text: AppLocalizations.getLocalizationValue(
+                                  locale, LocaleKey.noData),
                             )
                           : ListView.builder(
                               shrinkWrap: true,
@@ -177,7 +189,10 @@ class _SupportState extends State<Support> {
                               itemBuilder: (context, index) {
                                 ChattingModel m = chats[index];
                                 String date = Helper().getFormattedDate(m.time);
-                                return messageBubble(message: m.message, sender: m.sender == user.uid, time: date);
+                                return messageBubble(
+                                    message: m.message,
+                                    sender: m.sender == user.uid,
+                                    time: date);
                               },
                             );
                     },
@@ -201,7 +216,8 @@ class _SupportState extends State<Support> {
                         onPressed: () async {
                           String message = _messageController.text.trim();
                           if (message.isEmpty) {
-                            Fluttertoast.showToast(msg: "Cannot send empty message");
+                            Fluttertoast.showToast(
+                                msg: "Cannot send empty message");
                             return;
                           }
                           _messageController.clear();
@@ -221,8 +237,10 @@ class _SupportState extends State<Support> {
                       //   onPressed: () {},
                       // ),
                       hintText: 'Add text to this message',
-                      focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(0)),
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(0)),
+                      focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(0)),
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(0)),
                     ),
                   ),
                 ),
@@ -243,7 +261,8 @@ class _SupportState extends State<Support> {
           TextFormField(
             validator: (String value) {
               if (value.trim().isEmpty || int.parse(value) <= 0) {
-                return AppLocalizations.getLocalizationValue(locale, LocaleKey.requiredText);
+                return AppLocalizations.getLocalizationValue(
+                    locale, LocaleKey.requiredText);
               }
               return null;
             },
@@ -251,15 +270,18 @@ class _SupportState extends State<Support> {
             keyboardType: TextInputType.number,
             decoration: InputDecoration(
                 border: OutlineInputBorder(),
-                labelText: '₹ ${AppLocalizations.getLocalizationValue(locale, LocaleKey.fare)}'),
+                labelText:
+                    '₹ ${AppLocalizations.getLocalizationValue(locale, LocaleKey.fare)}'),
           ),
           SizedBox(
             height: 10,
           ),
           Container(
             width: size.width,
-            child: RaisedButton(
-              color: primaryColor,
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                primary: primaryColor,
+              ),
               onPressed: () async {
                 String price = _priceController.text.trim();
                 if (price.length <= 0) {
@@ -271,8 +293,11 @@ class _SupportState extends State<Support> {
                   return;
                 }
                 Navigator.pop(context);
-                await RequestController().updatePrice(widget.chatListModel.quoteModel, price);
-                Fluttertoast.showToast(msg: AppLocalizations.getLocalizationValue(locale, LocaleKey.update));
+                await RequestController()
+                    .updatePrice(widget.chatListModel.quoteModel, price);
+                Fluttertoast.showToast(
+                    msg: AppLocalizations.getLocalizationValue(
+                        locale, LocaleKey.update));
               },
               child: Text(
                 '${AppLocalizations.getLocalizationValue(locale, LocaleKey.fare)} ${AppLocalizations.getLocalizationValue(locale, LocaleKey.update)}',

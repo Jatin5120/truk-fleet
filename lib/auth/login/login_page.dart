@@ -35,7 +35,9 @@ class _LoginPageState extends State<LoginPage> implements LoginInterface {
           .snapshots()
           .first;
       if (snapshot.size <= 0) {
-        Fluttertoast.showToast(msg: AppLocalizations.getLocalizationValue(locale, LocaleKey.notRegistered));
+        Fluttertoast.showToast(
+            msg: AppLocalizations.getLocalizationValue(
+                locale, LocaleKey.notRegistered));
         return;
       }
     }
@@ -43,7 +45,8 @@ class _LoginPageState extends State<LoginPage> implements LoginInterface {
       context,
       MaterialPageRoute(
         builder: (context) => OtpPage(
-          args: OtpArguments(mobileNumber: '+91$mobileNumber', type: widget.type),
+          args:
+              OtpArguments(mobileNumber: '+91$mobileNumber', type: widget.type),
         ),
       ),
     );

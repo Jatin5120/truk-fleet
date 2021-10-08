@@ -1,6 +1,4 @@
 import 'dart:io';
-
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:focused_menu/focused_menu.dart';
@@ -11,7 +9,6 @@ import 'package:photo_view/photo_view.dart';
 import 'package:truk_fleet/driver/controller/upload_document_controller.dart';
 import 'package:truk_fleet/locale/app_localization.dart';
 import 'package:truk_fleet/locale/locale_keys.dart';
-import 'package:truk_fleet/utils/CustomImageChooser.dart';
 import 'package:truk_fleet/utils/constants.dart';
 
 class DriverDocumentScreen extends StatefulWidget {
@@ -42,7 +39,7 @@ class _DriverDocumentScreenState extends State<DriverDocumentScreen> {
   }
 
   Future getImage(ImageSource source, File f) async {
-    var image = await ImagePicker().getImage(source: source);
+    var image = await ImagePicker().pickImage(source: source);
     if (image != null && mounted) {
       setState(() {
         f = File(image.path);
@@ -72,8 +69,8 @@ class _DriverDocumentScreenState extends State<DriverDocumentScreen> {
             child: Text(title),
           ),
           Container(
-            child: RaisedButton(
-              onPressed: onPressed,
+            child: InkWell(
+              onTap: onPressed,
             ),
           ),
         ],
@@ -89,7 +86,8 @@ class _DriverDocumentScreenState extends State<DriverDocumentScreen> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         centerTitle: true,
-        title: Text(AppLocalizations.getLocalizationValue(locale, LocaleKey.documents)),
+        title: Text(
+            AppLocalizations.getLocalizationValue(locale, LocaleKey.documents)),
       ),
       body: SafeArea(
         child: Container(
@@ -108,7 +106,8 @@ class _DriverDocumentScreenState extends State<DriverDocumentScreen> {
     );
   }
 
-  Widget buildUploadButton(bool state, Function _onPressed, bool buttonState, File file, String docKey) {
+  Widget buildUploadButton(bool state, Function _onPressed, bool buttonState,
+      File file, String docKey) {
     return Container(
       height: 65,
       padding: EdgeInsets.only(bottom: 20),
@@ -171,7 +170,8 @@ class _DriverDocumentScreenState extends State<DriverDocumentScreen> {
                                       child: CircularProgressIndicator(
                                         value: progress == null
                                             ? null
-                                            : progress.cumulativeBytesLoaded / progress.expectedTotalBytes,
+                                            : progress.cumulativeBytesLoaded /
+                                                progress.expectedTotalBytes,
                                       ),
                                     ),
                                   ),
@@ -194,7 +194,8 @@ class _DriverDocumentScreenState extends State<DriverDocumentScreen> {
                                       child: CircularProgressIndicator(
                                         value: progress == null
                                             ? null
-                                            : progress.cumulativeBytesLoaded / progress.expectedTotalBytes,
+                                            : progress.cumulativeBytesLoaded /
+                                                progress.expectedTotalBytes,
                                       ),
                                     ),
                                   ),
@@ -234,8 +235,12 @@ class _DriverDocumentScreenState extends State<DriverDocumentScreen> {
                       width: 15,
                     ),
                     Text(
-                      AppLocalizations.getLocalizationValue(locale, state ? LocaleKey.uploaded : LocaleKey.upload),
-                      style: TextStyle(fontSize: 16, color: Colors.white, fontWeight: FontWeight.w500),
+                      AppLocalizations.getLocalizationValue(locale,
+                          state ? LocaleKey.uploaded : LocaleKey.upload),
+                      style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w500),
                     ),
                   ],
                 ),
@@ -244,7 +249,8 @@ class _DriverDocumentScreenState extends State<DriverDocumentScreen> {
     );
   }
 
-  Widget buildDocument(String docKey, String documentName, bool documentState, File file) {
+  Widget buildDocument(
+      String docKey, String documentName, bool documentState, File file) {
     bool buttonState = false;
     return Padding(
       padding: const EdgeInsets.all(5.0),
@@ -262,7 +268,8 @@ class _DriverDocumentScreenState extends State<DriverDocumentScreen> {
             ),
           ),
           Expanded(
-            child: buildUploadButton(documentState, () {}, buttonState, file, docKey),
+            child: buildUploadButton(
+                documentState, () {}, buttonState, file, docKey),
           ),
         ],
       ),
@@ -286,14 +293,34 @@ class _DriverDocumentScreenState extends State<DriverDocumentScreen> {
         ),
         Column(
           children: [
-            buildDocument(DocumentType.dl, AppLocalizations.getLocalizationValue(locale, LocaleKey.dl),
-                isAllNotUploaded ? false : documentStatus[DocumentType.dl][0], _dlFile),
-            buildDocument(DocumentType.adhaar, AppLocalizations.getLocalizationValue(locale, LocaleKey.adharCard),
-                isAllNotUploaded ? false : documentStatus[DocumentType.adhaar][0], _adhaarFile),
-            buildDocument(DocumentType.panCard, AppLocalizations.getLocalizationValue(locale, LocaleKey.panCard),
-                isAllNotUploaded ? false : documentStatus[DocumentType.panCard][0], _panFile),
-            buildDocument(DocumentType.selfie, AppLocalizations.getLocalizationValue(locale, LocaleKey.selfie),
-                isAllNotUploaded ? false : documentStatus[DocumentType.selfie][0], _selfiFile),
+            buildDocument(
+                DocumentType.dl,
+                AppLocalizations.getLocalizationValue(locale, LocaleKey.dl),
+                isAllNotUploaded ? false : documentStatus[DocumentType.dl][0],
+                _dlFile),
+            buildDocument(
+                DocumentType.adhaar,
+                AppLocalizations.getLocalizationValue(
+                    locale, LocaleKey.adharCard),
+                isAllNotUploaded
+                    ? false
+                    : documentStatus[DocumentType.adhaar][0],
+                _adhaarFile),
+            buildDocument(
+                DocumentType.panCard,
+                AppLocalizations.getLocalizationValue(
+                    locale, LocaleKey.panCard),
+                isAllNotUploaded
+                    ? false
+                    : documentStatus[DocumentType.panCard][0],
+                _panFile),
+            buildDocument(
+                DocumentType.selfie,
+                AppLocalizations.getLocalizationValue(locale, LocaleKey.selfie),
+                isAllNotUploaded
+                    ? false
+                    : documentStatus[DocumentType.selfie][0],
+                _selfiFile),
           ],
         ),
         //buildButton(),

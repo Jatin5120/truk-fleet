@@ -31,17 +31,20 @@ class DrawerMenuState extends State<DrawerMenu> {
   @override
   void initState() {
     super.initState();
-    SharedPref().isOnline().then((value) => setState(() => driverOnline = value));
+    SharedPref()
+        .isOnline()
+        .then((value) => setState(() => driverOnline = value));
   }
 
   @override
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context).locale;
     final pUser = Provider.of<MyDriverUser>(context);
-    double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    Widget placeHolder = Text(pUser.isUserLoading ? '...' : '${pUser.user.name[0]}'.toUpperCase(),
-        style: TextStyle(fontSize: 26, color: Colors.white, fontWeight: FontWeight.bold));
+    Widget placeHolder = Text(
+        pUser.isUserLoading ? '...' : '${pUser.user.name[0]}'.toUpperCase(),
+        style: TextStyle(
+            fontSize: 26, color: Colors.white, fontWeight: FontWeight.bold));
     return ListView(
       children: [
         Container(
@@ -108,9 +111,12 @@ class DrawerMenuState extends State<DrawerMenu> {
                 child: InkWell(
                   onTap: () {
                     Navigator.pop(context);
-                    Navigator.of(context).push(CupertinoPageRoute(builder: (context) => Profile()));
+                    Navigator.of(context).push(
+                        CupertinoPageRoute(builder: (context) => Profile()));
                   },
-                  child: Text(AppLocalizations.getLocalizationValue(locale, LocaleKey.edit),
+                  child: Text(
+                      AppLocalizations.getLocalizationValue(
+                          locale, LocaleKey.edit),
                       style: TextStyle(color: Colors.blue, fontSize: 18)),
                 ),
               ),
@@ -129,10 +135,12 @@ class DrawerMenuState extends State<DrawerMenu> {
           ),
           value: driverOnline,
           onChanged: (b) async {
-            CollectionReference inRide = FirebaseFirestore.instance.collection('InRide');
+            CollectionReference inRide =
+                FirebaseFirestore.instance.collection('InRide');
             final inRideDoc = await inRide.doc(user.uid).get();
             if (inRideDoc.exists) {
-              Fluttertoast.showToast(msg: 'Cannot go offline during ride! Complete the ride');
+              Fluttertoast.showToast(
+                  msg: 'Cannot go offline during ride! Complete the ride');
               return;
             }
             await SharedPref().setOnlineStatus(b);
@@ -140,7 +148,8 @@ class DrawerMenuState extends State<DrawerMenu> {
             print(s);
             if (!b) {
               backLoc.BackgroundLocation.stopLocationService();
-              CollectionReference driverAvaialable = FirebaseFirestore.instance.collection('DriverAvailable');
+              CollectionReference driverAvaialable =
+                  FirebaseFirestore.instance.collection('DriverAvailable');
               driverAvaialable.doc(user.uid).delete();
             } else
               backLoc.BackgroundLocation.startLocationService();
@@ -151,7 +160,10 @@ class DrawerMenuState extends State<DrawerMenu> {
           activeColor: primaryColor,
           title: Text(
             AppLocalizations.getLocalizationValue(
-                locale, driverOnline ? LocaleKey.driverOnline : LocaleKey.driverOffline),
+                locale,
+                driverOnline
+                    ? LocaleKey.driverOnline
+                    : LocaleKey.driverOffline),
             style: TextStyle(
               color: driverOnline ? primaryColor : Colors.black,
               fontSize: 18,
@@ -160,7 +172,8 @@ class DrawerMenuState extends State<DrawerMenu> {
           ),
         ),
         myListTile(
-            title: AppLocalizations.getLocalizationValue(locale, LocaleKey.documents),
+            title: AppLocalizations.getLocalizationValue(
+                locale, LocaleKey.documents),
             leading: Icon(
               Icons.dock,
               color: Colors.black,
@@ -172,7 +185,8 @@ class DrawerMenuState extends State<DrawerMenu> {
               ));
             }),
         myListTile(
-          title: AppLocalizations.getLocalizationValue(locale, LocaleKey.support),
+          title:
+              AppLocalizations.getLocalizationValue(locale, LocaleKey.support),
           leading: Padding(
             padding: const EdgeInsets.only(top: 5.0),
             child: Icon(
@@ -210,7 +224,8 @@ class DrawerMenuState extends State<DrawerMenu> {
           },
         ),
         myListTile(
-          title: AppLocalizations.getLocalizationValue(locale, LocaleKey.settings),
+          title:
+              AppLocalizations.getLocalizationValue(locale, LocaleKey.settings),
           leading: Icon(
             Icons.settings,
             color: Colors.black,
@@ -234,18 +249,22 @@ class DrawerMenuState extends State<DrawerMenu> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Icons.exit_to_app, color: Color.fromRGBO(255, 113, 1, 100)),
+                Icon(Icons.exit_to_app,
+                    color: Color.fromRGBO(255, 113, 1, 100)),
                 SizedBox(width: 10),
                 Text(
-                  AppLocalizations.getLocalizationValue(locale, LocaleKey.logout),
+                  AppLocalizations.getLocalizationValue(
+                      locale, LocaleKey.logout),
                   style: TextStyle(fontSize: 20, color: primaryColor),
                 )
               ],
             ),
             onTap: () {
               Helper().showConfirmationDialog(
-                title: AppLocalizations.getLocalizationValue(locale, LocaleKey.logout),
-                subTitle: AppLocalizations.getLocalizationValue(locale, LocaleKey.logoutConfirm),
+                title: AppLocalizations.getLocalizationValue(
+                    locale, LocaleKey.logout),
+                subTitle: AppLocalizations.getLocalizationValue(
+                    locale, LocaleKey.logoutConfirm),
                 context: context,
                 onTap: () {
                   Navigator.pop(context);
@@ -269,7 +288,8 @@ class DrawerMenuState extends State<DrawerMenu> {
   Widget myListTile({String title, void Function() onTap, Widget leading}) {
     return ListTile(
       leading: leading,
-      title: Text(title, style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400)),
+      title: Text(title,
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400)),
       onTap: onTap,
     );
   }

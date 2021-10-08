@@ -26,11 +26,11 @@ class _CompanyHomeFragmentState extends State<CompanyHomeFragment> {
     final pTruks = Provider.of<MyTruksProvider>(context);
     final pShipments = Provider.of<FleetRideModel>(context);
     locale = AppLocalizations.of(context).locale;
-    Size size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text(AppLocalizations.getLocalizationValue(locale, LocaleKey.shipments)),
+        title: Text(
+            AppLocalizations.getLocalizationValue(locale, LocaleKey.shipments)),
         centerTitle: true,
       ),
       body: Container(
@@ -43,7 +43,8 @@ class _CompanyHomeFragmentState extends State<CompanyHomeFragment> {
               )
             : (pShipments.shipmentList.length <= 0
                 ? NoDataPage(
-                    text: AppLocalizations.getLocalizationValue(locale, LocaleKey.noShipment),
+                    text: AppLocalizations.getLocalizationValue(
+                        locale, LocaleKey.noShipment),
                   )
                 : pShipments.isShipmentLoading
                     ? Center(
@@ -74,7 +75,9 @@ class _CompanyHomeFragmentState extends State<CompanyHomeFragment> {
               setState(() {
                 filteredList = shipments
                     .where((element) =>
-                        element.bookingId.toString().contains(string.trim().toLowerCase()) ||
+                        element.bookingId
+                            .toString()
+                            .contains(string.trim().toLowerCase()) ||
                         element.price.contains(string.toLowerCase()) ||
                         element.pickupDate.contains(string.toLowerCase()))
                     .toList();
@@ -83,9 +86,11 @@ class _CompanyHomeFragmentState extends State<CompanyHomeFragment> {
             }
           },
           decoration: InputDecoration(
-            hintText: AppLocalizations.getLocalizationValue(locale, LocaleKey.searchHint),
+            hintText: AppLocalizations.getLocalizationValue(
+                locale, LocaleKey.searchHint),
             border: OutlineInputBorder(),
-            labelText: AppLocalizations.getLocalizationValue(locale, LocaleKey.search),
+            labelText:
+                AppLocalizations.getLocalizationValue(locale, LocaleKey.search),
           ),
         ),
         SizedBox(
@@ -97,8 +102,10 @@ class _CompanyHomeFragmentState extends State<CompanyHomeFragment> {
             physics: BouncingScrollPhysics(),
             shrinkWrap: true,
             itemBuilder: (context, index) {
-              ShipmentModel model = isFilter ? filteredList[index] : shipments[index];
-              String docID = isFilter ? filteredList[index].id : shipments[index].id;
+              ShipmentModel model =
+                  isFilter ? filteredList[index] : shipments[index];
+              String docID =
+                  isFilter ? filteredList[index].id : shipments[index].id;
 
               bool isCollapsed = true;
               return ExpandableCardContainer(

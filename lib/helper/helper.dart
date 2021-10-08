@@ -15,7 +15,8 @@ class Helper {
     LatLng latLng = value;
     final coordinates = Coordinates(latLng.latitude, latLng.longitude);
     try {
-      var address = await Geocoder.local.findAddressesFromCoordinates(coordinates);
+      var address =
+          await Geocoder.local.findAddressesFromCoordinates(coordinates);
       String street = address.first.featureName;
       String area = address.first.subLocality;
       String pincode = address.first.postalCode;
@@ -31,7 +32,8 @@ class Helper {
     LatLng latLng = value;
     final coordinates = Coordinates(latLng.latitude, latLng.longitude);
     try {
-      var address = await Geocoder.local.findAddressesFromCoordinates(coordinates);
+      var address =
+          await Geocoder.local.findAddressesFromCoordinates(coordinates);
       String street = address.first.featureName;
       String area = address.first.subLocality;
       String pincode = address.first.postalCode;
@@ -51,7 +53,8 @@ class Helper {
   String getFormattedDate(int milliseconds) {
     DateTime date = DateTime.fromMillisecondsSinceEpoch(milliseconds);
     bool isToday = date.isSameDate(DateTime.now());
-    DateFormat formatter = DateFormat(isToday ? "hh:mm a" : "dd MMM, yy hh:mm a");
+    DateFormat formatter =
+        DateFormat(isToday ? "hh:mm a" : "dd MMM, yy hh:mm a");
     return formatter.format(date);
   }
 
@@ -64,7 +67,8 @@ class Helper {
     return 'TruK$s';
   }
 
-  void showConfirmationDialog({BuildContext context, String title, String subTitle, Function onTap}) {
+  void showConfirmationDialog(
+      {BuildContext context, String title, String subTitle, Function onTap}) {
     final locale = AppLocalizations.of(context).locale;
     Platform.isAndroid
         ? showDialog(
@@ -73,24 +77,28 @@ class Helper {
               title: Text('$title'),
               content: Text('$subTitle'),
               actions: [
-                FlatButton(
+                ElevatedButton(
                   onPressed: () {
                     Navigator.pop(context);
                     onTap();
                   },
                   child: Center(
                     child: Text(
-                      AppLocalizations.getLocalizationValue(locale, LocaleKey.yes),
+                      AppLocalizations.getLocalizationValue(
+                          locale, LocaleKey.yes),
                       style: TextStyle(color: primaryColor),
                     ),
                   ),
                 ),
-                RaisedButton(
-                  color: primaryColor,
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    primary: primaryColor,
+                  ),
                   onPressed: () => Navigator.pop(context),
                   child: Center(
                     child: Text(
-                      AppLocalizations.getLocalizationValue(locale, LocaleKey.no),
+                      AppLocalizations.getLocalizationValue(
+                          locale, LocaleKey.no),
                       style: TextStyle(color: Colors.white),
                     ),
                   ),
@@ -106,23 +114,25 @@ class Helper {
                 title: Text('$title'),
                 content: Text('$subTitle'),
                 actions: [
-                  FlatButton(
+                  ElevatedButton(
                     onPressed: () {
                       Navigator.pop(context);
                       onTap();
                     },
                     child: Center(
                       child: Text(
-                        AppLocalizations.getLocalizationValue(locale, LocaleKey.yes),
+                        AppLocalizations.getLocalizationValue(
+                            locale, LocaleKey.yes),
                         style: TextStyle(color: primaryColor),
                       ),
                     ),
                   ),
-                  FlatButton(
+                  ElevatedButton(
                     onPressed: () => Navigator.pop(context),
                     child: Center(
                       child: Text(
-                        AppLocalizations.getLocalizationValue(locale, LocaleKey.no),
+                        AppLocalizations.getLocalizationValue(
+                            locale, LocaleKey.no),
                         style: TextStyle(color: Colors.black),
                       ),
                     ),

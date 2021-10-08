@@ -108,72 +108,77 @@ class _RegisterUIState extends State<RegisterUI> {
             style: ElevatedButton.styleFrom(
               primary: primaryColor,
             ),
-            onPressed: isLoading
-                ? () {}
-                : () async {
-                    if (_formKey.currentState.validate()) {
-                      setState(() {
-                        isLoading = true;
-                      });
-                      if (user != null && isTC) {
-                        String uid = user.uid;
-                        String mobile = user.phoneNumber;
-                        String email = _emailController.text.trim();
-                        String name = _nameController.text.trim();
-                        String city = _cityController.text.trim();
-                        String state = _stateController.text.trim();
-                        String company = _companyNameController.text.trim();
-                        if (widget.type == LoginType.company) {
-                          String upi = _upiController.text.trim();
-                          UserModel userModel = UserModel(
-                              city: city,
-                              upiId: upi,
-                              company: company,
-                              email: email,
-                              joining: DateTime.now().millisecondsSinceEpoch,
-                              mobile: mobile,
-                              name: name,
-                              state: state,
-                              token: 'na',
-                              uid: uid,
-                              notification: false);
-                          widget.registerInterface.registerAgent(userModel);
-                        } else {
-                          String trukId = Helper.generateTrukId();
-                          DriverModel driverModel = DriverModel(
-                              city: city,
-                              agent: driverRegisterModel.agent,
-                              company: company,
-                              email: email,
-                              driverId: trukId,
-                              joining: DateTime.now().millisecondsSinceEpoch,
-                              mobile: mobile,
-                              name: name,
-                              state: state,
-                              token: 'na',
-                              uid: uid,
-                              notification: true,
-                              image: 'na');
-                          widget.registerInterface.registerDriver(driverModel);
-                        }
-                        setState(() {
-                          isLoading = false;
-                        });
-                      } else {
-                        if (user == null) {
-                          Fluttertoast.showToast(
-                              msg: 'Please fill all the fields');
-                        } else if (!isTC) {
+            onPressed: !isTC
+                ? null
+                : isLoading
+                    ? () {}
+                    : () async {
+                        if (_formKey.currentState.validate()) {
                           setState(() {
-                            isLoading = false;
+                            isLoading = true;
                           });
-                          Fluttertoast.showToast(
-                              msg: 'Please Accept terms and conditions');
+                          if (user != null && isTC) {
+                            String uid = user.uid;
+                            String mobile = user.phoneNumber;
+                            String email = _emailController.text.trim();
+                            String name = _nameController.text.trim();
+                            String city = _cityController.text.trim();
+                            String state = _stateController.text.trim();
+                            String company = _companyNameController.text.trim();
+                            if (widget.type == LoginType.company) {
+                              String upi = _upiController.text.trim();
+                              UserModel userModel = UserModel(
+                                  city: city,
+                                  upiId: upi,
+                                  company: company,
+                                  email: email,
+                                  joining:
+                                      DateTime.now().millisecondsSinceEpoch,
+                                  mobile: mobile,
+                                  name: name,
+                                  state: state,
+                                  token: 'na',
+                                  uid: uid,
+                                  notification: false);
+                              widget.registerInterface.registerAgent(userModel);
+                            } else {
+                              String trukId = Helper.generateTrukId();
+                              DriverModel driverModel = DriverModel(
+                                  city: city,
+                                  agent: driverRegisterModel.agent,
+                                  company: company,
+                                  email: email,
+                                  driverId: trukId,
+                                  joining:
+                                      DateTime.now().millisecondsSinceEpoch,
+                                  mobile: mobile,
+                                  name: name,
+                                  state: state,
+                                  token: 'na',
+                                  uid: uid,
+                                  notification: true,
+                                  image: 'na');
+                              widget.registerInterface
+                                  .registerDriver(driverModel);
+                            }
+                            setState(() {
+                              isLoading = false;
+                            });
+                          } else {
+                            if (user == null) {
+                              Fluttertoast.showToast(
+                                  msg: 'Please fill all the fields');
+                            } else if (!isTC) {
+                              setState(() {
+                                isLoading = false;
+                              });
+                              Fluttertoast.showToast(
+                                  msg: 'Please Accept terms and conditions');
+                            }
+                            // Navigator.pushNamed(context, LoginRoutes.loginRoot, arguments: widget.type);
+                          }
                         }
-                        // Navigator.pushNamed(context, LoginRoutes.loginRoot, arguments: widget.type);
-                      }
-                    }
-                  },
+                      },
             child: isLoading
                 ? CircularProgressIndicator(
                     valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
@@ -336,13 +341,13 @@ class _RegisterUIState extends State<RegisterUI> {
                             text: TextSpan(
                               children: [
                                 TextSpan(
-                                  text: AppLocalizations.getLocalizationValue(
-                                      locale, LocaleKey.accept),
+                                  text:
+                                      '${AppLocalizations.getLocalizationValue(locale, LocaleKey.accept)} ',
                                   style: TextStyle(color: Colors.black),
                                 ),
                                 TextSpan(
                                   text:
-                                      " ${AppLocalizations.getLocalizationValue(locale, LocaleKey.insuranceText2)}",
+                                      "${AppLocalizations.getLocalizationValue(locale, LocaleKey.insuranceText2)}",
                                   style: TextStyle(
                                       color: primaryColor,
                                       decoration: TextDecoration.underline),

@@ -282,10 +282,13 @@ class _MyDriversState extends State<MyDrivers> {
           height: 65,
           width: size.width,
           padding: EdgeInsets.only(left: 20, right: 20, bottom: 20),
-          child: RaisedButton(
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-            color: primaryColor,
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(5),
+              ),
+              primary: primaryColor,
+            ),
             onPressed: () {
               // Add a different driver
               Navigator.of(context).push(

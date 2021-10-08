@@ -31,7 +31,7 @@ class _ProfileState extends State<Profile> {
   MyDriverUser pUser;
   Locale locale;
   Future getImage(ImageSource source, int index) async {
-    var image = await ImagePicker().getImage(source: source);
+    var image = await ImagePicker().pickImage(source: source);
     if (image != null && mounted) {
       setState(() {
         myImage = File(image.path);
@@ -40,7 +40,11 @@ class _ProfileState extends State<Profile> {
   }
 
   Widget textFieldWithDetail(
-      {String hint, String text, TextEditingController controller, bool readOnly, String Function(String) validator}) {
+      {String hint,
+      String text,
+      TextEditingController controller,
+      bool readOnly,
+      String Function(String) validator}) {
     //controller.text = text;
     return Container(
       padding: EdgeInsets.only(left: 20, right: 20),
@@ -111,7 +115,7 @@ class _ProfileState extends State<Profile> {
                 ),
                 Center(
                   child: Stack(
-                    overflow: Overflow.visible,
+                    clipBehavior: Clip.none,
                     children: [
                       Container(
                         alignment: Alignment.center,
@@ -122,7 +126,9 @@ class _ProfileState extends State<Profile> {
                             size.height * 0.15 * 0.5,
                           ),
                         ),
-                        child: ((pUser.user.image == 'na' || pUser.user.image == null) && myImage == null
+                        child: ((pUser.user.image == 'na' ||
+                                    pUser.user.image == null) &&
+                                myImage == null
                             ? CircleAvatar(
                                 radius: size.height * 0.15 * 0.5,
                                 backgroundColor: primaryColor,
@@ -155,7 +161,8 @@ class _ProfileState extends State<Profile> {
                             Platform.isAndroid
                                 ? showDialog(
                                     context: context,
-                                    builder: (_) => CustomImageChooser.makeImageChooser(
+                                    builder: (_) =>
+                                        CustomImageChooser.makeImageChooser(
                                       context,
                                       0,
                                       (source) => getImage(source, 0),
@@ -165,7 +172,8 @@ class _ProfileState extends State<Profile> {
                                     context: context,
                                     builder: (_) => Material(
                                       color: Colors.transparent,
-                                      child: CustomImageChooser.makeImageChooser(
+                                      child:
+                                          CustomImageChooser.makeImageChooser(
                                         context,
                                         0,
                                         (source) => getImage(source, 0),
@@ -200,7 +208,10 @@ class _ProfileState extends State<Profile> {
                   padding: const EdgeInsets.only(left: 16),
                   child: Text(
                     'Driver ID : ${pUser.driverModel.driverId}',
-                    style: TextStyle(fontSize: 18, color: primaryColor, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                        fontSize: 18,
+                        color: primaryColor,
+                        fontWeight: FontWeight.bold),
                   ),
                 ),
                 SizedBox(
@@ -208,11 +219,13 @@ class _ProfileState extends State<Profile> {
                 ),
                 textFieldWithDetail(
                   //text: pUser.user.name,
-                  hint: AppLocalizations.getLocalizationValue(locale, LocaleKey.name),
+                  hint: AppLocalizations.getLocalizationValue(
+                      locale, LocaleKey.name),
                   controller: usernameController,
                   validator: (st) {
                     if (st.trim().isEmpty) {
-                      return AppLocalizations.getLocalizationValue(locale, LocaleKey.requiredText);
+                      return AppLocalizations.getLocalizationValue(
+                          locale, LocaleKey.requiredText);
                     }
                     return null;
                   },
@@ -222,17 +235,21 @@ class _ProfileState extends State<Profile> {
                 ),
                 textFieldWithDetail(
                   //text: pUser.user.email,
-                  hint: AppLocalizations.getLocalizationValue(locale, LocaleKey.email),
+                  hint: AppLocalizations.getLocalizationValue(
+                      locale, LocaleKey.email),
                   controller: emailController,
-                  validator: (st) =>
-                      st.isValidEmail() ? null : AppLocalizations.getLocalizationValue(locale, LocaleKey.invalidEmail),
+                  validator: (st) => st.isValidEmail()
+                      ? null
+                      : AppLocalizations.getLocalizationValue(
+                          locale, LocaleKey.invalidEmail),
                 ),
                 SizedBox(
                   height: 15,
                 ),
                 textFieldWithDetail(
                   text: pUser.user.mobile,
-                  hint: AppLocalizations.getLocalizationValue(locale, LocaleKey.mobile),
+                  hint: AppLocalizations.getLocalizationValue(
+                      locale, LocaleKey.mobile),
                   controller: phoneController,
                   readOnly: true,
                 ),
@@ -247,8 +264,10 @@ class _ProfileState extends State<Profile> {
                   height: 65,
                   width: size.width,
                   padding: EdgeInsets.only(left: 20, right: 20, bottom: 20),
-                  child: RaisedButton(
-                    color: primaryColor,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      primary: primaryColor,
+                    ),
                     onPressed: () async {
                       if (_formKey.currentState.validate()) {
                         String email = emailController.text.trim();
@@ -256,9 +275,11 @@ class _ProfileState extends State<Profile> {
                         setState(() {
                           isUpdating = true;
                         });
-                        await profileController.updateUser(email: email, name: name, image: myImage);
+                        await profileController.updateUser(
+                            email: email, name: name, image: myImage);
                         Fluttertoast.showToast(
-                            msg: AppLocalizations.getLocalizationValue(locale, LocaleKey.profileUpdated));
+                            msg: AppLocalizations.getLocalizationValue(
+                                locale, LocaleKey.profileUpdated));
                         setState(() {
                           isUpdating = false;
                         });
@@ -267,11 +288,13 @@ class _ProfileState extends State<Profile> {
                     child: isUpdating
                         ? Center(
                             child: CircularProgressIndicator(
-                              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                              valueColor:
+                                  AlwaysStoppedAnimation<Color>(Colors.white),
                             ),
                           )
                         : Text(
-                            AppLocalizations.getLocalizationValue(locale, LocaleKey.update),
+                            AppLocalizations.getLocalizationValue(
+                                locale, LocaleKey.update),
                             style: TextStyle(fontSize: 16, color: Colors.white),
                           ),
                   ),

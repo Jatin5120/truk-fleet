@@ -10,14 +10,12 @@ import 'package:image_picker/image_picker.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:map_launcher/map_launcher.dart';
 import 'package:truk_fleet/driver/controller/start_ride_document.dart';
-import 'package:truk_fleet/driver/pages/inride_page.dart';
 import 'package:truk_fleet/helper/emailHelper.dart';
 import 'package:truk_fleet/helper/payment_type.dart';
 import 'package:truk_fleet/locale/app_localization.dart';
 import 'package:truk_fleet/locale/locale_keys.dart';
 import 'package:truk_fleet/models/quote_model.dart';
 import 'package:truk_fleet/models/shipment_model.dart';
-import 'package:truk_fleet/utils/CustomImageChooser.dart';
 import 'package:truk_fleet/utils/constants.dart';
 import 'package:truk_fleet/utils/dialog_file.dart';
 
@@ -33,7 +31,7 @@ class _UploadStartTripState extends State<UploadStartTrip> {
   bool isLoading = false;
   Locale locale;
   Future<void> getImage(ImageSource source, int index) async {
-    var image = await ImagePicker().getImage(source: source);
+    var image = await ImagePicker().pickImage(source: source);
     if (image != null && mounted) {
       setState(() {
         File f = File(image.path);
@@ -72,7 +70,9 @@ class _UploadStartTripState extends State<UploadStartTrip> {
         child: Container(
           child: Center(
             child: images.length >= index + 1
-                ? (images[index] != null ? Image.file(images[index]) : dummyText)
+                ? (images[index] != null
+                    ? Image.file(images[index])
+                    : dummyText)
                 : dummyText,
           ),
         ),
@@ -83,8 +83,10 @@ class _UploadStartTripState extends State<UploadStartTrip> {
   @override
   void initState() {
     isLoading = true;
-    Future<QuerySnapshot> re =
-        FirebaseFirestore.instance.collection("Quote").where('bookingId', isEqualTo: widget.model.bookingId).get();
+    Future<QuerySnapshot> re = FirebaseFirestore.instance
+        .collection("Quote")
+        .where('bookingId', isEqualTo: widget.model.bookingId)
+        .get();
     re.then((value) {
       print(value.docs.length);
       if (value.docs.length > 0) {
@@ -92,7 +94,9 @@ class _UploadStartTripState extends State<UploadStartTrip> {
           isLoading = false;
         });
         QuoteModel quoteModel = QuoteModel.fromSnapshot(value.docs[0]);
-        if (quoteModel.advance > 0.0 && widget.model.paymentStatus == PaymentType.cod && widget.model.amountPaid == null ) {
+        if (quoteModel.advance > 0.0 &&
+            widget.model.paymentStatus == PaymentType.cod &&
+            widget.model.amountPaid == null) {
           paymentSuccessful(
             context: context,
             isPayment: true,
@@ -113,7 +117,6 @@ class _UploadStartTripState extends State<UploadStartTrip> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     locale = AppLocalizations.of(context).locale;
     return LoadingOverlay(
       isLoading: isLoading,
@@ -132,12 +135,17 @@ class _UploadStartTripState extends State<UploadStartTrip> {
               Expanded(
                 child: Container(
                   height: 65,
-                  padding: EdgeInsets.only(left: 10, right: 10, bottom: 10, top: 10),
-                  child: RaisedButton(
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-                    color: Colors.lightBlue,
+                  padding:
+                      EdgeInsets.only(left: 10, right: 10, bottom: 10, top: 10),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5)),
+                      primary: Colors.lightBlue,
+                    ),
                     onPressed: () async {
-                      final cord = Coords(widget.model.source.latitude, widget.model.source.longitude);
+                      final cord = Coords(widget.model.source.latitude,
+                          widget.model.source.longitude);
                       final availableMaps = await MapLauncher.installedMaps;
                       showModalBottomSheet(
                         context: context,
@@ -153,8 +161,9 @@ class _UploadStartTripState extends State<UploadStartTrip> {
                                           Navigator.pop(context);
                                           map.showMarker(
                                             coords: cord,
-                                            title:
-                                                AppLocalizations.getLocalizationValue(locale, LocaleKey.pickupLocation),
+                                            title: AppLocalizations
+                                                .getLocalizationValue(locale,
+                                                    LocaleKey.pickupLocation),
                                           );
                                         },
                                         title: Text(map.mapName),
@@ -174,7 +183,8 @@ class _UploadStartTripState extends State<UploadStartTrip> {
                     },
                     child: Center(
                       child: Text(
-                        AppLocalizations.getLocalizationValue(locale, LocaleKey.navigateToPickup),
+                        AppLocalizations.getLocalizationValue(
+                            locale, LocaleKey.navigateToPickup),
                         textAlign: TextAlign.center,
                         style: TextStyle(fontSize: 18, color: Colors.white),
                       ),
@@ -184,10 +194,14 @@ class _UploadStartTripState extends State<UploadStartTrip> {
               ),
               Container(
                 height: 65,
-                padding: EdgeInsets.only(left: 20, right: 20, bottom: 10, top: 10),
-                child: RaisedButton(
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-                  color: primaryColor,
+                padding:
+                    EdgeInsets.only(left: 20, right: 20, bottom: 10, top: 10),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5)),
+                    primary: primaryColor,
+                  ),
                   onPressed: () async {
                     if (images.any((element) => element == null)) {
                       Fluttertoast.showToast(msg: 'Please select all images');
@@ -197,14 +211,16 @@ class _UploadStartTripState extends State<UploadStartTrip> {
                       isLoading = true;
                     });
                     //print(images.length);
-                    await StartRideDocument().uploadImages(images: images, model: widget.model);
+                    await StartRideDocument()
+                        .uploadImages(images: images, model: widget.model);
                     setState(() {
                       isLoading = true;
                     });
                     Email().sendShipmentStartMail(widget.model, context);
                   },
                   child: Text(
-                    AppLocalizations.getLocalizationValue(locale, LocaleKey.startTrip),
+                    AppLocalizations.getLocalizationValue(
+                        locale, LocaleKey.startTrip),
                     style: TextStyle(fontSize: 18, color: Colors.white),
                   ),
                 ),
@@ -216,10 +232,14 @@ class _UploadStartTripState extends State<UploadStartTrip> {
           padding: const EdgeInsets.only(top: 20, left: 16, right: 16),
           child: GridView(
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2, childAspectRatio: 1.0, mainAxisSpacing: 28, crossAxisSpacing: 28),
+                crossAxisCount: 2,
+                childAspectRatio: 1.0,
+                mainAxisSpacing: 28,
+                crossAxisSpacing: 28),
             children: [
               pickImage(
-                title: '${AppLocalizations.getLocalizationValue(locale, LocaleKey.pickupImage)} 1',
+                title:
+                    '${AppLocalizations.getLocalizationValue(locale, LocaleKey.pickupImage)} 1',
                 onTap: () async {
                   await getImage(ImageSource.camera, 0);
                   // Platform.isAndroid
@@ -250,7 +270,8 @@ class _UploadStartTripState extends State<UploadStartTrip> {
                 index: 0,
               ),
               pickImage(
-                title: '${AppLocalizations.getLocalizationValue(locale, LocaleKey.pickupImage)} 2',
+                title:
+                    '${AppLocalizations.getLocalizationValue(locale, LocaleKey.pickupImage)} 2',
                 index: 1,
                 onTap: () async {
                   await getImage(ImageSource.camera, 1);
@@ -281,7 +302,8 @@ class _UploadStartTripState extends State<UploadStartTrip> {
                 },
               ),
               pickImage(
-                title: AppLocalizations.getLocalizationValue(locale, LocaleKey.trukImage),
+                title: AppLocalizations.getLocalizationValue(
+                    locale, LocaleKey.trukImage),
                 index: 2,
                 onTap: () async {
                   await getImage(ImageSource.camera, 2);
@@ -312,7 +334,8 @@ class _UploadStartTripState extends State<UploadStartTrip> {
                 },
               ),
               pickImage(
-                title: AppLocalizations.getLocalizationValue(locale, LocaleKey.selfie),
+                title: AppLocalizations.getLocalizationValue(
+                    locale, LocaleKey.selfie),
                 index: 3,
                 onTap: () async {
                   await getImage(ImageSource.camera, 3);

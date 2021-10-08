@@ -1,7 +1,4 @@
 import 'dart:async';
-import 'dart:math';
-
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -33,7 +30,8 @@ class _PendingDriverState extends State<PendingDriver> {
   Locale locale;
 
   Future<void> getPendingDrivers() async {
-    CollectionReference driverRequest = FirebaseFirestore.instance.collection(FirebaseHelper.driverRegistered);
+    CollectionReference driverRequest =
+        FirebaseFirestore.instance.collection(FirebaseHelper.driverRegistered);
     final snap = driverRequest.where('agent', isEqualTo: user.uid).snapshots();
 
     streamSubscription = snap.listen((element) {
@@ -61,7 +59,12 @@ class _PendingDriverState extends State<PendingDriver> {
   }
 
   Widget driverDetail(String key,
-      {String name, String driverID, String route, String status, String journeyStatus, String image}) {
+      {String name,
+      String driverID,
+      String route,
+      String status,
+      String journeyStatus,
+      String image}) {
     return Container(
       padding: EdgeInsets.only(left: 10, right: 10),
       child: FocusedMenuHolder(
@@ -72,7 +75,8 @@ class _PendingDriverState extends State<PendingDriver> {
         menuWidth: MediaQuery.of(context).size.width - 32,
         menuItems: [
           FocusedMenuItem(
-            title: Text(AppLocalizations.getLocalizationValue(locale, LocaleKey.delete)),
+            title: Text(AppLocalizations.getLocalizationValue(
+                locale, LocaleKey.delete)),
             trailingIcon: Icon(
               Icons.delete,
               color: Colors.red,
@@ -88,12 +92,14 @@ class _PendingDriverState extends State<PendingDriver> {
                 return;
               }
               Helper().showConfirmationDialog(
-                title: AppLocalizations.getLocalizationValue(locale, LocaleKey.delete),
-                subTitle: "${AppLocalizations.getLocalizationValue(locale, LocaleKey.deleteConfirm)} - $name?",
+                title: AppLocalizations.getLocalizationValue(
+                    locale, LocaleKey.delete),
+                subTitle:
+                    "${AppLocalizations.getLocalizationValue(locale, LocaleKey.deleteConfirm)} - $name?",
                 context: context,
                 onTap: () async {
-                  CollectionReference reference =
-                      FirebaseFirestore.instance.collection(FirebaseHelper.driverRegistered);
+                  CollectionReference reference = FirebaseFirestore.instance
+                      .collection(FirebaseHelper.driverRegistered);
                   await reference.doc(key).delete();
                 },
               );
@@ -134,22 +140,29 @@ class _PendingDriverState extends State<PendingDriver> {
     locale = AppLocalizations.of(context).locale;
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.getLocalizationValue(locale, LocaleKey.pending)),
+        title: Text(
+            AppLocalizations.getLocalizationValue(locale, LocaleKey.pending)),
       ),
       bottomNavigationBar: BottomAppBar(
         child: Container(
           height: 65,
           width: size.width,
           padding: EdgeInsets.only(left: 20, right: 20, bottom: 20),
-          child: RaisedButton(
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-            color: primaryColor,
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(5),
+              ),
+              primary: primaryColor,
+            ),
             onPressed: () {
               // Add a different driver
-              Navigator.of(context).push(MaterialPageRoute(builder: (context) => DriverDetails()));
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => DriverDetails()));
             },
             child: Text(
-              AppLocalizations.getLocalizationValue(locale, LocaleKey.addDriver),
+              AppLocalizations.getLocalizationValue(
+                  locale, LocaleKey.addDriver),
               style: TextStyle(fontSize: 18, color: Colors.white),
             ),
           ),
@@ -167,7 +180,8 @@ class _PendingDriverState extends State<PendingDriver> {
               )
             : (list.length == 0
                 ? NoDataPage(
-                    text: AppLocalizations.getLocalizationValue(locale, LocaleKey.noDriver),
+                    text: AppLocalizations.getLocalizationValue(
+                        locale, LocaleKey.noDriver),
                   )
                 : StreamBuilder<QuerySnapshot>(
                     stream: FirebaseFirestore.instance
@@ -178,7 +192,8 @@ class _PendingDriverState extends State<PendingDriver> {
                       if (!snapshot.hasData) {
                         return Center(
                           child: CircularProgressIndicator(
-                            valueColor: AlwaysStoppedAnimation<Color>(primaryColor),
+                            valueColor:
+                                AlwaysStoppedAnimation<Color>(primaryColor),
                           ),
                         );
                       }
@@ -189,11 +204,14 @@ class _PendingDriverState extends State<PendingDriver> {
                         itemCount: list.length,
                         itemBuilder: (context, index) {
                           DriverRegisterModel registerModel = list[index];
-                          if (temp.any((element) => element.mobile == "+91${registerModel.mobile}")) {
+                          if (temp.any((element) =>
+                              element.mobile == "+91${registerModel.mobile}")) {
                             return Container();
                           }
                           return driverDetail(registerModel.id,
-                              driverID: registerModel.mobile, image: 'NA', name: registerModel.name);
+                              driverID: registerModel.mobile,
+                              image: 'NA',
+                              name: registerModel.name);
                         },
                       );
                     },

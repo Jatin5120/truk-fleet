@@ -70,7 +70,6 @@ class _EditDriverDetailsState extends State<EditDriverDetails> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getDetails();
   }

@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:truk_fleet/driver/models/driver_model.dart';
 import 'package:truk_fleet/helper/login_type.dart';
@@ -44,7 +43,8 @@ class FirebaseHelper {
     }
     String collectionName = driverCollection;
     if (type == LoginType.company) collectionName = fleetOwnerCollection;
-    CollectionReference reference = FirebaseFirestore.instance.collection(collectionName);
+    CollectionReference reference =
+        FirebaseFirestore.instance.collection(collectionName);
 
     final d = await reference.doc(u).get();
     if (d.exists) {
@@ -56,14 +56,17 @@ class FirebaseHelper {
   Future insertUser(DriverModel model, String type) async {
     String collectionName = driverCollection;
     if (type == LoginType.company) collectionName = fleetOwnerCollection;
-    CollectionReference reference = FirebaseFirestore.instance.collection(collectionName);
+    CollectionReference reference =
+        FirebaseFirestore.instance.collection(collectionName);
 
     await reference.doc(model.uid).set(model.toMap());
-    await SharedPref().createSession(model.uid, model.name, model.email, model.mobile, type);
+    await SharedPref()
+        .createSession(model.uid, model.name, model.email, model.mobile, type);
   }
 
   Future<void> updateUser({String name, String email, String company}) async {
-    CollectionReference reference = FirebaseFirestore.instance.collection(driverCollection);
+    CollectionReference reference =
+        FirebaseFirestore.instance.collection(driverCollection);
     Map<String, dynamic> userData = {
       'uid': user.uid,
       'name': name,
@@ -74,9 +77,11 @@ class FirebaseHelper {
   }
 
   Future insertAgent(UserModel model, String type) async {
-    CollectionReference reference = FirebaseFirestore.instance.collection(fleetOwnerCollection);
+    CollectionReference reference =
+        FirebaseFirestore.instance.collection(fleetOwnerCollection);
     await reference.doc(model.uid).set(model.toMap());
-    await SharedPref().createSession(model.uid, model.name, model.email, model.mobile, type);
+    await SharedPref()
+        .createSession(model.uid, model.name, model.email, model.mobile, type);
   }
 
   Future<String> insertRequest({
@@ -93,7 +98,8 @@ class FirebaseHelper {
     String phoneNumber = user.phoneNumber;
     String uid = user.uid;
     final int bookingDate = DateTime.now().millisecondsSinceEpoch;
-    CollectionReference reference = FirebaseFirestore.instance.collection("Request");
+    CollectionReference reference =
+        FirebaseFirestore.instance.collection("Request");
     List<Map<String, dynamic>> materialMap = [];
     for (MaterialModel m in materials) {
       materialMap.add(m.toMap());
@@ -116,14 +122,16 @@ class FirebaseHelper {
   }
 
   Future updateQuoteStatus(String id, String status) async {
-    CollectionReference reference = FirebaseFirestore.instance.collection(quoteCollection);
+    CollectionReference reference =
+        FirebaseFirestore.instance.collection(quoteCollection);
     await reference.doc(id).update({
       'status': status,
     });
   }
 
   Future deleteRequest(String id) async {
-    CollectionReference reference = FirebaseFirestore.instance.collection(requestCollection);
+    CollectionReference reference =
+        FirebaseFirestore.instance.collection(requestCollection);
     await reference.doc(id).delete();
   }
 
@@ -131,12 +139,17 @@ class FirebaseHelper {
     //type is  0 = debit and 1 = credit
 
     final currentTimeMilli = DateTime.now().millisecondsSinceEpoch;
-    CollectionReference reference = FirebaseFirestore.instance.collection(walletCollection);
+    CollectionReference reference =
+        FirebaseFirestore.instance.collection(walletCollection);
     final snapWallet = await reference.doc(user.uid).get();
-    await transaction(tid, amount, type, currentTimeMilli, walletTranscationCollection);
-    await transaction(tid, amount, type, currentTimeMilli, transactionCollection);
+    await transaction(
+        tid, amount, type, currentTimeMilli, walletTranscationCollection);
+    await transaction(
+        tid, amount, type, currentTimeMilli, transactionCollection);
     if (snapWallet.exists) {
-      double amt = type == 1 ? snapWallet.get("amount") + amount : snapWallet.get("amount") - amount;
+      double amt = type == 1
+          ? snapWallet.get("amount") + amount
+          : snapWallet.get("amount") - amount;
       reference.doc(user.uid).update({
         'amount': amt,
         'lastUpdate': currentTimeMilli,
@@ -149,10 +162,12 @@ class FirebaseHelper {
     }
   }
 
-  Future transaction(String transactionId, double amount, int type, int time, String collection) async {
+  Future transaction(String transactionId, double amount, int type, int time,
+      String collection) async {
     //type is  0 = debit and 1 = credit
 
-    CollectionReference reference = FirebaseFirestore.instance.collection(collection);
+    CollectionReference reference =
+        FirebaseFirestore.instance.collection(collection);
 
     await reference.add({
       'tid': transactionId,
@@ -164,7 +179,8 @@ class FirebaseHelper {
   }
 
   StreamSubscription getNotificationCount() {
-    CollectionReference ref = FirebaseFirestore.instance.collection(FirebaseHelper.notificationCollection);
+    CollectionReference ref = FirebaseFirestore.instance
+        .collection(FirebaseHelper.notificationCollection);
     final stream = ref.where('uid', isEqualTo: user.uid).snapshots();
 
     StreamSubscription s = stream.listen((element) {});
@@ -172,7 +188,8 @@ class FirebaseHelper {
   }
 
   Future seenNotification(List<NotificationModel> notifications) async {
-    CollectionReference ref = FirebaseFirestore.instance.collection(FirebaseHelper.notificationCollection);
+    CollectionReference ref = FirebaseFirestore.instance
+        .collection(FirebaseHelper.notificationCollection);
     for (NotificationModel m in notifications) {
       await ref.doc(m.id).update({
         'isSeen': true,

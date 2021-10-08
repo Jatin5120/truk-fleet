@@ -2,14 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:focused_menu/focused_menu.dart';
 import 'package:focused_menu/modals.dart';
 import 'package:truk_fleet/company/controller/truk_controller.dart';
 import 'package:truk_fleet/company/pages/add_truk_one.dart';
 import 'package:truk_fleet/company/pages/add_truk_two.dart';
-import 'package:truk_fleet/driver/models/driver_model.dart';
 import 'package:truk_fleet/firebase_helper/firebase_helper.dart';
 import 'package:truk_fleet/helper/helper.dart';
 import 'package:truk_fleet/helper/request_status.dart';
@@ -34,19 +32,24 @@ class _MyTrucksState extends State<MyTrucks> {
     locale = AppLocalizations.of(context).locale;
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.getLocalizationValue(locale, LocaleKey.myTruks)),
+        title: Text(
+            AppLocalizations.getLocalizationValue(locale, LocaleKey.myTruks)),
       ),
       bottomNavigationBar: BottomAppBar(
         child: Container(
           height: 65,
           width: size.width,
           padding: EdgeInsets.only(left: 16, right: 16, bottom: 10),
-          child: RaisedButton(
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-            color: primaryColor,
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(5)),
+              primary: primaryColor,
+            ),
             onPressed: () {
               // Add a different driver
-              Navigator.of(context).push(CupertinoPageRoute(builder: (context) => AddTruck()));
+              Navigator.of(context)
+                  .push(CupertinoPageRoute(builder: (context) => AddTruck()));
             },
             child: Text(
               AppLocalizations.getLocalizationValue(locale, LocaleKey.addTruk),
@@ -74,19 +77,22 @@ class _MyTrucksState extends State<MyTrucks> {
             }
             if (snapshot.hasError || !snapshot.hasData) {
               return Center(
-                child: Text(AppLocalizations.getLocalizationValue(locale, LocaleKey.noData)),
+                child: Text(AppLocalizations.getLocalizationValue(
+                    locale, LocaleKey.noData)),
               );
             }
             if (snapshot.data.size <= 0) {
               return NoDataPage(
-                text: AppLocalizations.getLocalizationValue(locale, LocaleKey.noData),
+                text: AppLocalizations.getLocalizationValue(
+                    locale, LocaleKey.noData),
               );
             }
 
             return ListView.builder(
               itemCount: snapshot.data.docs.length,
               itemBuilder: (context, index) {
-                TrukModel model = TrukModel.fromSnapshot(snapshot.data.docs[index]);
+                TrukModel model =
+                    TrukModel.fromSnapshot(snapshot.data.docs[index]);
 
                 return truckDetail(
                   trukBodyType: model.trukType,
@@ -129,7 +135,8 @@ class _MyTrucksState extends State<MyTrucks> {
         menuWidth: MediaQuery.of(context).size.width - 32,
         menuItems: [
           FocusedMenuItem(
-            title: Text(AppLocalizations.getLocalizationValue(locale, LocaleKey.edit)),
+            title: Text(
+                AppLocalizations.getLocalizationValue(locale, LocaleKey.edit)),
             trailingIcon: Icon(Icons.edit),
             onPressed: () {
               Navigator.push(
@@ -144,7 +151,8 @@ class _MyTrucksState extends State<MyTrucks> {
             },
           ),
           FocusedMenuItem(
-            title: Text(AppLocalizations.getLocalizationValue(locale, LocaleKey.documents)),
+            title: Text(AppLocalizations.getLocalizationValue(
+                locale, LocaleKey.documents)),
             trailingIcon: Icon(Icons.dock),
             onPressed: () {
               Navigator.push(
@@ -158,7 +166,8 @@ class _MyTrucksState extends State<MyTrucks> {
             },
           ),
           FocusedMenuItem(
-            title: Text(AppLocalizations.getLocalizationValue(locale, LocaleKey.delete)),
+            title: Text(AppLocalizations.getLocalizationValue(
+                locale, LocaleKey.delete)),
             trailingIcon: Icon(
               Icons.delete,
               color: Colors.red,
@@ -174,8 +183,10 @@ class _MyTrucksState extends State<MyTrucks> {
                 return;
               }
               Helper().showConfirmationDialog(
-                title: AppLocalizations.getLocalizationValue(locale, LocaleKey.delete),
-                subTitle: "${AppLocalizations.getLocalizationValue(locale, LocaleKey.deleteConfirm)} - $trukID?",
+                title: AppLocalizations.getLocalizationValue(
+                    locale, LocaleKey.delete),
+                subTitle:
+                    "${AppLocalizations.getLocalizationValue(locale, LocaleKey.deleteConfirm)} - $trukID?",
                 context: context,
                 onTap: () async {
                   await TrukController().deleteTruk(trukID);
@@ -190,7 +201,8 @@ class _MyTrucksState extends State<MyTrucks> {
             leading: Container(
               width: 60,
               height: 60,
-              decoration: BoxDecoration(borderRadius: BorderRadius.circular(40), color: Colors.grey),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(40), color: Colors.grey),
               child: Center(
                 child: placeHolder,
               ),
@@ -204,12 +216,17 @@ class _MyTrucksState extends State<MyTrucks> {
                     text: TextSpan(children: [
                       TextSpan(
                         text: '$trukName ',
-                        style: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold),
                       ),
                       TextSpan(
                           text:
                               '(${AppLocalizations.getLocalizationValue(locale, trukBodyType.toLowerCase().contains("closed") ? LocaleKey.closedTruk : LocaleKey.openTruk)})',
-                          style: TextStyle(color: Colors.black, fontWeight: FontWeight.w400)),
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w400)),
                     ]),
                   ),
                   SizedBox(
@@ -253,9 +270,11 @@ class _MyTrucksState extends State<MyTrucks> {
                         ShipmentModel model = ShipmentModel.fromSnapshot(s);
                         m.add(model);
                       }
-                      if (m.any((element) => element.status == RequestStatus.started)) {
+                      if (m.any((element) =>
+                          element.status == RequestStatus.started)) {
                         status = LocaleKey.inTransit;
-                      } else if (m.any((element) => element.status == RequestStatus.assigned)) {
+                      } else if (m.any((element) =>
+                          element.status == RequestStatus.assigned)) {
                         status = LocaleKey.assigned;
                       } else
                         status = LocaleKey.available;
@@ -263,9 +282,12 @@ class _MyTrucksState extends State<MyTrucks> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            AppLocalizations.getLocalizationValue(locale, status),
+                            AppLocalizations.getLocalizationValue(
+                                locale, status),
                             style: TextStyle(
-                              color: status == LocaleKey.assigned ? primaryColor : Colors.blue,
+                              color: status == LocaleKey.assigned
+                                  ? primaryColor
+                                  : Colors.blue,
                               fontSize: 14,
                             ),
                           ),

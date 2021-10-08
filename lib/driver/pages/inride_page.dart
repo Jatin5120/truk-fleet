@@ -3,7 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:geocoder/geocoder.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:map_launcher/map_launcher.dart' as m;
@@ -63,7 +62,8 @@ class _InRidePageState extends State<InRidePage> {
           await requestPermission(_permission);
         }
 
-        if (_permissionStatus == PermissionStatus.granted) _getLocation(context);
+        if (_permissionStatus == PermissionStatus.granted)
+          _getLocation(context);
       }
     });
   }
@@ -76,12 +76,14 @@ class _InRidePageState extends State<InRidePage> {
           builder: (BuildContext context) {
             return AlertDialog(
               title: Text("GPS disabled"),
-              content: const Text('Please make sure you enable GPS and try again'),
+              content:
+                  const Text('Please make sure you enable GPS and try again'),
               actions: <Widget>[
-                FlatButton(
+                ElevatedButton(
                   child: Text('Ok'),
                   onPressed: () {
-                    final intent = AndroidIntent(action: 'android.settings.LOCATION_SOURCE_SETTINGS');
+                    final intent = AndroidIntent(
+                        action: 'android.settings.LOCATION_SOURCE_SETTINGS');
 
                     intent.launch();
                     Navigator.of(context, rootNavigator: true).pop();
@@ -111,7 +113,8 @@ class _InRidePageState extends State<InRidePage> {
     setState(() {
       isLoading = true;
     });
-    Position pos = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
+    Position pos = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.best);
     final lat = pos.latitude;
     final lng = pos.longitude;
     if (pos != null) {
@@ -149,12 +152,17 @@ class _InRidePageState extends State<InRidePage> {
             Expanded(
               child: Container(
                 height: 65,
-                padding: EdgeInsets.only(left: 20, right: 20, bottom: 10, top: 10),
-                child: RaisedButton(
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-                  color: primaryColor,
+                padding:
+                    EdgeInsets.only(left: 20, right: 20, bottom: 10, top: 10),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5)),
+                    primary: primaryColor,
+                  ),
                   onPressed: () async {
-                    final cord = m.Coords(widget.model.destination.latitude, widget.model.destination.longitude);
+                    final cord = m.Coords(widget.model.destination.latitude,
+                        widget.model.destination.longitude);
                     final availableMaps = await m.MapLauncher.installedMaps;
                     showModalBottomSheet(
                       context: context,
@@ -170,8 +178,9 @@ class _InRidePageState extends State<InRidePage> {
                                         Navigator.pop(context);
                                         map.showMarker(
                                           coords: cord,
-                                          title:
-                                              AppLocalizations.getLocalizationValue(locale, LocaleKey.pickupLocation),
+                                          title: AppLocalizations
+                                              .getLocalizationValue(locale,
+                                                  LocaleKey.pickupLocation),
                                         );
                                       },
                                       title: Text(map.mapName ?? "Google"),
@@ -190,7 +199,8 @@ class _InRidePageState extends State<InRidePage> {
                     );
                   },
                   child: Text(
-                    AppLocalizations.getLocalizationValue(locale, LocaleKey.navigate),
+                    AppLocalizations.getLocalizationValue(
+                        locale, LocaleKey.navigate),
                     style: TextStyle(fontSize: 18, color: Colors.white),
                   ),
                 ),
@@ -199,10 +209,14 @@ class _InRidePageState extends State<InRidePage> {
             Expanded(
               child: Container(
                 height: 65,
-                padding: EdgeInsets.only(left: 20, right: 20, bottom: 10, top: 10),
-                child: RaisedButton(
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-                  color: Colors.red,
+                padding:
+                    EdgeInsets.only(left: 20, right: 20, bottom: 10, top: 10),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5)),
+                    primary: Colors.red,
+                  ),
                   onPressed: () async {
                     Navigator.push(
                       context,
@@ -214,7 +228,8 @@ class _InRidePageState extends State<InRidePage> {
                     );
                   },
                   child: Text(
-                    AppLocalizations.getLocalizationValue(locale, LocaleKey.endTrip),
+                    AppLocalizations.getLocalizationValue(
+                        locale, LocaleKey.endTrip),
                     style: TextStyle(fontSize: 18, color: Colors.white),
                   ),
                 ),
@@ -287,9 +302,12 @@ class _InRidePageState extends State<InRidePage> {
                                   height: 5,
                                 ),
                                 FutureBuilder<String>(
-                                  future: Helper().setLocationText(widget.model.destination),
+                                  future: Helper().setLocationText(
+                                      widget.model.destination),
                                   builder: (context, snapshot) {
-                                    if (!snapshot.hasData || snapshot.connectionState == ConnectionState.waiting) {
+                                    if (!snapshot.hasData ||
+                                        snapshot.connectionState ==
+                                            ConnectionState.waiting) {
                                       return Text('Address...');
                                     }
                                     return Text(

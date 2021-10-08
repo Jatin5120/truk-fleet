@@ -25,8 +25,10 @@ class _FinalPaymentScreenState extends State<FinalPaymentScreen> {
   String user;
   @override
   void initState() {
-    Future<QuerySnapshot> re =
-        FirebaseFirestore.instance.collection("Quote").where('bookingId', isEqualTo: widget.model.bookingId).get();
+    Future<QuerySnapshot> re = FirebaseFirestore.instance
+        .collection("Quote")
+        .where('bookingId', isEqualTo: widget.model.bookingId)
+        .get();
     re.then((value) {
       isLoading = false;
       print(value.docs.length);
@@ -34,7 +36,9 @@ class _FinalPaymentScreenState extends State<FinalPaymentScreen> {
         QuoteModel quoteModel = QuoteModel.fromSnapshot(value.docs[0]);
         if (widget.model.paymentStatus == PaymentType.cod) {
           if (quoteModel.advance > 0.0)
-            paymentRemaining = (double.parse(widget.model.price) - quoteModel.advance).toString();
+            paymentRemaining =
+                (double.parse(widget.model.price) - quoteModel.advance)
+                    .toString();
           else
             paymentRemaining = widget.model.price;
         }
@@ -58,45 +62,50 @@ class _FinalPaymentScreenState extends State<FinalPaymentScreen> {
                 showDialog(
                     context: context,
                     builder: (context) => AlertDialog(
-                      content: Container(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Text("Generating invoice...."),
-                            CircularProgressIndicator()
-                          ],
-                        ),
-                      ),
-                    )
-                );
-                await FirebaseFirestore.instance.collection(FirebaseHelper.userCollection).doc(widget.model.uid).get().then((value){
+                          content: Container(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Text("Generating invoice...."),
+                                CircularProgressIndicator()
+                              ],
+                            ),
+                          ),
+                        ));
+                await FirebaseFirestore.instance
+                    .collection(FirebaseHelper.userCollection)
+                    .doc(widget.model.uid)
+                    .get()
+                    .then((value) {
                   setState(() {
                     user = value.get('name');
                   });
                 });
-                for(var m in widget.model.materials){
+                for (var m in widget.model.materials) {
                   setState(() {
-                    items.add(
-                        InvoiceItem(
-                            quantity: m.quantity,
-                            name: m.materialName,
-                            type: m.materialType,
-                            mode: widget.model.paymentStatus,
-                            total: widget.model.price
-                        ));
+                    items.add(InvoiceItem(
+                        quantity: m.quantity,
+                        name: m.materialName,
+                        type: m.materialType,
+                        mode: widget.model.paymentStatus,
+                        total: widget.model.price));
                   });
                 }
-                pdfPage().generateInvoice(widget.model, user,items);
+                PdfPage().generateInvoice(widget.model, user, items);
                 Navigator.pop(context);
                 String inv;
-                await FirebaseFirestore.instance.collection(FirebaseHelper.invoiceCollection).where('id',isEqualTo: widget.model.id).get().then((value) {
-                  for(var data in value.docs){
+                await FirebaseFirestore.instance
+                    .collection(FirebaseHelper.invoiceCollection)
+                    .where('id', isEqualTo: widget.model.id)
+                    .get()
+                    .then((value) {
+                  for (var data in value.docs) {
                     setState(() {
-                      inv=data['invoice'];
+                      inv = data['invoice'];
                     });
                   }
                 });
-               Email().sendShipmentCompleteMail(widget.model,inv, context);
+                Email().sendShipmentCompleteMail(widget.model, inv, context);
               },
               style: ElevatedButton.styleFrom(
                 primary: primaryColor,
@@ -123,21 +132,23 @@ class _FinalPaymentScreenState extends State<FinalPaymentScreen> {
               SizedBox(
                 height: 10,
               ),
-              widget.model.amountPaid==null?Text(
-                "\u20b9$paymentRemaining",
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 35,
-                  fontWeight: FontWeight.bold,
-                ),
-              ):Text(
-                "\u20b9${(double.parse(widget.model.price)-double.parse(widget.model.amountPaid))}",
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 35,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+              widget.model.amountPaid == null
+                  ? Text(
+                      "\u20b9$paymentRemaining",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 35,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    )
+                  : Text(
+                      "\u20b9${(double.parse(widget.model.price) - double.parse(widget.model.amountPaid))}",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 35,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
             ],
           ),
         ),

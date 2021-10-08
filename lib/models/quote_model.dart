@@ -1,10 +1,6 @@
-import 'dart:convert';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:truk_fleet/helper/helper.dart';
-import 'package:truk_fleet/helper/payment_type.dart';
 import 'package:truk_fleet/helper/request_status.dart';
 
 import '../models/material_model.dart';

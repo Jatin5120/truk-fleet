@@ -1,11 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:truk_fleet/company/controller/request_controller.dart';
 import 'package:truk_fleet/company/pages/send_quote.dart';
-import 'package:truk_fleet/firebase_helper/firebase_helper.dart';
 import 'package:truk_fleet/helper/helper.dart';
 import 'package:truk_fleet/helper/request_status.dart';
 import 'package:truk_fleet/locale/app_localization.dart';

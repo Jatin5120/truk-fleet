@@ -1,9 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:mailer/mailer.dart';
-import 'package:mailer/smtp_server/gmail.dart';
-import 'package:truk_fleet/Invoice%20Handler/Invoice%20model/invoice.dart';
 import 'package:truk_fleet/driver/models/driver_model.dart';
 import 'package:truk_fleet/driver/pages/driver_homepage.dart';
 import 'package:truk_fleet/driver/pages/inride_page.dart';
@@ -14,57 +11,64 @@ import 'package:truk_fleet/models/quote_model.dart';
 import 'package:truk_fleet/models/shipment_model.dart';
 import 'package:truk_fleet/models/user_model.dart';
 
-class Email{
-  sendShipmentCompleteMail(ShipmentModel model,inv, context) async {
+class Email {
+  sendShipmentCompleteMail(ShipmentModel model, inv, context) async {
     showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          content: Container(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Text("Updating...."),
-                CircularProgressIndicator()
-              ],
-            ),
-          ),
-        )
-    );
+              content: Container(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [Text("Updating...."), CircularProgressIndicator()],
+                ),
+              ),
+            ));
     String dest = await Helper().setLocationText(model.destination);
     Uri url;
-    await FirebaseFirestore.instance.collection(FirebaseHelper.driverCollection).doc(model.driver).update({
-      'cstatus':true
-    }).then((value) async {
+    await FirebaseFirestore.instance
+        .collection(FirebaseHelper.driverCollection)
+        .doc(model.driver)
+        .update({'cstatus': true}).then((value) async {
       String userMail;
       String userName;
-      await FirebaseFirestore.instance.collection(FirebaseHelper.userCollection).doc(model.uid).get().then((value){
+      await FirebaseFirestore.instance
+          .collection(FirebaseHelper.userCollection)
+          .doc(model.uid)
+          .get()
+          .then((value) {
         UserModel um = UserModel.fromSnapshot(value);
-          userMail = um.email;
-          userName = um.name;
+        userMail = um.email;
+        userName = um.name;
       });
-      await FirebaseFirestore.instance.collection(FirebaseHelper.invoiceCollection).where('id',isEqualTo:model.uid).get().then((value){
-        for(var data in value.docs){
-          url= Uri.parse(data.get('invoice'));
+      await FirebaseFirestore.instance
+          .collection(FirebaseHelper.invoiceCollection)
+          .where('id', isEqualTo: model.uid)
+          .get()
+          .then((value) {
+        for (var data in value.docs) {
+          url = Uri.parse(data.get('invoice'));
         }
       });
-      try{
-        final mailer = sg.Mailer('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');
+      try {
+        final mailer = sg.Mailer(
+            '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');
         final toAddress = sg.Address(userMail);
         final fromAddress = sg.Address('info@trukapp.com');
         final subject = 'DRIVER ASSIGNED';
-        Map<String,dynamic> dd= {
-          'UserName':userName,
-          'destination':dest,
-          'invoiceUrl':url,
+        Map<String, dynamic> dd = {
+          'UserName': userName,
+          'destination': dest,
+          'invoiceUrl': url,
         };
-        final personalization = sg.Personalization([toAddress],dynamicTemplateData: dd);
-        final email =
-        sg.Email([personalization], fromAddress, subject, templateId: "d-9644068b03e9448daa384f4843f85ffa");
+        final personalization =
+            sg.Personalization([toAddress], dynamicTemplateData: dd);
+        final email = sg.Email([personalization], fromAddress, subject,
+            templateId: "d-9644068b03e9448daa384f4843f85ffa");
         mailer.send(email).then((result) {
           // ...
           print('mail sent: ${result.asError.error.toString()}');
         });
-      }catch(e){
+      } catch (e) {
         print("ERRRORR: $e");
       }
     });
@@ -74,55 +78,59 @@ class Email{
       MaterialPageRoute(
         builder: (context) => DriverHomeScreen(),
       ),
-          (route) => false,
+      (route) => false,
     );
   }
+
   sendShipmentStartMail(ShipmentModel model, context) async {
     showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          content: Container(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Text("Updating...."),
-                CircularProgressIndicator()
-              ],
-            ),
-          ),
-        )
-    );
+              content: Container(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [Text("Updating...."), CircularProgressIndicator()],
+                ),
+              ),
+            ));
     String source = await Helper().setLocationText(model.source);
     DateTime st = DateTime.fromMillisecondsSinceEpoch(model.bookingDate);
-    await FirebaseFirestore.instance.collection(FirebaseHelper.driverCollection).doc(model.driver).update({
-      'cstatus':true
-    }).then((value) async {
+    await FirebaseFirestore.instance
+        .collection(FirebaseHelper.driverCollection)
+        .doc(model.driver)
+        .update({'cstatus': true}).then((value) async {
       String userMail;
-      await FirebaseFirestore.instance.collection(FirebaseHelper.userCollection).doc(model.uid).get().then((value){
+      await FirebaseFirestore.instance
+          .collection(FirebaseHelper.userCollection)
+          .doc(model.uid)
+          .get()
+          .then((value) {
         userMail = value.get('email');
       });
-      try{
-        try{
-          final mailer = sg.Mailer('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');
+      try {
+        try {
+          final mailer = sg.Mailer(
+              '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');
           final toAddress = sg.Address(userMail);
           final fromAddress = sg.Address('info@trukapp.com');
           final subject = 'DRIVER ASSIGNED';
-          Map<String,dynamic> dd= {
-            'Source':source,
-            'OrderNumber':model.bookingId,
-            'ShippingDate':st,
+          Map<String, dynamic> dd = {
+            'Source': source,
+            'OrderNumber': model.bookingId,
+            'ShippingDate': st,
           };
-          final personalization = sg.Personalization([toAddress],dynamicTemplateData: dd);
-          final email =
-          sg.Email([personalization], fromAddress, subject, templateId: "d-153e98f8cac54374b1c9d3357e64516e");
+          final personalization =
+              sg.Personalization([toAddress], dynamicTemplateData: dd);
+          final email = sg.Email([personalization], fromAddress, subject,
+              templateId: "d-153e98f8cac54374b1c9d3357e64516e");
           mailer.send(email).then((result) {
             // ...
             print('mail sent: ${result.asError.error.toString()}');
           });
-        }catch (e) {
+        } catch (e) {
           print("Error: $e");
         }
-      }catch(e){
+      } catch (e) {
         print("ERRRORR: $e");
       }
     });
@@ -136,59 +144,64 @@ class Email{
       ),
     );
   }
-  sendDriverAssignedMail(DriverModel model, context , email, QuoteModel quoteModel) async {
+
+  sendDriverAssignedMail(
+      DriverModel model, context, email, QuoteModel quoteModel) async {
     showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          content: Container(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Text("Updating...."),
-                CircularProgressIndicator()
-              ],
-            ),
-          ),
-        )
-    );
+              content: Container(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [Text("Updating...."), CircularProgressIndicator()],
+                ),
+              ),
+            ));
     String userName;
     String userMail;
     DriverModel dr;
-    await FirebaseFirestore.instance.collection(FirebaseHelper.userCollection).doc(quoteModel.uid).get().then((value){
+    await FirebaseFirestore.instance
+        .collection(FirebaseHelper.userCollection)
+        .doc(quoteModel.uid)
+        .get()
+        .then((value) {
       UserModel u = UserModel.fromSnapshot(value);
       userName = u.name;
       userMail = u.email;
     });
-    await FirebaseFirestore.instance.collection(FirebaseHelper.driverCollection).where('uid',isEqualTo: model.uid).get().then((value){
-      for(var d in value.docs){
-        dr=DriverModel.fromSnapshot(d);
-        d.reference.update({
-          'cstatus':false
-        }).then((value) async {
-          try{
-            final mailer = sg.Mailer('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');
+    await FirebaseFirestore.instance
+        .collection(FirebaseHelper.driverCollection)
+        .where('uid', isEqualTo: model.uid)
+        .get()
+        .then((value) {
+      for (var d in value.docs) {
+        dr = DriverModel.fromSnapshot(d);
+        d.reference.update({'cstatus': false}).then((value) async {
+          try {
+            final mailer = sg.Mailer(
+                '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');
             final toAddress = sg.Address(userMail);
             final fromAddress = sg.Address('info@trukapp.com');
             final subject = 'DRIVER ASSIGNED';
-            Map<String,dynamic> dd= {
-              'Name':userName,
-              'ID':quoteModel.bookingId,
-              'DName':dr.name,
-              'Phone':dr.mobile
+            Map<String, dynamic> dd = {
+              'Name': userName,
+              'ID': quoteModel.bookingId,
+              'DName': dr.name,
+              'Phone': dr.mobile
             };
-            final personalization = sg.Personalization([toAddress],dynamicTemplateData: dd);
-            final email =
-            sg.Email([personalization], fromAddress, subject, templateId: "d-abb7173c4c264e74a85aa69b6a145ab7");
+            final personalization =
+                sg.Personalization([toAddress], dynamicTemplateData: dd);
+            final email = sg.Email([personalization], fromAddress, subject,
+                templateId: "d-abb7173c4c264e74a85aa69b6a145ab7");
             mailer.send(email).then((result) {
               // ...
               print('mail sent: ${result.asError.error.toString()}');
             });
-          }catch (e) {
+          } catch (e) {
             print("Error: $e");
           }
         });
       }
     });
-
   }
 }

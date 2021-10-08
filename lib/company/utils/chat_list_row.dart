@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:truk_fleet/helper/payment_type.dart';
 import 'package:truk_fleet/helper/request_status.dart';
 import 'package:truk_fleet/locale/app_localization.dart';
 import 'package:truk_fleet/locale/locale_keys.dart';
@@ -11,7 +10,8 @@ import 'package:truk_fleet/utils/constants.dart';
 class ChatListRow extends StatelessWidget {
   final ChattingListModel model;
   final Function onPriceUpdate;
-  const ChatListRow({Key key, this.model, this.onPriceUpdate}) : super(key: key);
+  const ChatListRow({Key key, this.model, this.onPriceUpdate})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -79,13 +79,18 @@ class ChatListRow extends StatelessWidget {
                     ),
                     Align(
                       alignment: Alignment.centerRight,
-                      child: RaisedButton(
-                        onPressed: model.quoteModel.status == RequestStatus.accepted ||
-                                model.quoteModel.status == RequestStatus.assigned ||
-                                model.quoteModel.status == RequestStatus.cancelled
-                            ? null
-                            : onPriceUpdate,
-                        color: primaryColor,
+                      child: ElevatedButton(
+                        onPressed:
+                            model.quoteModel.status == RequestStatus.accepted ||
+                                    model.quoteModel.status ==
+                                        RequestStatus.assigned ||
+                                    model.quoteModel.status ==
+                                        RequestStatus.cancelled
+                                ? null
+                                : onPriceUpdate,
+                        style: ElevatedButton.styleFrom(
+                          primary: primaryColor,
+                        ),
                         child: Center(
                           child: Text(
                             "${AppLocalizations.getLocalizationValue(locale, LocaleKey.fare)} ${AppLocalizations.getLocalizationValue(locale, LocaleKey.update)}",

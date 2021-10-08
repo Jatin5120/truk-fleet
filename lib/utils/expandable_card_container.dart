@@ -2,7 +2,6 @@ import 'package:expandable/expandable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:truk_fleet/company/pages/track.dart';
-import 'package:truk_fleet/company/pages/track_shipment.dart';
 import 'package:truk_fleet/helper/helper.dart';
 import 'package:truk_fleet/helper/request_status.dart';
 import 'package:truk_fleet/locale/app_localization.dart';
@@ -17,10 +16,13 @@ class ExpandableCardContainer extends StatefulWidget {
   final String docID;
   final bool isCollapsed;
 
-  const ExpandableCardContainer({Key key, this.model, this.docID, this.isCollapsed = false}) : super(key: key);
+  const ExpandableCardContainer(
+      {Key key, this.model, this.docID, this.isCollapsed = false})
+      : super(key: key);
 
   @override
-  _ExpandableCardContainerState createState() => _ExpandableCardContainerState();
+  _ExpandableCardContainerState createState() =>
+      _ExpandableCardContainerState();
 }
 
 class _ExpandableCardContainerState extends State<ExpandableCardContainer> {
@@ -100,17 +102,22 @@ class _ExpandableCardContainerState extends State<ExpandableCardContainer> {
                     children: [
                       Text(
                         "Booking Id: ${widget.model.bookingId}",
-                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: Colors.black),
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 12,
+                            color: Colors.black),
                       ),
                       Text(
                         "${AppLocalizations.getLocalizationValue(locale, LocaleKey.quantity)}: $weight KG",
-                        style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            fontSize: 14, fontWeight: FontWeight.bold),
                       ),
                       SizedBox(
                         height: 5,
                       ),
                       FutureBuilder<String>(
-                        future: Helper().setLocationText(widget.model.destination),
+                        future:
+                            Helper().setLocationText(widget.model.destination),
                         builder: (context, snapshot) {
                           if (!snapshot.hasData) {
                             return Text('Address...');
@@ -123,7 +130,8 @@ class _ExpandableCardContainerState extends State<ExpandableCardContainer> {
                             textAlign: TextAlign.start,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                            style: TextStyle(
+                                fontSize: 14, fontWeight: FontWeight.bold),
                           );
                         },
                       ),
@@ -132,21 +140,24 @@ class _ExpandableCardContainerState extends State<ExpandableCardContainer> {
                       ),
                       Text(
                         "${AppLocalizations.getLocalizationValue(locale, LocaleKey.date)}: ${widget.model.pickupDate}",
-                        style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            fontSize: 14, fontWeight: FontWeight.bold),
                       ),
                       SizedBox(
                         height: 5,
                       ),
                       Text(
                         "${AppLocalizations.getLocalizationValue(locale, LocaleKey.fare)} \u20B9 ${widget.model.price}",
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
                       ),
                       SizedBox(
                         height: 5,
                       ),
                       Text(
                         "${AppLocalizations.getLocalizationValue(locale, LocaleKey.payments)}: ${AppLocalizations.getLocalizationValue(locale, widget.model.paymentStatus)}",
-                        style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            fontSize: 14, fontWeight: FontWeight.bold),
                       ),
                       SizedBox(
                         height: 5,
@@ -195,7 +206,8 @@ class _ExpandableCardContainerState extends State<ExpandableCardContainer> {
                           ),
                           child: Center(
                             child: Text(
-                              AppLocalizations.getLocalizationValue(locale, LocaleKey.orderSummary),
+                              AppLocalizations.getLocalizationValue(
+                                  locale, LocaleKey.orderSummary),
                               style: TextStyle(color: Colors.white),
                             ),
                           ),
@@ -212,38 +224,44 @@ class _ExpandableCardContainerState extends State<ExpandableCardContainer> {
                               decoration: completedDecoration,
                               child: Center(
                                 child: Text(
-                                  AppLocalizations.getLocalizationValue(locale, LocaleKey.delivered),
+                                  AppLocalizations.getLocalizationValue(
+                                      locale, LocaleKey.delivered),
                                   style: enabledTextStyle,
                                   textAlign: TextAlign.left,
                                 ),
                               ),
                             )
                           : GestureDetector(
-                              onTap: widget.model.status != RequestStatus.started
-                                  ? () {}
-                                  : () {
-                                      double weight = 0.0;
-                                      for (MaterialModel m in widget.model.materials) {
-                                        weight += m.quantity;
-                                      }
-                                      Navigator.push(
-                                        context,
-                                        CupertinoPageRoute(
-                                          builder: (context) => TrackNew(
-                                            shipmentModel: widget.model,
-                                          ),
-                                        ),
-                                      );
-                                    },
+                              onTap:
+                                  widget.model.status != RequestStatus.started
+                                      ? () {}
+                                      : () {
+                                          double weight = 0.0;
+                                          for (MaterialModel m
+                                              in widget.model.materials) {
+                                            weight += m.quantity;
+                                          }
+                                          Navigator.push(
+                                            context,
+                                            CupertinoPageRoute(
+                                              builder: (context) => TrackNew(
+                                                shipmentModel: widget.model,
+                                              ),
+                                            ),
+                                          );
+                                        },
                               child: Container(
                                 height: 40.0,
-                                decoration: widget.model.status == RequestStatus.started
-                                    ? enabledDecoration
-                                    : disabledBoxDecoration,
+                                decoration:
+                                    widget.model.status == RequestStatus.started
+                                        ? enabledDecoration
+                                        : disabledBoxDecoration,
                                 child: Center(
                                   child: Text(
-                                    AppLocalizations.getLocalizationValue(locale, LocaleKey.track),
-                                    style: widget.model.status == RequestStatus.started
+                                    AppLocalizations.getLocalizationValue(
+                                        locale, LocaleKey.track),
+                                    style: widget.model.status ==
+                                            RequestStatus.started
                                         ? enabledTextStyle
                                         : disabledTextStyle,
                                     textAlign: TextAlign.left,

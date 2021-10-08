@@ -12,10 +12,13 @@ class FleetSelection extends StatefulWidget {
 
 class _FleetSelectionState extends State<FleetSelection> {
   EdgeInsetsGeometry padding = EdgeInsets.only(left: 15, right: 15);
-  TextStyle selectedTitleTextStyle = TextStyle(color: Colors.white, fontSize: 18);
+  TextStyle selectedTitleTextStyle =
+      TextStyle(color: Colors.white, fontSize: 18);
   TextStyle unselectedTitleTextStyle = TextStyle(fontSize: 18);
-  TextStyle selectedSubtitleTextStyle = TextStyle(color: Colors.white, fontSize: 16);
-  TextStyle unselectedSubtitleTextStyle = TextStyle(fontSize: 16, color: Colors.grey);
+  TextStyle selectedSubtitleTextStyle =
+      TextStyle(color: Colors.white, fontSize: 16);
+  TextStyle unselectedSubtitleTextStyle =
+      TextStyle(fontSize: 16, color: Colors.grey);
   Locale locale;
   String type = LoginType.company;
 
@@ -54,13 +57,18 @@ class _FleetSelectionState extends State<FleetSelection> {
           },
           title: Padding(
             padding: const EdgeInsets.only(top: 10, bottom: 10.0),
-            child: Text(title, style: selection == index ? selectedTitleTextStyle : unselectedTitleTextStyle),
+            child: Text(title,
+                style: selection == index
+                    ? selectedTitleTextStyle
+                    : unselectedTitleTextStyle),
           ),
           subtitle: Padding(
             padding: const EdgeInsets.only(top: 8, bottom: 8.0),
             child: Text(
               subtitle,
-              style: selection == index ? selectedSubtitleTextStyle : unselectedSubtitleTextStyle,
+              style: selection == index
+                  ? selectedSubtitleTextStyle
+                  : unselectedSubtitleTextStyle,
             ),
           ),
         ),
@@ -96,7 +104,8 @@ class _FleetSelectionState extends State<FleetSelection> {
               Padding(
                 padding: EdgeInsets.only(left: 15),
                 child: Text(
-                  AppLocalizations.getLocalizationValue(locale, LocaleKey.fleetSelectionScreenTitle),
+                  AppLocalizations.getLocalizationValue(
+                      locale, LocaleKey.fleetSelectionScreenTitle),
                   style: TextStyle(fontSize: 20, color: Colors.black),
                 ),
               ),
@@ -106,8 +115,10 @@ class _FleetSelectionState extends State<FleetSelection> {
               selectionCard(
                 assetImage: 'assets/images/truckingCompany.png',
                 index: 0,
-                title: AppLocalizations.getLocalizationValue(locale, LocaleKey.fleetSelectionTitle),
-                subtitle: AppLocalizations.getLocalizationValue(locale, LocaleKey.fleetSelectionSubtitle),
+                title: AppLocalizations.getLocalizationValue(
+                    locale, LocaleKey.fleetSelectionTitle),
+                subtitle: AppLocalizations.getLocalizationValue(
+                    locale, LocaleKey.fleetSelectionSubtitle),
                 onTap: () {
                   setState(() {
                     type = LoginType.company;
@@ -120,8 +131,10 @@ class _FleetSelectionState extends State<FleetSelection> {
               selectionCard(
                 assetImage: 'assets/images/driver.png',
                 index: 1,
-                subtitle: AppLocalizations.getLocalizationValue(locale, LocaleKey.driverSelectionSubtitle),
-                title: AppLocalizations.getLocalizationValue(locale, LocaleKey.driverSelectionTitle),
+                subtitle: AppLocalizations.getLocalizationValue(
+                    locale, LocaleKey.driverSelectionSubtitle),
+                title: AppLocalizations.getLocalizationValue(
+                    locale, LocaleKey.driverSelectionTitle),
                 onTap: () {
                   setState(() {
                     type = LoginType.driver;
@@ -136,8 +149,10 @@ class _FleetSelectionState extends State<FleetSelection> {
                 height: 65,
                 width: size.width,
                 padding: EdgeInsets.only(left: 20, right: 20, bottom: 20),
-                child: RaisedButton(
-                  color: primaryColor,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    primary: primaryColor,
+                  ),
                   onPressed: () {
                     Navigator.pushReplacement(
                       context,
@@ -147,7 +162,8 @@ class _FleetSelectionState extends State<FleetSelection> {
                     );
                   },
                   child: Text(
-                    AppLocalizations.getLocalizationValue(locale, LocaleKey.continueText),
+                    AppLocalizations.getLocalizationValue(
+                        locale, LocaleKey.continueText),
                     style: TextStyle(fontSize: 18, color: Colors.white),
                   ),
                 ),

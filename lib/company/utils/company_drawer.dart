@@ -8,7 +8,6 @@ import 'package:truk_fleet/company/pages/my_payout_page.dart';
 import 'package:truk_fleet/company/pages/my_shipment_screen.dart';
 import 'package:truk_fleet/company/pages/settings.dart';
 import 'package:truk_fleet/company/pages/company_profile.dart';
-import 'package:truk_fleet/driver/fragments/home_map_fragment.dart';
 import 'package:truk_fleet/helper/helper.dart';
 import 'package:truk_fleet/locale/app_localization.dart';
 import 'package:truk_fleet/locale/locale_keys.dart';
@@ -31,7 +30,6 @@ class CompanyDrawerMenuState extends State<CompanyDrawerMenu> {
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context).locale;
     final pUser = Provider.of<MyUser>(context);
-    double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     Widget placeHolder = Text(
       pUser.isUserLoading ? '...' : '${pUser.user.name[0]}',
@@ -107,9 +105,12 @@ class CompanyDrawerMenuState extends State<CompanyDrawerMenu> {
                 child: InkWell(
                   onTap: () {
                     Navigator.pop(context);
-                    Navigator.of(context).push(CupertinoPageRoute(builder: (context) => CompanyProfile()));
+                    Navigator.of(context).push(CupertinoPageRoute(
+                        builder: (context) => CompanyProfile()));
                   },
-                  child: Text(AppLocalizations.getLocalizationValue(locale, LocaleKey.edit),
+                  child: Text(
+                      AppLocalizations.getLocalizationValue(
+                          locale, LocaleKey.edit),
                       style: TextStyle(color: Colors.blue, fontSize: 18)),
                 ),
               ),
@@ -122,7 +123,8 @@ class CompanyDrawerMenuState extends State<CompanyDrawerMenu> {
           ),
         ),
         myListTile(
-          title: AppLocalizations.getLocalizationValue(locale, LocaleKey.shipments),
+          title: AppLocalizations.getLocalizationValue(
+              locale, LocaleKey.shipments),
           leading: SvgPicture.asset(
             'assets/svg/truck_svg.svg',
             height: 22,
@@ -131,11 +133,13 @@ class CompanyDrawerMenuState extends State<CompanyDrawerMenu> {
           ),
           onTap: () {
             Navigator.pop(context);
-            Navigator.of(context).push(CupertinoPageRoute(builder: (context) => CompanyHomeFragment()));
+            Navigator.of(context).push(CupertinoPageRoute(
+                builder: (context) => CompanyHomeFragment()));
           },
         ),
         myListTile(
-          title: AppLocalizations.getLocalizationValue(locale, LocaleKey.myTruks),
+          title:
+              AppLocalizations.getLocalizationValue(locale, LocaleKey.myTruks),
           leading: Padding(
             padding: const EdgeInsets.only(top: 5.0),
             child: Image.asset(
@@ -155,7 +159,8 @@ class CompanyDrawerMenuState extends State<CompanyDrawerMenu> {
           },
         ),
         myListTile(
-          title: AppLocalizations.getLocalizationValue(locale, LocaleKey.myDriver),
+          title:
+              AppLocalizations.getLocalizationValue(locale, LocaleKey.myDriver),
           leading: Image.asset(
             'assets/images/delivery-man.png',
             height: 25,
@@ -171,7 +176,8 @@ class CompanyDrawerMenuState extends State<CompanyDrawerMenu> {
           },
         ),
         myListTile(
-          title: AppLocalizations.getLocalizationValue(locale, LocaleKey.myPayout),
+          title:
+              AppLocalizations.getLocalizationValue(locale, LocaleKey.myPayout),
           leading: Icon(
             Icons.payment,
             color: Colors.black,
@@ -186,15 +192,18 @@ class CompanyDrawerMenuState extends State<CompanyDrawerMenu> {
           },
         ),
         myListTile(
-          title: AppLocalizations.getLocalizationValue(locale, LocaleKey.documents),
+          title: AppLocalizations.getLocalizationValue(
+              locale, LocaleKey.documents),
           leading: Icon(Icons.dock, color: Colors.black),
           onTap: () {
             Navigator.pop(context);
-            Navigator.of(context).push(CupertinoPageRoute(builder: (context) => FleetDocumentScreen()));
+            Navigator.of(context).push(CupertinoPageRoute(
+                builder: (context) => FleetDocumentScreen()));
           },
         ),
         myListTile(
-          title: AppLocalizations.getLocalizationValue(locale, LocaleKey.support),
+          title:
+              AppLocalizations.getLocalizationValue(locale, LocaleKey.support),
           leading: Padding(
             padding: const EdgeInsets.only(top: 5.0),
             child: Icon(
@@ -232,14 +241,16 @@ class CompanyDrawerMenuState extends State<CompanyDrawerMenu> {
           },
         ),
         myListTile(
-            title: AppLocalizations.getLocalizationValue(locale, LocaleKey.settings),
+            title: AppLocalizations.getLocalizationValue(
+                locale, LocaleKey.settings),
             leading: Icon(
               Icons.settings,
               color: Colors.black,
             ),
             onTap: () {
               Navigator.pop(context);
-              Navigator.of(context).push(CupertinoPageRoute(builder: (context) => SettingsPage()));
+              Navigator.of(context).push(
+                  CupertinoPageRoute(builder: (context) => SettingsPage()));
             }),
         Container(
           height: 50,
@@ -249,18 +260,22 @@ class CompanyDrawerMenuState extends State<CompanyDrawerMenu> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Icons.exit_to_app, color: Color.fromRGBO(255, 113, 1, 100)),
+                Icon(Icons.exit_to_app,
+                    color: Color.fromRGBO(255, 113, 1, 100)),
                 SizedBox(width: 10),
                 Text(
-                  AppLocalizations.getLocalizationValue(locale, LocaleKey.logout),
+                  AppLocalizations.getLocalizationValue(
+                      locale, LocaleKey.logout),
                   style: TextStyle(fontSize: 20, color: primaryColor),
                 )
               ],
             ),
             onTap: () {
               Helper().showConfirmationDialog(
-                title: AppLocalizations.getLocalizationValue(locale, LocaleKey.logout),
-                subTitle: AppLocalizations.getLocalizationValue(locale, LocaleKey.logoutConfirm),
+                title: AppLocalizations.getLocalizationValue(
+                    locale, LocaleKey.logout),
+                subTitle: AppLocalizations.getLocalizationValue(
+                    locale, LocaleKey.logoutConfirm),
                 context: context,
                 onTap: () {
                   Navigator.pop(context);
@@ -284,7 +299,8 @@ class CompanyDrawerMenuState extends State<CompanyDrawerMenu> {
   Widget myListTile({String title, void Function() onTap, Widget leading}) {
     return ListTile(
       leading: leading,
-      title: Text(title, style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400)),
+      title: Text(title,
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400)),
       onTap: onTap,
     );
   }

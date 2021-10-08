@@ -2,13 +2,17 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import '../locale/app_localization.dart';
 import '../locale/locale_keys.dart';
 import '../utils/constants.dart';
 
 void paymentSuccessful(
-    {String shipmentId, BuildContext context, bool isPayment = true, Function onTap, String payment, String text}) {
+    {String shipmentId,
+    BuildContext context,
+    bool isPayment = true,
+    Function onTap,
+    String payment,
+    String text}) {
   final locale = AppLocalizations.of(context).locale;
   Platform.isAndroid
       ? showDialog(
@@ -26,8 +30,10 @@ void paymentSuccessful(
                     child: Text(
                       isPayment
                           ? "\u20b9$payment"
-                          : AppLocalizations.getLocalizationValue(locale, LocaleKey.bookingRequested),
-                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                          : AppLocalizations.getLocalizationValue(
+                              locale, LocaleKey.bookingRequested),
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
                   ),
                   SizedBox(
@@ -57,11 +63,14 @@ void paymentSuccessful(
                   height: 50,
                   width: MediaQuery.of(context).size.width,
                   padding: EdgeInsets.only(left: 20, right: 20, bottom: 10),
-                  child: RaisedButton(
-                    color: primaryColor,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      primary: primaryColor,
+                    ),
                     onPressed: onTap,
                     child: Text(
-                      AppLocalizations.getLocalizationValue(locale, LocaleKey.done),
+                      AppLocalizations.getLocalizationValue(
+                          locale, LocaleKey.done),
                       style: TextStyle(color: Colors.white, fontSize: 18),
                     ),
                   ),
@@ -87,8 +96,10 @@ void paymentSuccessful(
                       child: Text(
                         isPayment
                             ? "\u20b9$payment"
-                            : AppLocalizations.getLocalizationValue(locale, LocaleKey.bookingRequested),
-                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                            : AppLocalizations.getLocalizationValue(
+                                locale, LocaleKey.bookingRequested),
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
                       ),
                     ),
                     SizedBox(
@@ -118,11 +129,14 @@ void paymentSuccessful(
                     height: 50,
                     width: MediaQuery.of(context).size.width,
                     padding: EdgeInsets.only(left: 20, right: 20, bottom: 10),
-                    child: RaisedButton(
-                      color: primaryColor,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary: primaryColor,
+                      ),
                       onPressed: onTap,
                       child: Text(
-                        AppLocalizations.getLocalizationValue(locale, LocaleKey.done),
+                        AppLocalizations.getLocalizationValue(
+                            locale, LocaleKey.done),
                         style: TextStyle(color: Colors.white, fontSize: 18),
                       ),
                     ),
@@ -134,7 +148,12 @@ void paymentSuccessful(
         );
 }
 
-void showConfirmationDialog({BuildContext context, String title, String subTitle, Function onTap, Function onNoTap}) {
+void showConfirmationDialog(
+    {BuildContext context,
+    String title,
+    String subTitle,
+    Function onTap,
+    Function onNoTap}) {
   if (onNoTap == null) {
     onNoTap = () {
       Navigator.pop(context);
@@ -148,20 +167,23 @@ void showConfirmationDialog({BuildContext context, String title, String subTitle
             title: Text('$title'),
             content: Text('$subTitle'),
             actions: [
-              FlatButton(
+              ElevatedButton(
                 onPressed: () {
                   Navigator.pop(context);
                   onTap();
                 },
                 child: Center(
                   child: Text(
-                    AppLocalizations.getLocalizationValue(locale, LocaleKey.yes),
+                    AppLocalizations.getLocalizationValue(
+                        locale, LocaleKey.yes),
                     style: TextStyle(color: primaryColor),
                   ),
                 ),
               ),
-              RaisedButton(
-                color: primaryColor,
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  primary: primaryColor,
+                ),
                 onPressed: () => Navigator.pop(context),
                 child: Center(
                   child: Text(
@@ -181,23 +203,25 @@ void showConfirmationDialog({BuildContext context, String title, String subTitle
               title: Text('$title'),
               content: Text('$subTitle'),
               actions: [
-                FlatButton(
+                ElevatedButton(
                   onPressed: () {
                     Navigator.pop(context);
                     onTap();
                   },
                   child: Center(
                     child: Text(
-                      AppLocalizations.getLocalizationValue(locale, LocaleKey.yes),
+                      AppLocalizations.getLocalizationValue(
+                          locale, LocaleKey.yes),
                       style: TextStyle(color: primaryColor),
                     ),
                   ),
                 ),
-                FlatButton(
+                ElevatedButton(
                   onPressed: onNoTap,
                   child: Center(
                     child: Text(
-                      AppLocalizations.getLocalizationValue(locale, LocaleKey.no),
+                      AppLocalizations.getLocalizationValue(
+                          locale, LocaleKey.no),
                       style: TextStyle(color: Colors.black),
                     ),
                   ),
@@ -224,7 +248,7 @@ void showConfirmationDialog({BuildContext context, String title, String subTitle
 //               decoration: InputDecoration(border: OutlineInputBorder()),
 //             ),
 //             actions: [
-//               FlatButton(
+//               ElevatedButton(
 //                 onPressed: () {
 //                   if (textEditingController.text.trim().isEmpty) {
 //                     Fluttertoast.showToast(msg: "Please specify reason");
@@ -240,7 +264,7 @@ void showConfirmationDialog({BuildContext context, String title, String subTitle
 //                   ),
 //                 ),
 //               ),
-//               RaisedButton(
+//               ElevatedButton(
 //                 color: primaryColor,
 //                 onPressed: () => Navigator.pop(context),
 //                 child: Center(
@@ -267,7 +291,7 @@ void showConfirmationDialog({BuildContext context, String title, String subTitle
 //                 expands: true,
 //               ),
 //               actions: [
-//                 FlatButton(
+//                 ElevatedButton(
 //                   onPressed: () {
 //                     if (textEditingController.text.trim().isEmpty) {
 //                       Fluttertoast.showToast(msg: "Please specify reason");
@@ -283,7 +307,7 @@ void showConfirmationDialog({BuildContext context, String title, String subTitle
 //                     ),
 //                   ),
 //                 ),
-//                 FlatButton(
+//                 ElevatedButton(
 //                   onPressed: () => Navigator.pop(context),
 //                   child: Center(
 //                     child: Text(

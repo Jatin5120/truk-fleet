@@ -3,8 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:truk_fleet/Routes/routes.dart';
-import 'package:truk_fleet/auth/login_navigator.dart';
 import 'package:truk_fleet/auth/register/register_interface.dart';
 import 'package:truk_fleet/driver/models/driver_model.dart';
 import 'package:truk_fleet/firebase_helper/firebase_helper.dart';
@@ -23,7 +21,8 @@ class RegisterUI extends StatefulWidget {
   final RegisterInterface registerInterface;
   final String type;
 
-  const RegisterUI({Key key, this.registerInterface, this.type}) : super(key: key);
+  const RegisterUI({Key key, this.registerInterface, this.type})
+      : super(key: key);
 
   @override
   _RegisterUIState createState() => _RegisterUIState();
@@ -34,7 +33,7 @@ class _RegisterUIState extends State<RegisterUI> {
   User user;
   double get height => MediaQuery.of(context).size.height;
   double get width => MediaQuery.of(context).size.width;
-  bool isTC=false;
+  bool isTC = false;
   Color getColor(Set<MaterialState> states) {
     const Set<MaterialState> interactiveStates = <MaterialState>{
       MaterialState.pressed,
@@ -46,6 +45,7 @@ class _RegisterUIState extends State<RegisterUI> {
     }
     return primaryColor;
   }
+
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _companyNameController = TextEditingController();
@@ -104,8 +104,10 @@ class _RegisterUIState extends State<RegisterUI> {
           height: 65,
           width: width,
           padding: EdgeInsets.only(left: 20, right: 20, bottom: 20),
-          child: RaisedButton(
-            color: primaryColor,
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              primary: primaryColor,
+            ),
             onPressed: isLoading
                 ? () {}
                 : () async {
@@ -113,7 +115,7 @@ class _RegisterUIState extends State<RegisterUI> {
                       setState(() {
                         isLoading = true;
                       });
-                      if (user != null&&isTC) {
+                      if (user != null && isTC) {
                         String uid = user.uid;
                         String mobile = user.phoneNumber;
                         String email = _emailController.text.trim();
@@ -158,14 +160,15 @@ class _RegisterUIState extends State<RegisterUI> {
                           isLoading = false;
                         });
                       } else {
-                        if(user==null){
-                          Fluttertoast.showToast(msg: 'Please fill all the fields');
-                        }
-                        else if(!isTC){
+                        if (user == null) {
+                          Fluttertoast.showToast(
+                              msg: 'Please fill all the fields');
+                        } else if (!isTC) {
                           setState(() {
                             isLoading = false;
                           });
-                          Fluttertoast.showToast(msg: 'Please Accept terms and conditions');
+                          Fluttertoast.showToast(
+                              msg: 'Please Accept terms and conditions');
                         }
                         // Navigator.pushNamed(context, LoginRoutes.loginRoot, arguments: widget.type);
                       }
@@ -176,7 +179,8 @@ class _RegisterUIState extends State<RegisterUI> {
                     valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                   )
                 : Text(
-                    AppLocalizations.getLocalizationValue(locale, LocaleKey.continueText),
+                    AppLocalizations.getLocalizationValue(
+                        locale, LocaleKey.continueText),
                     style: TextStyle(color: Colors.white, fontSize: 18),
                   ),
           ),
@@ -206,7 +210,8 @@ class _RegisterUIState extends State<RegisterUI> {
                     height: height * 0.15,
                   ),
                   Text(
-                    AppLocalizations.getLocalizationValue(locale, LocaleKey.registerTitle),
+                    AppLocalizations.getLocalizationValue(
+                        locale, LocaleKey.registerTitle),
                     style: TextStyle(fontSize: 18),
                   ),
                   SizedBox(
@@ -216,12 +221,14 @@ class _RegisterUIState extends State<RegisterUI> {
                     controller: _nameController,
                     validator: (value) {
                       if (value.isEmpty) {
-                        return AppLocalizations.getLocalizationValue(locale, LocaleKey.requiredText);
+                        return AppLocalizations.getLocalizationValue(
+                            locale, LocaleKey.requiredText);
                       }
                       return null;
                     },
                     decoration: InputDecoration(
-                      labelText: AppLocalizations.getLocalizationValue(locale, LocaleKey.name),
+                      labelText: AppLocalizations.getLocalizationValue(
+                          locale, LocaleKey.name),
                       border: OutlineInputBorder(),
                     ),
                   ),
@@ -232,9 +239,11 @@ class _RegisterUIState extends State<RegisterUI> {
                     controller: _emailController,
                     validator: (input) => input.isValidEmail()
                         ? null
-                        : AppLocalizations.getLocalizationValue(locale, LocaleKey.invalidEmail),
+                        : AppLocalizations.getLocalizationValue(
+                            locale, LocaleKey.invalidEmail),
                     decoration: InputDecoration(
-                      labelText: AppLocalizations.getLocalizationValue(locale, LocaleKey.email),
+                      labelText: AppLocalizations.getLocalizationValue(
+                          locale, LocaleKey.email),
                       border: OutlineInputBorder(),
                     ),
                   ),
@@ -244,8 +253,10 @@ class _RegisterUIState extends State<RegisterUI> {
                   if (widget.type == LoginType.company)
                     TextFormField(
                       controller: _upiController,
-                      validator: (input) =>
-                          input.isEmpty ? AppLocalizations.getLocalizationValue(locale, LocaleKey.requiredText) : null,
+                      validator: (input) => input.isEmpty
+                          ? AppLocalizations.getLocalizationValue(
+                              locale, LocaleKey.requiredText)
+                          : null,
                       decoration: InputDecoration(
                         labelText: "UPI",
                         border: OutlineInputBorder(),
@@ -259,12 +270,14 @@ class _RegisterUIState extends State<RegisterUI> {
                     controller: _companyNameController,
                     validator: (value) {
                       if (value.isEmpty) {
-                        return AppLocalizations.getLocalizationValue(locale, LocaleKey.requiredText);
+                        return AppLocalizations.getLocalizationValue(
+                            locale, LocaleKey.requiredText);
                       }
                       return null;
                     },
                     decoration: InputDecoration(
-                      labelText: AppLocalizations.getLocalizationValue(locale, LocaleKey.company),
+                      labelText: AppLocalizations.getLocalizationValue(
+                          locale, LocaleKey.company),
                       border: OutlineInputBorder(),
                     ),
                   ),
@@ -275,12 +288,14 @@ class _RegisterUIState extends State<RegisterUI> {
                     controller: _cityController,
                     validator: (value) {
                       if (value.isEmpty) {
-                        return AppLocalizations.getLocalizationValue(locale, LocaleKey.requiredText);
+                        return AppLocalizations.getLocalizationValue(
+                            locale, LocaleKey.requiredText);
                       }
                       return null;
                     },
                     decoration: InputDecoration(
-                      labelText: AppLocalizations.getLocalizationValue(locale, LocaleKey.city),
+                      labelText: AppLocalizations.getLocalizationValue(
+                          locale, LocaleKey.city),
                       border: OutlineInputBorder(),
                     ),
                   ),
@@ -290,13 +305,15 @@ class _RegisterUIState extends State<RegisterUI> {
                   TextFormField(
                     validator: (value) {
                       if (value.isEmpty) {
-                        return AppLocalizations.getLocalizationValue(locale, LocaleKey.requiredText);
+                        return AppLocalizations.getLocalizationValue(
+                            locale, LocaleKey.requiredText);
                       }
                       return null;
                     },
                     controller: _stateController,
                     decoration: InputDecoration(
-                      labelText: AppLocalizations.getLocalizationValue(locale, LocaleKey.state),
+                      labelText: AppLocalizations.getLocalizationValue(
+                          locale, LocaleKey.state),
                       border: OutlineInputBorder(),
                     ),
                   ),
@@ -306,25 +323,29 @@ class _RegisterUIState extends State<RegisterUI> {
                       children: [
                         Checkbox(
                             checkColor: Colors.white,
-                            fillColor:MaterialStateProperty.resolveWith(getColor),
+                            fillColor:
+                                MaterialStateProperty.resolveWith(getColor),
                             value: isTC,
                             onChanged: (bool value) {
                               setState(() {
                                 isTC = value;
                               });
-                            }
-                        ),
+                            }),
                         Expanded(
                           child: RichText(
                             text: TextSpan(
                               children: [
                                 TextSpan(
-                                  text: AppLocalizations.getLocalizationValue(locale, LocaleKey.accept),
+                                  text: AppLocalizations.getLocalizationValue(
+                                      locale, LocaleKey.accept),
                                   style: TextStyle(color: Colors.black),
                                 ),
                                 TextSpan(
-                                  text: " ${AppLocalizations.getLocalizationValue(locale, LocaleKey.insuranceText2)}",
-                                  style: TextStyle(color: primaryColor, decoration: TextDecoration.underline),
+                                  text:
+                                      " ${AppLocalizations.getLocalizationValue(locale, LocaleKey.insuranceText2)}",
+                                  style: TextStyle(
+                                      color: primaryColor,
+                                      decoration: TextDecoration.underline),
                                   recognizer: TapGestureRecognizer()
                                     ..onTap = () {
                                       Navigator.push(

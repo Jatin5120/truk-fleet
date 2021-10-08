@@ -32,15 +32,24 @@ class _AddTruckState extends State<AddTruck> {
   String trukBodyType = LocaleKey.closedTruk;
   bool isLoading = false;
   Locale locale;
-  List<String> trukModelList = ["Single Axle", "Double Axle", "Triple Axle", "Multi Axle"];
+  List<String> trukModelList = [
+    "Single Axle",
+    "Double Axle",
+    "Triple Axle",
+    "Multi Axle"
+  ];
 
-  Widget detailTextField({String labelText, TextEditingController controller, String Function(String) validator}) {
+  Widget detailTextField(
+      {String labelText,
+      TextEditingController controller,
+      String Function(String) validator}) {
     return Container(
       padding: EdgeInsets.only(left: 20, right: 20, bottom: 10),
       child: TextFormField(
         validator: validator,
         controller: controller,
-        decoration: InputDecoration(labelText: labelText, border: OutlineInputBorder()),
+        decoration:
+            InputDecoration(labelText: labelText, border: OutlineInputBorder()),
       ),
     );
   }
@@ -52,15 +61,17 @@ class _AddTruckState extends State<AddTruck> {
       trukOwnerNameController.text = widget.trukModel.ownerName;
       mobileNumberController.text = widget.trukModel.mobileNumber;
       panTinController.text = widget.trukModel.panTin;
-      grossWeightController.text = (int.parse(widget.trukModel.grossWeight)/1000).toString();
+      grossWeightController.text =
+          (int.parse(widget.trukModel.grossWeight) / 1000).toString();
       lengthController.text = widget.trukModel.length;
       breadthController.text = widget.trukModel.breadth;
       heightController.text = widget.trukModel.height;
       trukNumberController.text = widget.trukModel.trukNumber;
       permitTypeController.text = widget.trukModel.permitType;
       trukModelController.text = widget.trukModel.trukName;
-      trukBodyType =
-          widget.trukModel.trukType.toLowerCase().contains('closed') ? LocaleKey.closedTruk : LocaleKey.openTruk;
+      trukBodyType = widget.trukModel.trukType.toLowerCase().contains('closed')
+          ? LocaleKey.closedTruk
+          : LocaleKey.openTruk;
       setState(() {});
     }
   }
@@ -85,7 +96,8 @@ class _AddTruckState extends State<AddTruck> {
     locale = AppLocalizations.of(context).locale;
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.getLocalizationValue(locale, LocaleKey.trukDetails)),
+        title: Text(AppLocalizations.getLocalizationValue(
+            locale, LocaleKey.trukDetails)),
       ),
       body: Form(
         key: _formKey,
@@ -97,39 +109,52 @@ class _AddTruckState extends State<AddTruck> {
                 Container(
                   padding: EdgeInsets.only(left: 20, top: 20, bottom: 20),
                   child: Text(
-                    AppLocalizations.getLocalizationValue(locale, LocaleKey.addTruk),
+                    AppLocalizations.getLocalizationValue(
+                        locale, LocaleKey.addTruk),
                     style: TextStyle(fontSize: 18),
                   ),
                 ),
                 detailTextField(
-                  labelText: AppLocalizations.getLocalizationValue(locale, LocaleKey.ownerName),
+                  labelText: AppLocalizations.getLocalizationValue(
+                      locale, LocaleKey.ownerName),
                   controller: trukOwnerNameController,
-                  validator: (value) =>
-                      value.isEmpty ? AppLocalizations.getLocalizationValue(locale, LocaleKey.requiredText) : null,
+                  validator: (value) => value.isEmpty
+                      ? AppLocalizations.getLocalizationValue(
+                          locale, LocaleKey.requiredText)
+                      : null,
                 ),
                 detailTextField(
-                  labelText: AppLocalizations.getLocalizationValue(locale, LocaleKey.mobile),
+                  labelText: AppLocalizations.getLocalizationValue(
+                      locale, LocaleKey.mobile),
                   controller: mobileNumberController,
                   validator: (value) => value.isEmpty
-                      ? AppLocalizations.getLocalizationValue(locale, LocaleKey.requiredText)
+                      ? AppLocalizations.getLocalizationValue(
+                          locale, LocaleKey.requiredText)
                       : (value.length != 10 ? 'Invalid number' : null),
                 ),
                 detailTextField(
-                  labelText: AppLocalizations.getLocalizationValue(locale, LocaleKey.panTin),
+                  labelText: AppLocalizations.getLocalizationValue(
+                      locale, LocaleKey.panTin),
                   controller: panTinController,
-                  validator: (value) =>
-                      value.isEmpty ? AppLocalizations.getLocalizationValue(locale, LocaleKey.requiredText) : null,
+                  validator: (value) => value.isEmpty
+                      ? AppLocalizations.getLocalizationValue(
+                          locale, LocaleKey.requiredText)
+                      : null,
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20),
+                  padding:
+                      const EdgeInsets.only(left: 20, right: 20, bottom: 20),
                   child: DropdownButtonFormField<String>(
                     hint: Text(
-                      AppLocalizations.getLocalizationValue(locale, LocaleKey.trukModel),
+                      AppLocalizations.getLocalizationValue(
+                          locale, LocaleKey.trukModel),
                     ),
-                    onChanged: (value) => setState(() => trukModelController.text = value),
+                    onChanged: (value) =>
+                        setState(() => trukModelController.text = value),
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
-                      labelText: AppLocalizations.getLocalizationValue(locale, LocaleKey.trukModel),
+                      labelText: AppLocalizations.getLocalizationValue(
+                          locale, LocaleKey.trukModel),
                     ),
                     items: trukModelList
                         .map(
@@ -150,33 +175,41 @@ class _AddTruckState extends State<AddTruck> {
                 //       value.isEmpty ? AppLocalizations.getLocalizationValue(locale, LocaleKey.requiredText) : null,
                 // ),
                 detailTextField(
-                  labelText: AppLocalizations.getLocalizationValue(locale, LocaleKey.grossWeight),
+                  labelText: AppLocalizations.getLocalizationValue(
+                      locale, LocaleKey.grossWeight),
                   controller: grossWeightController,
-                  validator: (value) =>
-                      value.isEmpty ? AppLocalizations.getLocalizationValue(locale, LocaleKey.requiredText) : null,
+                  validator: (value) => value.isEmpty
+                      ? AppLocalizations.getLocalizationValue(
+                          locale, LocaleKey.requiredText)
+                      : null,
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20),
+                  padding:
+                      const EdgeInsets.only(left: 20, right: 20, bottom: 20),
                   child: DropdownButtonFormField(
                     hint: Text(
-                      AppLocalizations.getLocalizationValue(locale, LocaleKey.trukType),
+                      AppLocalizations.getLocalizationValue(
+                          locale, LocaleKey.trukType),
                     ),
                     onChanged: (value) => setState(() => trukBodyType = value),
                     value: trukBodyType ?? LocaleKey.closedTruk,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
-                      labelText: AppLocalizations.getLocalizationValue(locale, LocaleKey.selectTrukType),
+                      labelText: AppLocalizations.getLocalizationValue(
+                          locale, LocaleKey.selectTrukType),
                     ),
                     items: [
                       DropdownMenuItem(
                         child: Text(
-                          AppLocalizations.getLocalizationValue(locale, LocaleKey.closedTruk),
+                          AppLocalizations.getLocalizationValue(
+                              locale, LocaleKey.closedTruk),
                         ),
                         value: LocaleKey.closedTruk,
                       ),
                       DropdownMenuItem(
                         child: Text(
-                          AppLocalizations.getLocalizationValue(locale, LocaleKey.openTruk),
+                          AppLocalizations.getLocalizationValue(
+                              locale, LocaleKey.openTruk),
                         ),
                         value: LocaleKey.openTruk,
                       ),
@@ -184,77 +217,98 @@ class _AddTruckState extends State<AddTruck> {
                   ),
                 ),
                 detailTextField(
-                  labelText: AppLocalizations.getLocalizationValue(locale, LocaleKey.lengthInFeet),
+                  labelText: AppLocalizations.getLocalizationValue(
+                      locale, LocaleKey.lengthInFeet),
                   controller: lengthController,
-                  validator: (value) =>
-                      value.isEmpty ? AppLocalizations.getLocalizationValue(locale, LocaleKey.requiredText) : null,
+                  validator: (value) => value.isEmpty
+                      ? AppLocalizations.getLocalizationValue(
+                          locale, LocaleKey.requiredText)
+                      : null,
                 ),
                 detailTextField(
-                  labelText: AppLocalizations.getLocalizationValue(locale, LocaleKey.breadthInFeet),
+                  labelText: AppLocalizations.getLocalizationValue(
+                      locale, LocaleKey.breadthInFeet),
                   controller: breadthController,
-                  validator: (value) =>
-                      value.isEmpty ? AppLocalizations.getLocalizationValue(locale, LocaleKey.requiredText) : null,
+                  validator: (value) => value.isEmpty
+                      ? AppLocalizations.getLocalizationValue(
+                          locale, LocaleKey.requiredText)
+                      : null,
                 ),
                 detailTextField(
-                  labelText: AppLocalizations.getLocalizationValue(locale, LocaleKey.heightInFeet),
+                  labelText: AppLocalizations.getLocalizationValue(
+                      locale, LocaleKey.heightInFeet),
                   controller: heightController,
-                  validator: (value) =>
-                      value.isEmpty ? AppLocalizations.getLocalizationValue(locale, LocaleKey.requiredText) : null,
+                  validator: (value) => value.isEmpty
+                      ? AppLocalizations.getLocalizationValue(
+                          locale, LocaleKey.requiredText)
+                      : null,
                 ),
                 detailTextField(
-                  labelText: AppLocalizations.getLocalizationValue(locale, LocaleKey.trukNumber),
+                  labelText: AppLocalizations.getLocalizationValue(
+                      locale, LocaleKey.trukNumber),
                   controller: trukNumberController,
-                  validator: (value) =>
-                      value.isEmpty ? AppLocalizations.getLocalizationValue(locale, LocaleKey.requiredText) : null,
+                  validator: (value) => value.isEmpty
+                      ? AppLocalizations.getLocalizationValue(
+                          locale, LocaleKey.requiredText)
+                      : null,
                 ),
                 detailTextField(
-                  labelText: AppLocalizations.getLocalizationValue(locale, LocaleKey.permitType),
+                  labelText: AppLocalizations.getLocalizationValue(
+                      locale, LocaleKey.permitType),
                   controller: permitTypeController,
-                  validator: (value) =>
-                      value.isEmpty ? AppLocalizations.getLocalizationValue(locale, LocaleKey.requiredText) : null,
+                  validator: (value) => value.isEmpty
+                      ? AppLocalizations.getLocalizationValue(
+                          locale, LocaleKey.requiredText)
+                      : null,
                 ),
                 Container(
                   height: 65,
                   width: size.width,
                   padding: EdgeInsets.only(left: 20, right: 20, bottom: 20),
-                  child: RaisedButton(
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-                    color: primaryColor,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5)),
+                      primary: primaryColor,
+                    ),
                     onPressed: isLoading
                         ? () {}
                         : () async {
                             if (_formKey.currentState.validate()) {
                               if (trukModelController.text.trim().isEmpty) {
-                                Fluttertoast.showToast(msg: "Select Truk Model");
+                                Fluttertoast.showToast(
+                                    msg: "Select Truk Model");
                                 return;
                               }
 
                               String mobile = mobileNumberController.text;
                               String ownerName = trukOwnerNameController.text;
-                              String trukNumber = trukNumberController.text.toUpperCase();
+                              String trukNumber =
+                                  trukNumberController.text.toUpperCase();
                               String height = heightController.text;
-                              String grossWeigth = (int.parse(grossWeightController.text)*1000).toString();
+                              String grossWeigth =
+                                  (int.parse(grossWeightController.text) * 1000)
+                                      .toString();
                               String breadth = breadthController.text;
                               String length = lengthController.text;
                               String permitType = permitTypeController.text;
                               String panTin = panTinController.text;
                               String trukName = trukModelController.text;
                               TrukModel trukModel = TrukModel(
-                                breadth: breadth,
-                                driver: 'na',
-                                ownerId: user.uid,
-                                grossWeight: grossWeigth,
-                                height: height,
-                                length: length,
-                                mobileNumber: mobile,
-                                ownerName: ownerName,
-                                panTin: panTin,
-                                permitType: permitType,
-                                trukName: trukName,
-                                trukNumber: trukNumber,
-                                trukType: trukBodyType,
-                                available: true
-                              );
+                                  breadth: breadth,
+                                  driver: 'na',
+                                  ownerId: user.uid,
+                                  grossWeight: grossWeigth,
+                                  height: height,
+                                  length: length,
+                                  mobileNumber: mobile,
+                                  ownerName: ownerName,
+                                  panTin: panTin,
+                                  permitType: permitType,
+                                  trukName: trukName,
+                                  trukNumber: trukNumber,
+                                  trukType: trukBodyType,
+                                  available: true);
                               setState(() {
                                 isLoading = true;
                               });
@@ -281,13 +335,16 @@ class _AddTruckState extends State<AddTruck> {
                     child: isLoading
                         ? Center(
                             child: CircularProgressIndicator(
-                              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                              valueColor:
+                                  AlwaysStoppedAnimation<Color>(Colors.white),
                             ),
                           )
                         : Text(
                             widget.isEdit
-                                ? AppLocalizations.getLocalizationValue(locale, LocaleKey.update)
-                                : AppLocalizations.getLocalizationValue(locale, LocaleKey.continueText),
+                                ? AppLocalizations.getLocalizationValue(
+                                    locale, LocaleKey.update)
+                                : AppLocalizations.getLocalizationValue(
+                                    locale, LocaleKey.continueText),
                             style: TextStyle(fontSize: 18, color: Colors.white),
                           ),
                   ),

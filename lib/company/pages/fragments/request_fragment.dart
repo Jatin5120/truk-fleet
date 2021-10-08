@@ -52,23 +52,37 @@ class _RequestFragmentState extends State<RequestFragment> {
       case LocaleKey.cancelled:
         isFilter = true;
         filteredList = [];
-        filteredList = myList.where((element) => element['request'].status == LocaleKey.cancelled).toList();
+        filteredList = myList
+            .where(
+                (element) => element['request'].status == LocaleKey.cancelled)
+            .toList();
         break;
       case LocaleKey.accepted:
         isFilter = true;
         filteredList = [];
-        filteredList = myList.where((element)=>(element['request'].status == LocaleKey.accepted)).toList();
+        filteredList = myList
+            .where(
+                (element) => (element['request'].status == LocaleKey.accepted))
+            .toList();
         break;
       case LocaleKey.rejected:
         isFilter = true;
         filteredList = [];
-        filteredList = myList.where((element)=>(element['request'].status == LocaleKey.rejected)).toList();
+        filteredList = myList
+            .where(
+                (element) => (element['request'].status == LocaleKey.rejected))
+            .toList();
         break;
 
       case LocaleKey.pending:
         isFilter = true;
         filteredList = [];
-        filteredList = myList.where((element)=>(element['request'].status != LocaleKey.accepted && element['request'].status != LocaleKey.cancelled && element['request'].status != LocaleKey.rejected)).toList();
+        filteredList = myList
+            .where((element) =>
+                (element['request'].status != LocaleKey.accepted &&
+                    element['request'].status != LocaleKey.cancelled &&
+                    element['request'].status != LocaleKey.rejected))
+            .toList();
         break;
       // default:
       //   isFilter = false;
@@ -92,165 +106,189 @@ class _RequestFragmentState extends State<RequestFragment> {
       width: size.width,
       padding: const EdgeInsets.all(16),
       child: pRequest.requests.length <= 0
-              ? NoDataPage(
-                  text: AppLocalizations.getLocalizationValue(locale, LocaleKey.noQuotesRequested),
-                )
-              : Column(
+          ? NoDataPage(
+              text: AppLocalizations.getLocalizationValue(
+                  locale, LocaleKey.noQuotesRequested),
+            )
+          : Column(
+              children: [
+                SizedBox(
+                  height: 10,
+                ),
+                Row(
                   children: [
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: TextFormField(
-                            onChanged: (string) {
-                              if (string.trim().length <= 0 || string.isEmpty) {
-                                setState(() {
-                                  isFilter = false;
-                                  filteredList = [];
-                                });
-                              } else {
-                                setState(() {
-                                  filteredList = pRequest.requests.where((element) {
-                                    if (element['request'].bookingId.toString().contains(string.trim().toLowerCase()) ||
-                                        element['request'].pickupDate.contains(string.toLowerCase())) {
-                                      return true;
-                                    }
-
-                                    if (element['user'].name.toLowerCase().contains(string.toLowerCase())) return true;
-                                    if (element['source'].toLowerCase().contains(string.toLowerCase())) return true;
-                                    if (element['destination'].toLowerCase().contains(string.toLowerCase())) return true;
-                                    return false;
-                                  }).toList();
-                                  isFilter = true;
-                                });
-                              }
-                            },
-                            decoration: InputDecoration(
-                              hintText: AppLocalizations.getLocalizationValue(locale, LocaleKey.searchHint),
-                              border: OutlineInputBorder(),
-                              labelText: AppLocalizations.getLocalizationValue(locale, LocaleKey.search),
-                            ),
-                          ),
-                        ),
-                        // IconButton(
-                        //     icon: Icon(Icons.filter_alt_rounded),
-                        //     onPressed: () {
-                        //       Widget dialog = AlertDialog(
-                        //         backgroundColor: Colors.white,
-                        //         elevation: 8,
-                        //         title: Text(
-                        //           "Filter Requests",
-                        //           style: TextStyle(
-                        //             fontFamily: 'Maven',
-                        //             fontSize: 16,
-                        //             fontWeight: FontWeight.bold,
-                        //           ),
-                        //         ),
-                        //         content: Column(
-                        //           mainAxisSize: MainAxisSize.min,
-                        //           children: <Widget>[
-                        //             RadioListTile(
-                        //               activeColor: Colors.green,
-                        //               value: 'all',
-                        //               title: Text("All"),
-                        //               groupValue: _radioValue,
-                        //               onChanged: (a) {
-                        //                 _handleRadioValueChange(a);
-                        //                 Navigator.pop(context);
-                        //               },
-                        //             ),
-                        //             RadioListTile(
-                        //               activeColor: Colors.green,
-                        //               value: LocaleKey.pending,
-                        //               title: Text("Pending"),
-                        //               groupValue: _radioValue,
-                        //               onChanged: (a) {
-                        //                 _handleRadioValueChange(a);
-                        //                 Navigator.pop(context);
-                        //               },
-                        //             ),
-                        //             RadioListTile(
-                        //               activeColor: Colors.green,
-                        //               value: LocaleKey.accepted,
-                        //               title: Text("Accepted"),
-                        //               groupValue: _radioValue,
-                        //               onChanged: (a) {
-                        //                 _handleRadioValueChange(a);
-                        //                 Navigator.pop(context);
-                        //               },
-                        //             ),
-                        //             RadioListTile(
-                        //               activeColor: Colors.green,
-                        //               value: LocaleKey.rejected,
-                        //               title: Text("Rejected"),
-                        //               groupValue: _radioValue,
-                        //               onChanged: (a) {
-                        //                 _handleRadioValueChange(a);
-                        //                 Navigator.pop(context);
-                        //               },
-                        //             ),
-                        //             RadioListTile(
-                        //               activeColor: Colors.green,
-                        //               value: LocaleKey.cancelled,
-                        //               title: Text("Cancelled"),
-                        //               groupValue: _radioValue,
-                        //               onChanged: (a) {
-                        //                 _handleRadioValueChange(a);
-                        //                 Navigator.pop(context);
-                        //               },
-                        //             ),
-                        //           ],
-                        //         ),
-                        //       );
-                        //       showGeneralDialog(
-                        //           context: context,
-                        //           pageBuilder: (context, anim1, anim2) => dialog,
-                        //           barrierDismissible: true,
-                        //           barrierLabel: '',
-                        //           transitionBuilder: (context, anim1, anim2, child) {
-                        //             return Transform.scale(
-                        //               scale: anim1.value,
-                        //               origin: Offset(MediaQuery.of(context).size.width * 0.5, -200),
-                        //               child: child,
-                        //             );
-                        //           },
-                        //           transitionDuration: Duration(milliseconds: 400));
-                        //     }),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
                     Expanded(
-                      child: ListView.builder(
-                        shrinkWrap: true,
-                        physics: BouncingScrollPhysics(),
-                        itemCount: isFilter ? filteredList.length : pRequest.requests.length,
-                        itemBuilder: (context, index) {
-                          Map<String, dynamic> data = isFilter ? filteredList[index] : pRequest.requests[index];
-                          UserModel userModel = data['user'];
-                          RequestModel requestModel = data['request'];
-                          int x=0;
-                          QuoteModel quoteModel;
+                      child: TextFormField(
+                        onChanged: (string) {
+                          if (string.trim().length <= 0 || string.isEmpty) {
+                            setState(() {
+                              isFilter = false;
+                              filteredList = [];
+                            });
+                          } else {
+                            setState(() {
+                              filteredList = pRequest.requests.where((element) {
+                                if (element['request']
+                                        .bookingId
+                                        .toString()
+                                        .contains(
+                                            string.trim().toLowerCase()) ||
+                                    element['request']
+                                        .pickupDate
+                                        .contains(string.toLowerCase())) {
+                                  return true;
+                                }
 
-                          for (QuoteModel element in pRequest.quotes) {
-                            if (element.bookingId == requestModel.bookingId) {
-                              quoteModel = element;
-                              break;
-                            }
+                                if (element['user']
+                                    .name
+                                    .toLowerCase()
+                                    .contains(string.toLowerCase()))
+                                  return true;
+                                if (element['source']
+                                    .toLowerCase()
+                                    .contains(string.toLowerCase()))
+                                  return true;
+                                if (element['destination']
+                                    .toLowerCase()
+                                    .contains(string.toLowerCase()))
+                                  return true;
+                                return false;
+                              }).toList();
+                              isFilter = true;
+                            });
                           }
-                          return buildRequestCard(requestModel, userModel, quoteModel);
                         },
+                        decoration: InputDecoration(
+                          hintText: AppLocalizations.getLocalizationValue(
+                              locale, LocaleKey.searchHint),
+                          border: OutlineInputBorder(),
+                          labelText: AppLocalizations.getLocalizationValue(
+                              locale, LocaleKey.search),
+                        ),
                       ),
                     ),
+                    // IconButton(
+                    //     icon: Icon(Icons.filter_alt_rounded),
+                    //     onPressed: () {
+                    //       Widget dialog = AlertDialog(
+                    //         backgroundColor: Colors.white,
+                    //         elevation: 8,
+                    //         title: Text(
+                    //           "Filter Requests",
+                    //           style: TextStyle(
+                    //             fontFamily: 'Maven',
+                    //             fontSize: 16,
+                    //             fontWeight: FontWeight.bold,
+                    //           ),
+                    //         ),
+                    //         content: Column(
+                    //           mainAxisSize: MainAxisSize.min,
+                    //           children: <Widget>[
+                    //             RadioListTile(
+                    //               activeColor: Colors.green,
+                    //               value: 'all',
+                    //               title: Text("All"),
+                    //               groupValue: _radioValue,
+                    //               onChanged: (a) {
+                    //                 _handleRadioValueChange(a);
+                    //                 Navigator.pop(context);
+                    //               },
+                    //             ),
+                    //             RadioListTile(
+                    //               activeColor: Colors.green,
+                    //               value: LocaleKey.pending,
+                    //               title: Text("Pending"),
+                    //               groupValue: _radioValue,
+                    //               onChanged: (a) {
+                    //                 _handleRadioValueChange(a);
+                    //                 Navigator.pop(context);
+                    //               },
+                    //             ),
+                    //             RadioListTile(
+                    //               activeColor: Colors.green,
+                    //               value: LocaleKey.accepted,
+                    //               title: Text("Accepted"),
+                    //               groupValue: _radioValue,
+                    //               onChanged: (a) {
+                    //                 _handleRadioValueChange(a);
+                    //                 Navigator.pop(context);
+                    //               },
+                    //             ),
+                    //             RadioListTile(
+                    //               activeColor: Colors.green,
+                    //               value: LocaleKey.rejected,
+                    //               title: Text("Rejected"),
+                    //               groupValue: _radioValue,
+                    //               onChanged: (a) {
+                    //                 _handleRadioValueChange(a);
+                    //                 Navigator.pop(context);
+                    //               },
+                    //             ),
+                    //             RadioListTile(
+                    //               activeColor: Colors.green,
+                    //               value: LocaleKey.cancelled,
+                    //               title: Text("Cancelled"),
+                    //               groupValue: _radioValue,
+                    //               onChanged: (a) {
+                    //                 _handleRadioValueChange(a);
+                    //                 Navigator.pop(context);
+                    //               },
+                    //             ),
+                    //           ],
+                    //         ),
+                    //       );
+                    //       showGeneralDialog(
+                    //           context: context,
+                    //           pageBuilder: (context, anim1, anim2) => dialog,
+                    //           barrierDismissible: true,
+                    //           barrierLabel: '',
+                    //           transitionBuilder: (context, anim1, anim2, child) {
+                    //             return Transform.scale(
+                    //               scale: anim1.value,
+                    //               origin: Offset(MediaQuery.of(context).size.width * 0.5, -200),
+                    //               child: child,
+                    //             );
+                    //           },
+                    //           transitionDuration: Duration(milliseconds: 400));
+                    //     }),
                   ],
                 ),
+                SizedBox(
+                  height: 10,
+                ),
+                Expanded(
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    physics: BouncingScrollPhysics(),
+                    itemCount: isFilter
+                        ? filteredList.length
+                        : pRequest.requests.length,
+                    itemBuilder: (context, index) {
+                      Map<String, dynamic> data = isFilter
+                          ? filteredList[index]
+                          : pRequest.requests[index];
+                      UserModel userModel = data['user'];
+                      RequestModel requestModel = data['request'];
+                      QuoteModel quoteModel;
+
+                      for (QuoteModel element in pRequest.quotes) {
+                        if (element.bookingId == requestModel.bookingId) {
+                          quoteModel = element;
+                          break;
+                        }
+                      }
+                      return buildRequestCard(
+                          requestModel, userModel, quoteModel);
+                    },
+                  ),
+                ),
+              ],
+            ),
     );
   }
 
-  Widget buildRequestCard(RequestModel requestModel, UserModel userModel, QuoteModel quoteModel) {
+  Widget buildRequestCard(
+      RequestModel requestModel, UserModel userModel, QuoteModel quoteModel) {
     String status = RequestStatus.pending;
 
     String paymentStatus = 'pending';
@@ -296,7 +334,8 @@ class _RequestFragmentState extends State<RequestFragment> {
                         );
                       }),
                   FutureBuilder<String>(
-                      future: Helper().setLocationText(requestModel.destination),
+                      future:
+                          Helper().setLocationText(requestModel.destination),
                       builder: (context, snapshot) {
                         if (!snapshot.hasData) {
                           return Text('|');
@@ -364,8 +403,11 @@ class _RequestFragmentState extends State<RequestFragment> {
                   height: 5,
                 ),
                 Text(
-                  AppLocalizations.getLocalizationValue(locale,
-                      requestModel.truk.toLowerCase().contains('closed') ? LocaleKey.closedTruk : LocaleKey.openTruk),
+                  AppLocalizations.getLocalizationValue(
+                      locale,
+                      requestModel.truk.toLowerCase().contains('closed')
+                          ? LocaleKey.closedTruk
+                          : LocaleKey.openTruk),
                   style: TextStyle(fontSize: 12, color: Colors.orange),
                 ),
                 SizedBox(
@@ -409,18 +451,21 @@ class _RequestFragmentState extends State<RequestFragment> {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(5),
       ),
-      child: RaisedButton(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(5),
-        ),
+      child: ElevatedButton(
         onPressed: RequestStatus.pending == status ? onPressed : null,
-        color: getColor(status),
-        disabledColor: Colors.white,
+        style: ElevatedButton.styleFrom(
+          primary: getColor(status),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(5),
+          ),
+        ),
         child: Center(
           child: Text(
             getButtonText(status) ?? status,
             style: TextStyle(
-              color: RequestStatus.pending == status ? Colors.white : getColor(status),
+              color: RequestStatus.pending == status
+                  ? Colors.white
+                  : getColor(status),
             ),
           ),
         ),
@@ -434,15 +479,21 @@ class _RequestFragmentState extends State<RequestFragment> {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(5),
       ),
-      child: RaisedButton(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(5),
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(5),
+          ),
+          primary: Colors.blue,
         ),
-        onPressed: status == RequestStatus.accepted && status != RequestStatus.assigned ? onPressed : null,
-        color: Colors.blue,
+        onPressed:
+            status == RequestStatus.accepted && status != RequestStatus.assigned
+                ? onPressed
+                : null,
         child: Center(
           child: Text(
-            AppLocalizations.getLocalizationValue(locale, LocaleKey.assignDriver),
+            AppLocalizations.getLocalizationValue(
+                locale, LocaleKey.assignDriver),
             style: TextStyle(
               color: Colors.white,
             ),
@@ -471,16 +522,20 @@ class _RequestFragmentState extends State<RequestFragment> {
       case RequestStatus.pending:
         return AppLocalizations.getLocalizationValue(locale, LocaleKey.quote);
       case RequestStatus.accepted:
-        return AppLocalizations.getLocalizationValue(locale, LocaleKey.accepted);
+        return AppLocalizations.getLocalizationValue(
+            locale, LocaleKey.accepted);
       case RequestStatus.quoted:
         return AppLocalizations.getLocalizationValue(locale, LocaleKey.quoted);
       case RequestStatus.rejected:
-        return AppLocalizations.getLocalizationValue(locale, LocaleKey.rejected);
+        return AppLocalizations.getLocalizationValue(
+            locale, LocaleKey.rejected);
       case RequestStatus.assigned:
-        return AppLocalizations.getLocalizationValue(locale, LocaleKey.assigned);
+        return AppLocalizations.getLocalizationValue(
+            locale, LocaleKey.assigned);
       case RequestStatus.cancelled:
         //print(AppLocalizations.getLocalizationValue(locale, LocaleKey.cancelled));
-        return AppLocalizations.getLocalizationValue(locale, LocaleKey.cancelled);
+        return AppLocalizations.getLocalizationValue(
+            locale, LocaleKey.cancelled);
       default:
         return AppLocalizations.getLocalizationValue(locale, LocaleKey.quote);
     }

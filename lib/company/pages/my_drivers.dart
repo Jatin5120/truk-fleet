@@ -31,7 +31,8 @@ class _MyDriversState extends State<MyDrivers> {
   Locale locale;
   Future<String> getDriverStatus(String driverId) async {
     print(driverId);
-    CollectionReference reference = FirebaseFirestore.instance.collection(FirebaseHelper.shipment);
+    CollectionReference reference =
+        FirebaseFirestore.instance.collection(FirebaseHelper.shipment);
     final stream = reference.where('driver', isEqualTo: driverId).snapshots();
     //print(stream.size);
     String status;
@@ -56,7 +57,8 @@ class _MyDriversState extends State<MyDrivers> {
       String route,
       String status,
       String journeyStatus,
-      String image, String contact}) {
+      String image,
+      String contact}) {
     Widget placeHolder = Text(
       '${name[0]}',
       style: TextStyle(
@@ -75,7 +77,8 @@ class _MyDriversState extends State<MyDrivers> {
         menuWidth: MediaQuery.of(context).size.width - 32,
         menuItems: [
           FocusedMenuItem(
-            title: Text(AppLocalizations.getLocalizationValue(locale, LocaleKey.edit)),
+            title: Text(
+                AppLocalizations.getLocalizationValue(locale, LocaleKey.edit)),
             trailingIcon: Icon(Icons.edit),
             onPressed: () {
               Navigator.push(
@@ -89,7 +92,8 @@ class _MyDriversState extends State<MyDrivers> {
             },
           ),
           FocusedMenuItem(
-            title: Text(AppLocalizations.getLocalizationValue(locale, LocaleKey.documents)),
+            title: Text(AppLocalizations.getLocalizationValue(
+                locale, LocaleKey.documents)),
             trailingIcon: Icon(Icons.dock),
             onPressed: () {
               Navigator.push(
@@ -103,7 +107,8 @@ class _MyDriversState extends State<MyDrivers> {
             },
           ),
           FocusedMenuItem(
-            title: Text(AppLocalizations.getLocalizationValue(locale, LocaleKey.delete)),
+            title: Text(AppLocalizations.getLocalizationValue(
+                locale, LocaleKey.delete)),
             trailingIcon: Icon(
               Icons.delete,
               color: Colors.red,
@@ -119,12 +124,14 @@ class _MyDriversState extends State<MyDrivers> {
                 return;
               }
               Helper().showConfirmationDialog(
-                title: AppLocalizations.getLocalizationValue(locale, LocaleKey.delete),
-                subTitle: "${AppLocalizations.getLocalizationValue(locale, LocaleKey.deleteConfirm)} - $driverID?",
+                title: AppLocalizations.getLocalizationValue(
+                    locale, LocaleKey.delete),
+                subTitle:
+                    "${AppLocalizations.getLocalizationValue(locale, LocaleKey.deleteConfirm)} - $driverID?",
                 context: context,
                 onTap: () async {
-                  CollectionReference reference =
-                      FirebaseFirestore.instance.collection(FirebaseHelper.driverCollection);
+                  CollectionReference reference = FirebaseFirestore.instance
+                      .collection(FirebaseHelper.driverCollection);
                   await reference.doc(driverUid).delete();
                 },
               );
@@ -202,9 +209,11 @@ class _MyDriversState extends State<MyDrivers> {
                         ShipmentModel model = ShipmentModel.fromSnapshot(s);
                         m.add(model);
                       }
-                      if (m.any((element) => element.status == RequestStatus.started)) {
+                      if (m.any((element) =>
+                          element.status == RequestStatus.started)) {
                         status = LocaleKey.inTransit;
-                      } else if (m.any((element) => element.status == RequestStatus.assigned)) {
+                      } else if (m.any((element) =>
+                          element.status == RequestStatus.assigned)) {
                         status = LocaleKey.assigned;
                       } else
                         status = LocaleKey.available;
@@ -212,9 +221,13 @@ class _MyDriversState extends State<MyDrivers> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            AppLocalizations.getLocalizationValue(locale, status),
+                            AppLocalizations.getLocalizationValue(
+                                locale, status),
                             style: TextStyle(
-                                color: status == LocaleKey.assigned ? primaryColor : Colors.blue, fontSize: 14),
+                                color: status == LocaleKey.assigned
+                                    ? primaryColor
+                                    : Colors.blue,
+                                fontSize: 14),
                           ),
                           // Text(
                           //   '$journeyStatus',
@@ -240,7 +253,8 @@ class _MyDriversState extends State<MyDrivers> {
     locale = AppLocalizations.of(context).locale;
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.getLocalizationValue(locale, LocaleKey.myDriver)),
+        title: Text(
+            AppLocalizations.getLocalizationValue(locale, LocaleKey.myDriver)),
         actions: [
           InkWell(
             onTap: () {
@@ -254,7 +268,8 @@ class _MyDriversState extends State<MyDrivers> {
               padding: const EdgeInsets.only(right: 8, left: 8),
               child: Center(
                 child: Text(
-                  AppLocalizations.getLocalizationValue(locale, LocaleKey.pending),
+                  AppLocalizations.getLocalizationValue(
+                      locale, LocaleKey.pending),
                   style: TextStyle(color: primaryColor, fontSize: 16),
                 ),
               ),
@@ -268,14 +283,17 @@ class _MyDriversState extends State<MyDrivers> {
           width: size.width,
           padding: EdgeInsets.only(left: 20, right: 20, bottom: 20),
           child: RaisedButton(
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
             color: primaryColor,
             onPressed: () {
               // Add a different driver
-              Navigator.of(context).push(CupertinoPageRoute(builder: (context) => DriverDetails()));
+              Navigator.of(context).push(
+                  CupertinoPageRoute(builder: (context) => DriverDetails()));
             },
             child: Text(
-              AppLocalizations.getLocalizationValue(locale, LocaleKey.addDriver),
+              AppLocalizations.getLocalizationValue(
+                  locale, LocaleKey.addDriver),
               style: TextStyle(fontSize: 18, color: Colors.white),
             ),
           ),
@@ -300,30 +318,32 @@ class _MyDriversState extends State<MyDrivers> {
             }
             if (snapshot.hasError || !snapshot.hasData) {
               return Center(
-                child: Text(AppLocalizations.getLocalizationValue(locale, LocaleKey.noData)),
+                child: Text(AppLocalizations.getLocalizationValue(
+                    locale, LocaleKey.noData)),
               );
             }
             if (snapshot.data.size <= 0) {
               return NoDataPage(
-                text: AppLocalizations.getLocalizationValue(locale, LocaleKey.noDriver),
+                text: AppLocalizations.getLocalizationValue(
+                    locale, LocaleKey.noDriver),
               );
             }
 
             return ListView.builder(
               itemCount: snapshot.data.docs.length,
               itemBuilder: (context, index) {
-                DriverModel model = DriverModel.fromSnapshot(snapshot.data.docs[index]);
+                DriverModel model =
+                    DriverModel.fromSnapshot(snapshot.data.docs[index]);
 
                 return driverDetail(
-                  driverUid: model.uid,
-                  driverID: model.driverId,
-                  image: model.image,
-                  name: model.name,
-                  journeyStatus: 'Pending',
-                  route: 'Pending',
-                  status: 'Pending',
-                  contact: model.mobile
-                );
+                    driverUid: model.uid,
+                    driverID: model.driverId,
+                    image: model.image,
+                    name: model.name,
+                    journeyStatus: 'Pending',
+                    route: 'Pending',
+                    status: 'Pending',
+                    contact: model.mobile);
               },
             );
           },

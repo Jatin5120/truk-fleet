@@ -56,7 +56,8 @@ class LoginUIState extends State<LoginUI> {
                 Padding(
                   padding: EdgeInsets.only(left: 20),
                   child: Text(
-                    AppLocalizations.getLocalizationValue(locale, LocaleKey.enterMobile),
+                    AppLocalizations.getLocalizationValue(
+                        locale, LocaleKey.enterMobile),
                     style: TextStyle(fontSize: 18, color: Colors.black),
                   ),
                 ),
@@ -69,7 +70,8 @@ class LoginUIState extends State<LoginUI> {
                     autofocus: false,
                     validator: (st) {
                       if (st.isEmpty) {
-                        return AppLocalizations.getLocalizationValue(locale, LocaleKey.requiredText);
+                        return AppLocalizations.getLocalizationValue(
+                            locale, LocaleKey.requiredText);
                       }
                       if (st.trim().length < 10) {
                         return '*Invalid mobile number';
@@ -85,7 +87,8 @@ class LoginUIState extends State<LoginUI> {
                         image: image,
                       ),
                       counterText: "",
-                      labelText: AppLocalizations.getLocalizationValue(locale, LocaleKey.mobile),
+                      labelText: AppLocalizations.getLocalizationValue(
+                          locale, LocaleKey.mobile),
                       hintText: 'e.g., 1234567890',
                       border: OutlineInputBorder(),
                     ),
@@ -99,8 +102,10 @@ class LoginUIState extends State<LoginUI> {
                   height: 65,
                   width: size.width,
                   padding: EdgeInsets.only(left: 20, right: 20, bottom: 20),
-                  child: RaisedButton(
-                    color: primaryColor,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      primary: primaryColor,
+                    ),
                     onPressed: isLoading
                         ? () {}
                         : () async {
@@ -108,7 +113,8 @@ class LoginUIState extends State<LoginUI> {
                               setState(() {
                                 isLoading = true;
                               });
-                              await widget.loginInterface.loginWithMobile(_mobileController.text.trim());
+                              await widget.loginInterface.loginWithMobile(
+                                  _mobileController.text.trim());
                               setState(() {
                                 isLoading = false;
                               });
@@ -117,11 +123,13 @@ class LoginUIState extends State<LoginUI> {
                     child: isLoading
                         ? Center(
                             child: CircularProgressIndicator(
-                              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                              valueColor:
+                                  AlwaysStoppedAnimation<Color>(Colors.white),
                             ),
                           )
                         : Text(
-                            AppLocalizations.getLocalizationValue(locale, LocaleKey.generateOtp),
+                            AppLocalizations.getLocalizationValue(
+                                locale, LocaleKey.generateOtp),
                             style: TextStyle(fontSize: 16, color: Colors.white),
                           ),
                   ),

@@ -43,7 +43,7 @@ class _MoreDriverDetailsState extends State<MoreDriverDetails> {
   }
 
   Future getImage(ImageSource source, File f) async {
-    var image = await ImagePicker().getImage(source: source);
+    var image = await ImagePicker().pickImage(source: source);
     if (image != null && mounted) {
       setState(() {
         f = File(image.path);
@@ -74,8 +74,8 @@ class _MoreDriverDetailsState extends State<MoreDriverDetails> {
             child: Text(title),
           ),
           Container(
-            child: RaisedButton(
-              onPressed: onPressed,
+            child: InkWell(
+              onTap: onPressed,
             ),
           ),
         ],

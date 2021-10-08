@@ -4,7 +4,6 @@ import 'package:truk_fleet/auth/register/register_interface.dart';
 import 'package:truk_fleet/auth/register/register_ui.dart';
 import 'package:truk_fleet/driver/models/driver_model.dart';
 import 'package:truk_fleet/firebase_helper/firebase_helper.dart';
-import 'package:truk_fleet/helper/login_type.dart';
 import 'package:truk_fleet/models/user_model.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -16,7 +15,8 @@ class RegisterPage extends StatefulWidget {
   _RegisterPageState createState() => _RegisterPageState();
 }
 
-class _RegisterPageState extends State<RegisterPage> implements RegisterInterface {
+class _RegisterPageState extends State<RegisterPage>
+    implements RegisterInterface {
   @override
   Widget build(BuildContext context) {
     return RegisterUI(

@@ -57,7 +57,7 @@ class _FleetDocumentScreenState extends State<FleetDocumentScreen> {
   }
 
   Future getImage(ImageSource source, File f) async {
-    var image = await ImagePicker().getImage(source: source);
+    var image = await ImagePicker().pickImage(source: source);
     if (image != null && mounted) {
       setState(() {
         f = File(image.path);
@@ -87,8 +87,8 @@ class _FleetDocumentScreenState extends State<FleetDocumentScreen> {
             child: Text(title),
           ),
           Container(
-            child: RaisedButton(
-              onPressed: onPressed,
+            child: InkWell(
+              onTap: onPressed,
             ),
           ),
         ],
@@ -104,7 +104,8 @@ class _FleetDocumentScreenState extends State<FleetDocumentScreen> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         centerTitle: true,
-        title: Text(AppLocalizations.getLocalizationValue(locale, LocaleKey.documents)),
+        title: Text(
+            AppLocalizations.getLocalizationValue(locale, LocaleKey.documents)),
       ),
       body: SafeArea(
         child: Container(
@@ -123,7 +124,8 @@ class _FleetDocumentScreenState extends State<FleetDocumentScreen> {
     );
   }
 
-  Widget buildUploadButton(bool state, Function _onPressed, bool buttonState, File file, String docKey) {
+  Widget buildUploadButton(bool state, Function _onPressed, bool buttonState,
+      File file, String docKey) {
     return Container(
       height: 65,
       padding: EdgeInsets.only(bottom: 20),
@@ -171,8 +173,16 @@ class _FleetDocumentScreenState extends State<FleetDocumentScreen> {
             title: Text("File"),
             trailingIcon: Icon(Icons.file_present),
             onPressed: () async {
-              FilePickerResult result = await FilePicker.platform
-                  .pickFiles(type: FileType.custom, allowedExtensions: ['jpg', 'png', 'jpeg', 'pdf', 'doc', 'docx']);
+              FilePickerResult result = await FilePicker.platform.pickFiles(
+                  type: FileType.custom,
+                  allowedExtensions: [
+                    'jpg',
+                    'png',
+                    'jpeg',
+                    'pdf',
+                    'doc',
+                    'docx'
+                  ]);
               if (result != null) {
                 File ff = File(result.files.single.path);
                 if (ff != null) {
@@ -197,9 +207,16 @@ class _FleetDocumentScreenState extends State<FleetDocumentScreen> {
                   : () {
                       String fileUrl = documentStatus[docKey][1];
 
-                      String extenstion = fileUrl.split("/").last.split(".").last.split("?").first;
+                      String extenstion = fileUrl
+                          .split("/")
+                          .last
+                          .split(".")
+                          .last
+                          .split("?")
+                          .first;
                       print(extenstion);
-                      bool isImage = ['jpg', 'png', 'jpeg'].contains(extenstion);
+                      bool isImage =
+                          ['jpg', 'png', 'jpeg'].contains(extenstion);
                       if (!isImage) {
                         _launchURL(fileUrl);
                       } else
@@ -208,14 +225,16 @@ class _FleetDocumentScreenState extends State<FleetDocumentScreen> {
                                 context: context,
                                 builder: (context) => Container(
                                   child: PhotoView(
-                                    loadingBuilder: (context, progress) => Center(
+                                    loadingBuilder: (context, progress) =>
+                                        Center(
                                       child: Container(
                                         width: 50.0,
                                         height: 50.0,
                                         child: CircularProgressIndicator(
                                           value: progress == null
                                               ? null
-                                              : progress.cumulativeBytesLoaded / progress.expectedTotalBytes,
+                                              : progress.cumulativeBytesLoaded /
+                                                  progress.expectedTotalBytes,
                                         ),
                                       ),
                                     ),
@@ -230,14 +249,16 @@ class _FleetDocumentScreenState extends State<FleetDocumentScreen> {
                                 context: context,
                                 builder: (context) => Container(
                                   child: PhotoView(
-                                    loadingBuilder: (context, progress) => Center(
+                                    loadingBuilder: (context, progress) =>
+                                        Center(
                                       child: Container(
                                         width: 50.0,
                                         height: 50.0,
                                         child: CircularProgressIndicator(
                                           value: progress == null
                                               ? null
-                                              : progress.cumulativeBytesLoaded / progress.expectedTotalBytes,
+                                              : progress.cumulativeBytesLoaded /
+                                                  progress.expectedTotalBytes,
                                         ),
                                       ),
                                     ),
@@ -278,8 +299,12 @@ class _FleetDocumentScreenState extends State<FleetDocumentScreen> {
                       width: 15,
                     ),
                     Text(
-                      AppLocalizations.getLocalizationValue(locale, state ? LocaleKey.uploaded : LocaleKey.upload),
-                      style: TextStyle(fontSize: 16, color: Colors.white, fontWeight: FontWeight.w500),
+                      AppLocalizations.getLocalizationValue(locale,
+                          state ? LocaleKey.uploaded : LocaleKey.upload),
+                      style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w500),
                     ),
                   ],
                 ),
@@ -288,7 +313,8 @@ class _FleetDocumentScreenState extends State<FleetDocumentScreen> {
     );
   }
 
-  Widget buildDocument(String docKey, String documentName, bool documentState, File file) {
+  Widget buildDocument(
+      String docKey, String documentName, bool documentState, File file) {
     bool buttonState = false;
     return Padding(
       padding: const EdgeInsets.all(5.0),
@@ -306,7 +332,8 @@ class _FleetDocumentScreenState extends State<FleetDocumentScreen> {
             ),
           ),
           Expanded(
-            child: buildUploadButton(documentState, () {}, buttonState, file, docKey),
+            child: buildUploadButton(
+                documentState, () {}, buttonState, file, docKey),
           ),
         ],
       ),
@@ -330,20 +357,60 @@ class _FleetDocumentScreenState extends State<FleetDocumentScreen> {
         ),
         Column(
           children: [
-            buildDocument(FleetDocumentType.dl, AppLocalizations.getLocalizationValue(locale, LocaleKey.dl),
-                isAllNotUploaded ? false : documentStatus[FleetDocumentType.dl][0], _dlFile),
-            buildDocument(FleetDocumentType.adhaar, AppLocalizations.getLocalizationValue(locale, LocaleKey.adharCard),
-                isAllNotUploaded ? false : documentStatus[FleetDocumentType.adhaar][0], _adhaarFile),
-            buildDocument(FleetDocumentType.panCard, AppLocalizations.getLocalizationValue(locale, LocaleKey.panCard),
-                isAllNotUploaded ? false : documentStatus[FleetDocumentType.panCard][0], _panFile),
-            buildDocument(FleetDocumentType.selfie, AppLocalizations.getLocalizationValue(locale, LocaleKey.selfie),
-                isAllNotUploaded ? false : documentStatus[FleetDocumentType.selfie][0], _selfiFile),
-            buildDocument(FleetDocumentType.company_registration, AppLocalizations.getLocalizationValue(locale, LocaleKey.company_registration),
-                isAllNotUploaded ? false : documentStatus[FleetDocumentType.company_registration][0], _companyRegistration),
-            buildDocument(FleetDocumentType.gst_registration, AppLocalizations.getLocalizationValue(locale, LocaleKey.gst_registration),
-                isAllNotUploaded ? false : documentStatus[FleetDocumentType.gst_registration][0], _gstRegistration),
-            buildDocument(FleetDocumentType.bank_proof, AppLocalizations.getLocalizationValue(locale, LocaleKey.bank_proof),
-                isAllNotUploaded ? false : documentStatus[FleetDocumentType.bank_proof][0], _bankProof),
+            buildDocument(
+                FleetDocumentType.dl,
+                AppLocalizations.getLocalizationValue(locale, LocaleKey.dl),
+                isAllNotUploaded
+                    ? false
+                    : documentStatus[FleetDocumentType.dl][0],
+                _dlFile),
+            buildDocument(
+                FleetDocumentType.adhaar,
+                AppLocalizations.getLocalizationValue(
+                    locale, LocaleKey.adharCard),
+                isAllNotUploaded
+                    ? false
+                    : documentStatus[FleetDocumentType.adhaar][0],
+                _adhaarFile),
+            buildDocument(
+                FleetDocumentType.panCard,
+                AppLocalizations.getLocalizationValue(
+                    locale, LocaleKey.panCard),
+                isAllNotUploaded
+                    ? false
+                    : documentStatus[FleetDocumentType.panCard][0],
+                _panFile),
+            buildDocument(
+                FleetDocumentType.selfie,
+                AppLocalizations.getLocalizationValue(locale, LocaleKey.selfie),
+                isAllNotUploaded
+                    ? false
+                    : documentStatus[FleetDocumentType.selfie][0],
+                _selfiFile),
+            buildDocument(
+                FleetDocumentType.company_registration,
+                AppLocalizations.getLocalizationValue(
+                    locale, LocaleKey.company_registration),
+                isAllNotUploaded
+                    ? false
+                    : documentStatus[FleetDocumentType.company_registration][0],
+                _companyRegistration),
+            buildDocument(
+                FleetDocumentType.gst_registration,
+                AppLocalizations.getLocalizationValue(
+                    locale, LocaleKey.gst_registration),
+                isAllNotUploaded
+                    ? false
+                    : documentStatus[FleetDocumentType.gst_registration][0],
+                _gstRegistration),
+            buildDocument(
+                FleetDocumentType.bank_proof,
+                AppLocalizations.getLocalizationValue(
+                    locale, LocaleKey.bank_proof),
+                isAllNotUploaded
+                    ? false
+                    : documentStatus[FleetDocumentType.bank_proof][0],
+                _bankProof),
           ],
         ),
         //buildButton(),

@@ -29,7 +29,8 @@ class _MoreTrukDetailsState extends State<MoreTrukDetails> {
   File _permit;
   File _fitness;
   File _rc;
-  final TrukDocumentController _trukDocumentController = TrukDocumentController();
+  final TrukDocumentController _trukDocumentController =
+      TrukDocumentController();
   Map<String, dynamic> documentStatus = {
     TrukDocumentType.rc: [false, 'na'],
     TrukDocumentType.permit: [false, 'na'],
@@ -45,7 +46,7 @@ class _MoreTrukDetailsState extends State<MoreTrukDetails> {
   }
 
   Future getImage(ImageSource source, File f) async {
-    var image = await ImagePicker().getImage(source: source);
+    var image = await ImagePicker().pickImage(source: source);
     if (image != null && mounted) {
       setState(() {
         f = File(image.path);
@@ -57,9 +58,11 @@ class _MoreTrukDetailsState extends State<MoreTrukDetails> {
   getDocsStatus() async {
     isLoading = true;
     setState(() {});
-    bool isAllNotUploaded = !await _trukDocumentController.getMasterUploadStatus(id: widget.trukNumber);
+    bool isAllNotUploaded = !await _trukDocumentController
+        .getMasterUploadStatus(id: widget.trukNumber);
     if (!isAllNotUploaded) {
-      documentStatus = await _trukDocumentController.getPerticularUploadStatus(id: widget.trukNumber);
+      documentStatus = await _trukDocumentController.getPerticularUploadStatus(
+          id: widget.trukNumber);
     }
     isLoading = false;
     if (mounted) {
@@ -75,8 +78,8 @@ class _MoreTrukDetailsState extends State<MoreTrukDetails> {
             child: Text(title),
           ),
           Container(
-            child: RaisedButton(
-              onPressed: onPressed,
+            child: InkWell(
+              onTap: onPressed,
             ),
           ),
         ],
@@ -92,7 +95,8 @@ class _MoreTrukDetailsState extends State<MoreTrukDetails> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         centerTitle: true,
-        title: Text(AppLocalizations.getLocalizationValue(locale, LocaleKey.documents)),
+        title: Text(
+            AppLocalizations.getLocalizationValue(locale, LocaleKey.documents)),
       ),
       body: SafeArea(
         child: Container(
@@ -111,7 +115,8 @@ class _MoreTrukDetailsState extends State<MoreTrukDetails> {
     );
   }
 
-  Widget buildUploadButton(bool state, Function _onPressed, bool buttonState, File file, String docKey) {
+  Widget buildUploadButton(bool state, Function _onPressed, bool buttonState,
+      File file, String docKey) {
     return Container(
       height: 65,
       padding: EdgeInsets.only(bottom: 20),
@@ -133,7 +138,8 @@ class _MoreTrukDetailsState extends State<MoreTrukDetails> {
                 setState(() {
                   isLoading = true;
                 });
-                await _trukDocumentController.updateDocumentStatus(docKey, ff, id: widget.trukNumber.toUpperCase());
+                await _trukDocumentController.updateDocumentStatus(docKey, ff,
+                    id: widget.trukNumber.toUpperCase());
                 getDocsStatus();
               }
             },
@@ -147,7 +153,8 @@ class _MoreTrukDetailsState extends State<MoreTrukDetails> {
                 setState(() {
                   isLoading = true;
                 });
-                await _trukDocumentController.updateDocumentStatus(docKey, ff, id: widget.trukNumber.toUpperCase());
+                await _trukDocumentController.updateDocumentStatus(docKey, ff,
+                    id: widget.trukNumber.toUpperCase());
                 getDocsStatus();
               }
             },
@@ -171,7 +178,8 @@ class _MoreTrukDetailsState extends State<MoreTrukDetails> {
                                       child: CircularProgressIndicator(
                                         value: progress == null
                                             ? null
-                                            : progress.cumulativeBytesLoaded / progress.expectedTotalBytes,
+                                            : progress.cumulativeBytesLoaded /
+                                                progress.expectedTotalBytes,
                                       ),
                                     ),
                                   ),
@@ -194,7 +202,8 @@ class _MoreTrukDetailsState extends State<MoreTrukDetails> {
                                       child: CircularProgressIndicator(
                                         value: progress == null
                                             ? null
-                                            : progress.cumulativeBytesLoaded / progress.expectedTotalBytes,
+                                            : progress.cumulativeBytesLoaded /
+                                                progress.expectedTotalBytes,
                                       ),
                                     ),
                                   ),
@@ -230,8 +239,12 @@ class _MoreTrukDetailsState extends State<MoreTrukDetails> {
                 width: 15,
               ),
               Text(
-                AppLocalizations.getLocalizationValue(locale, state ? LocaleKey.uploaded : LocaleKey.upload),
-                style: TextStyle(fontSize: 16, color: Colors.white, fontWeight: FontWeight.w500),
+                AppLocalizations.getLocalizationValue(
+                    locale, state ? LocaleKey.uploaded : LocaleKey.upload),
+                style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w500),
               ),
             ],
           ),
@@ -240,7 +253,8 @@ class _MoreTrukDetailsState extends State<MoreTrukDetails> {
     );
   }
 
-  Widget buildDocument(String docKey, String documentName, bool documentState, File file) {
+  Widget buildDocument(
+      String docKey, String documentName, bool documentState, File file) {
     bool buttonState = false;
     return Padding(
       padding: const EdgeInsets.all(5.0),
@@ -258,7 +272,8 @@ class _MoreTrukDetailsState extends State<MoreTrukDetails> {
             ),
           ),
           Expanded(
-            child: buildUploadButton(documentState, () {}, buttonState, file, docKey),
+            child: buildUploadButton(
+                documentState, () {}, buttonState, file, docKey),
           ),
         ],
       ),
@@ -284,26 +299,45 @@ class _MoreTrukDetailsState extends State<MoreTrukDetails> {
           children: [
             buildDocument(
                 TrukDocumentType.insurance,
-                AppLocalizations.getLocalizationValue(locale, LocaleKey.insuranceDoc),
-                isAllNotUploaded ? false : documentStatus[TrukDocumentType.insurance][0],
+                AppLocalizations.getLocalizationValue(
+                    locale, LocaleKey.insuranceDoc),
+                isAllNotUploaded
+                    ? false
+                    : documentStatus[TrukDocumentType.insurance][0],
                 _insurance),
             buildDocument(
                 TrukDocumentType.fitness,
-                AppLocalizations.getLocalizationValue(locale, LocaleKey.fitnessCert),
-                isAllNotUploaded ? false : documentStatus[TrukDocumentType.fitness][0],
+                AppLocalizations.getLocalizationValue(
+                    locale, LocaleKey.fitnessCert),
+                isAllNotUploaded
+                    ? false
+                    : documentStatus[TrukDocumentType.fitness][0],
                 _fitness),
-            buildDocument(TrukDocumentType.permit, AppLocalizations.getLocalizationValue(locale, LocaleKey.permit),
-                isAllNotUploaded ? false : documentStatus[TrukDocumentType.permit][0], _permit),
-            buildDocument(TrukDocumentType.rc, AppLocalizations.getLocalizationValue(locale, LocaleKey.rc),
-                isAllNotUploaded ? false : documentStatus[TrukDocumentType.rc][0], _rc),
+            buildDocument(
+                TrukDocumentType.permit,
+                AppLocalizations.getLocalizationValue(locale, LocaleKey.permit),
+                isAllNotUploaded
+                    ? false
+                    : documentStatus[TrukDocumentType.permit][0],
+                _permit),
+            buildDocument(
+                TrukDocumentType.rc,
+                AppLocalizations.getLocalizationValue(locale, LocaleKey.rc),
+                isAllNotUploaded
+                    ? false
+                    : documentStatus[TrukDocumentType.rc][0],
+                _rc),
           ],
         ),
         Container(
           width: MediaQuery.of(context).size.width * 0.4,
           height: 40,
-          child: RaisedButton(
-            color: primaryColor,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              primary: primaryColor,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(5)),
+            ),
             child: Text(
               AppLocalizations.getLocalizationValue(locale, LocaleKey.done),
               style: TextStyle(fontSize: 20, color: Colors.white),

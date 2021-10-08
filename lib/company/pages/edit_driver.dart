@@ -30,40 +30,51 @@ class _EditDriverDetailsState extends State<EditDriverDetails> {
   Locale locale;
   String id;
 
-  Widget detailTextField({String labelText, bool enable=true,TextEditingController controller, String Function(String) validator}) {
+  Widget detailTextField(
+      {String labelText,
+      bool enable = true,
+      TextEditingController controller,
+      String Function(String) validator}) {
     return Container(
       padding: EdgeInsets.only(left: 20, right: 20, bottom: 10),
       child: TextFormField(
         enabled: enable,
         controller: controller,
         validator: validator,
-        decoration: InputDecoration(labelText: labelText, border: OutlineInputBorder()),
+        decoration:
+            InputDecoration(labelText: labelText, border: OutlineInputBorder()),
       ),
     );
   }
+
   getDetails() async {
-    await FirebaseFirestore.instance.collection(FirebaseHelper.driverRegistered).where('agent',isEqualTo: user.uid).get().then((value){
-      for(var d in value.docs)
-        {
-          if(widget.mobile.contains(d.get('mobile'))){
-            setState(() {
-              _nameController.text= d.get('name');
-              _licenseExpiryController.text = d.get('licenseExpiryDate');
-              _adhaarController.text = d.get('adhaar');
-              _dlController.text=d.get('dl');
-              _mobileController.text=d.get('mobile');
-              id=d.id;
-            });
-          }
+    await FirebaseFirestore.instance
+        .collection(FirebaseHelper.driverRegistered)
+        .where('agent', isEqualTo: user.uid)
+        .get()
+        .then((value) {
+      for (var d in value.docs) {
+        if (widget.mobile.contains(d.get('mobile'))) {
+          setState(() {
+            _nameController.text = d.get('name');
+            _licenseExpiryController.text = d.get('licenseExpiryDate');
+            _adhaarController.text = d.get('adhaar');
+            _dlController.text = d.get('dl');
+            _mobileController.text = d.get('mobile');
+            id = d.id;
+          });
         }
+      }
     });
   }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     getDetails();
   }
+
   @override
   void dispose() {
     _nameController.dispose();
@@ -80,7 +91,8 @@ class _EditDriverDetailsState extends State<EditDriverDetails> {
     locale = AppLocalizations.of(context).locale;
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.getLocalizationValue(locale, LocaleKey.driverDetails)),
+        title: Text(AppLocalizations.getLocalizationValue(
+            locale, LocaleKey.driverDetails)),
         centerTitle: true,
       ),
       body: Form(
@@ -97,7 +109,8 @@ class _EditDriverDetailsState extends State<EditDriverDetails> {
                       Container(
                         padding: EdgeInsets.only(top: 20, left: 20),
                         child: Text(
-                          AppLocalizations.getLocalizationValue(locale, LocaleKey.registerDriver),
+                          AppLocalizations.getLocalizationValue(
+                              locale, LocaleKey.registerDriver),
                           style: TextStyle(fontSize: 18),
                         ),
                       ),
@@ -105,35 +118,43 @@ class _EditDriverDetailsState extends State<EditDriverDetails> {
                         height: 10,
                       ),
                       detailTextField(
-                        labelText: AppLocalizations.getLocalizationValue(locale, LocaleKey.name),
+                        labelText: AppLocalizations.getLocalizationValue(
+                            locale, LocaleKey.name),
                         controller: _nameController,
                         validator: (value) => value.isEmpty
-                            ? AppLocalizations.getLocalizationValue(locale, LocaleKey.requiredText)
+                            ? AppLocalizations.getLocalizationValue(
+                                locale, LocaleKey.requiredText)
                             : null,
                       ),
                       detailTextField(
-                        labelText: AppLocalizations.getLocalizationValue(locale, LocaleKey.mobile),
+                        labelText: AppLocalizations.getLocalizationValue(
+                            locale, LocaleKey.mobile),
                         controller: _mobileController,
                         validator: (value) => value.isEmpty
-                            ? AppLocalizations.getLocalizationValue(locale, LocaleKey.requiredText)
+                            ? AppLocalizations.getLocalizationValue(
+                                locale, LocaleKey.requiredText)
                             : (value.length != 10 ? 'Invalid number' : null),
                       ),
                       detailTextField(
-                        labelText: AppLocalizations.getLocalizationValue(locale, LocaleKey.adharPan),
+                        labelText: AppLocalizations.getLocalizationValue(
+                            locale, LocaleKey.adharPan),
                         controller: _adhaarController,
                         validator: (value) => value.isEmpty
-                            ? AppLocalizations.getLocalizationValue(locale, LocaleKey.requiredText)
+                            ? AppLocalizations.getLocalizationValue(
+                                locale, LocaleKey.requiredText)
                             : null,
                       ),
                       detailTextField(
-                        labelText: AppLocalizations.getLocalizationValue(locale, LocaleKey.licenseNo),
+                        labelText: AppLocalizations.getLocalizationValue(
+                            locale, LocaleKey.licenseNo),
                         controller: _dlController,
                         validator: (value) => value.isEmpty
-                            ? AppLocalizations.getLocalizationValue(locale, LocaleKey.requiredText)
+                            ? AppLocalizations.getLocalizationValue(
+                                locale, LocaleKey.requiredText)
                             : null,
                       ),
                       InkWell(
-                        onTap: (){
+                        onTap: () {
                           showMonthPicker(
                             context: context,
                             firstDate: DateTime(DateTime.now().year - 1, 5),
@@ -143,17 +164,20 @@ class _EditDriverDetailsState extends State<EditDriverDetails> {
                           ).then((date) {
                             if (date != null) {
                               setState(() {
-                                _licenseExpiryController.text = "${date.month}/${date.year.toString().split("")[2]}${date.year.toString().split("")[3]}";
+                                _licenseExpiryController.text =
+                                    "${date.month}/${date.year.toString().split("")[2]}${date.year.toString().split("")[3]}";
                               });
                             }
                           });
                         },
                         child: detailTextField(
-                          labelText: AppLocalizations.getLocalizationValue(locale, LocaleKey.licenseExpiry),
+                          labelText: AppLocalizations.getLocalizationValue(
+                              locale, LocaleKey.licenseExpiry),
                           controller: _licenseExpiryController,
                           enable: false,
                           validator: (value) => value.isEmpty
-                              ? AppLocalizations.getLocalizationValue(locale, LocaleKey.requiredText)
+                              ? AppLocalizations.getLocalizationValue(
+                                  locale, LocaleKey.requiredText)
                               : null,
                         ),
                       ),
@@ -161,60 +185,70 @@ class _EditDriverDetailsState extends State<EditDriverDetails> {
                       Container(
                         height: 65,
                         width: size.width,
-                        padding: EdgeInsets.only(left: 20, right: 20, bottom: 20),
-                        child: RaisedButton(
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-                          color: primaryColor,
+                        padding:
+                            EdgeInsets.only(left: 20, right: 20, bottom: 20),
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5)),
+                            primary: primaryColor,
+                          ),
                           onPressed: isLoading
                               ? () {}
                               : () async {
-                            if (_formKey.currentState.validate()) {
-                              String mobile = _mobileController.text;
-                              String name = _nameController.text;
-                              String dl = _dlController.text;
-                              String adhaar = _adhaarController.text;
-                              String expiry = _licenseExpiryController.text;
-                              DriverRegisterModel model = DriverRegisterModel(
-                                  adhaar: adhaar,
-                                  agent: user.uid,
-                                  dl: dl,
-                                  licenseExpiryDate: expiry,
-                                  mobile: mobile,
-                                  name: name,
-                                  pan: 'adhaar',
-                                  cstatus: true
-                              );
-                              setState(() {
-                                isLoading = true;
-                              });
-                              bool b = await AddDriverController().update(model,id);
-                              setState(() {
-                                isLoading = false;
-                              });
-                              if (!b) {
-                                Navigator.pop(context);
-                              } else {
-                                Fluttertoast.showToast(
-                                    msg: AppLocalizations.getLocalizationValue(
-                                      locale,
-                                      LocaleKey.driverRegistered,
-                                    ));
-                                Navigator.pop(context);
-                              }
-                              // Navigator.of(context)
-                              //     .push(MaterialPageRoute(builder: (context) => DriverDocumentScreen()));
-                            }
-                          },
+                                  if (_formKey.currentState.validate()) {
+                                    String mobile = _mobileController.text;
+                                    String name = _nameController.text;
+                                    String dl = _dlController.text;
+                                    String adhaar = _adhaarController.text;
+                                    String expiry =
+                                        _licenseExpiryController.text;
+                                    DriverRegisterModel model =
+                                        DriverRegisterModel(
+                                            adhaar: adhaar,
+                                            agent: user.uid,
+                                            dl: dl,
+                                            licenseExpiryDate: expiry,
+                                            mobile: mobile,
+                                            name: name,
+                                            pan: 'adhaar',
+                                            cstatus: true);
+                                    setState(() {
+                                      isLoading = true;
+                                    });
+                                    bool b = await AddDriverController()
+                                        .update(model, id);
+                                    setState(() {
+                                      isLoading = false;
+                                    });
+                                    if (!b) {
+                                      Navigator.pop(context);
+                                    } else {
+                                      Fluttertoast.showToast(
+                                          msg: AppLocalizations
+                                              .getLocalizationValue(
+                                        locale,
+                                        LocaleKey.driverRegistered,
+                                      ));
+                                      Navigator.pop(context);
+                                    }
+                                    // Navigator.of(context)
+                                    //     .push(MaterialPageRoute(builder: (context) => DriverDocumentScreen()));
+                                  }
+                                },
                           child: isLoading
                               ? Center(
-                            child: CircularProgressIndicator(
-                              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                            ),
-                          )
+                                  child: CircularProgressIndicator(
+                                    valueColor: AlwaysStoppedAnimation<Color>(
+                                        Colors.white),
+                                  ),
+                                )
                               : Text(
-                            AppLocalizations.getLocalizationValue(locale, LocaleKey.update),
-                            style: TextStyle(fontSize: 18, color: Colors.white),
-                          ),
+                                  AppLocalizations.getLocalizationValue(
+                                      locale, LocaleKey.update),
+                                  style: TextStyle(
+                                      fontSize: 18, color: Colors.white),
+                                ),
                         ),
                       )
                     ],

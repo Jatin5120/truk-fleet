@@ -36,8 +36,9 @@ class _RequestFragmentState extends State<RequestFragment> {
   @override
   void initState() {
     //Provider.of<MyRequest>(context, listen: false).getRequestList();
-    final pRequest = Provider.of<MyRequest>(context,listen: false);
-    pRequest.getQuoteList();
+
+    final b = Provider.of<MyRequest>(context, listen: false);
+    b.getQuoteList();
     super.initState();
   }
 
@@ -96,17 +97,25 @@ class _RequestFragmentState extends State<RequestFragment> {
     setState(() {});
   }
 
-  Future<String> getAdress(LatLng lateLng) async{
+   Future<String> getAdress(LatLng lateLng) async{
     final coordinates = Coordinates(lateLng.latitude, lateLng.longitude);
-    print('Before time ${DateTime.now()}');
     var address =  await Geocoder.local.findAddressesFromCoordinates(coordinates);
-    print('After time ${DateTime.now()}');
     String street = address.first.featureName;
     String area = address.first.subLocality;
     String pincode = address.first.postalCode;
     String city = address.first.subAdminArea;
     return '$street, $area, $city, $pincode';
   }
+  getLocation(RequestModel requestModel, String string) async{
+    bool isTrack = false;
+    var address = await getAdress(requestModel.source);
+    if (address.toLowerCase().contains(string.toLowerCase())){
+      isTrack =  true;
+    }
+    print('IsTrack is $isTrack');
+    return isTrack;
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -142,46 +151,65 @@ class _RequestFragmentState extends State<RequestFragment> {
                               filteredList = [];
                             });
                           } else {
-
-                            setState(() {
-                              filteredList = pRequest.requests.where((element) {
-                                if (element['request']
-                                        .bookingId
-                                        .toString()
-                                        .contains(
-                                            string.trim().toLowerCase()) ||
-                                    element['request']
-                                        .pickupDate
-                                        .contains(string.toLowerCase())) {
-                                  return true;
-                                }
-
+                            setState(()  {
+                              filteredList =  pRequest.requests.where((element) {
+                                // if (element['request']
+                                //         .bookingId
+                                //         .toString()
+                                //         .contains(
+                                //             string.trim().toLowerCase()) ||
+                                //     element['request']
+                                //         .pickupDate
+                                //         .contains(string.toLowerCase())) {
+                                //   return true;
+                                // }
+                                //
                                 // if (element['user']
                                 //     .name
                                 //     .toLowerCase()
                                 //     .contains(string.toLowerCase()))
                                 //   return true;
-                                RequestModel requestModel = element['request'];
-                                // String address = await getAdress(requestModel.source);
+
+                                RequestModel requestModel =  element['request'];
+                                // String address =  getAdress(requestModel.source);
 
 
-                                Future.delayed(Duration(milliseconds: 100),() async{
-                                  String adress = await getAdress(requestModel.source);
-                                  if(adress.toLowerCase().contains(string.toLowerCase()))
-                                    return true;
-                                });
+                                // getLocation(element['request'],string);
+                                //
+                                // print(getLocation(element['request'], string));
+
+                               // Future<dynamic> isTrue = getLocation(element['request'], string);
+                               //
+                               // if(isTrue != null)
+                               //    return true;
+                               //
+                               //  if(getAdress(requestModel.source).toLowerCase().contains(string.toLowerCase()))
+                               //    return true;
+
+                                // print('you answer is ${getAdress(requestModel.source).then((value) {
+                                //   return value.toLowerCase().contains(string.toLowerCase());
+                                // }).then((value) => print(value))}');
+
+                                // if(getAdress(requestModel.source).then((value) {
+                                //   return value.toLowerCase().contains(string.toLowerCase());
+                                // }) != null)
+                                //   return true;
+
+                                // Future.delayed(Duration(milliseconds: 100),() async{
+                                //   String adress = await getAdress(requestModel.source);
+                                //   if(adress.toLowerCase().contains(string.toLowerCase()))
+                                //     return true;
+                                // });
 
                                 getAdress(requestModel.source).then((value) {
-                                  print('Your condition is ${value.toLowerCase().contains(string.toLowerCase())}');
-
                                   print('your value is ${value.toLowerCase()}');
                                   if(value.toLowerCase().contains(string.toLowerCase()))
                                     return true;
                                 });
-                                getAdress(requestModel.destination).then((value) {
-                                  if(value.toLowerCase().contains(string.toLowerCase()))
-                                    return true;
-                                });
+                                // getAdress(requestModel.destination).then((value) {
+                                //   if(value.toLowerCase().contains(string.toLowerCase()))
+                                //     return true;
+                                // });
                                 return false;
                               }).toList();
                               isFilter = true;
@@ -297,15 +325,16 @@ class _RequestFragmentState extends State<RequestFragment> {
                       Map<String, dynamic> data = isFilter
                           ? filteredList[index]
                           : pRequest.requests[index];
-                      print('Your data is ${data}');
+                      // print('Your data is ${data}');
                       UserModel userModel = data['user'];
                       RequestModel requestModel = data['request'];
                       QuoteModel quoteModel;
 
-                      print('element is ${pRequest.quotes}');
+                      // print('element is ${pRequest.quoteList}');
 
                       for (QuoteModel element in pRequest.quotes) {
-                        print('QuoteModel is $element');
+                        // print('QuoteModel is ${requestModel.bookingId}');
+                        // print('condition is ${element.bookingId == requestModel.bookingId}');
                         if (element.bookingId == requestModel.bookingId) {
                           quoteModel = element;
                           break;
@@ -324,9 +353,9 @@ class _RequestFragmentState extends State<RequestFragment> {
   Widget buildRequestCard(
       RequestModel requestModel, UserModel userModel, QuoteModel quoteModel) {
     String status = RequestStatus.pending;
-print('Quet function ${quoteModel}');
     String paymentStatus = 'pending';
     if (quoteModel != null) {
+      print('Quet function ${quoteModel.paymentStatus}');
       paymentStatus = quoteModel.paymentStatus;
       status = quoteModel.status;
       if (status == RequestStatus.assigned) {

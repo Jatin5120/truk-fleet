@@ -118,8 +118,10 @@ class MyRequest with ChangeNotifier {
     CollectionReference quoteRef = FirebaseFirestore.instance.collection(FirebaseHelper.quoteCollection);
     Stream<QuerySnapshot> quoteSnap =
         quoteRef.where('agent', isEqualTo: me.uid).orderBy('bookingDate', descending: true).snapshots();
-
+ final test = await quoteRef.where('mobile', isEqualTo: '+919664722610').get();
+ print('Data is --> ${test.docs.length}');
     quoteSnap.listen((ev) {
+      print('Your quotelise is ${ev.docs.length}');
       quoteList = [];
       for (QueryDocumentSnapshot q in ev.docs) {
         QuoteModel model = QuoteModel.fromSnapshot(q);

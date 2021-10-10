@@ -153,63 +153,32 @@ class _RequestFragmentState extends State<RequestFragment> {
                           } else {
                             setState(()  {
                               filteredList =  pRequest.requests.where((element) {
-                                // if (element['request']
-                                //         .bookingId
-                                //         .toString()
-                                //         .contains(
-                                //             string.trim().toLowerCase()) ||
-                                //     element['request']
-                                //         .pickupDate
-                                //         .contains(string.toLowerCase())) {
-                                //   return true;
-                                // }
-                                //
-                                // if (element['user']
-                                //     .name
-                                //     .toLowerCase()
-                                //     .contains(string.toLowerCase()))
-                                //   return true;
+                                if (element['request']
+                                        .bookingId
+                                        .toString()
+                                        .contains(
+                                            string.trim().toLowerCase()) ||
+                                    element['request']
+                                        .pickupDate
+                                        .contains(string.toLowerCase())) {
+                                  return true;
+                                }
 
-                                RequestModel requestModel =  element['request'];
-                                // String address =  getAdress(requestModel.source);
+                                if (element['user']
+                                    .name
+                                    .toLowerCase()
+                                    .contains(string.toLowerCase()))
+                                  return true;
 
+                                if (element['request'].destinationString
+                                    .toLowerCase()
+                                    .contains(string.toLowerCase()))
+                                  return true;
 
-                                // getLocation(element['request'],string);
-                                //
-                                // print(getLocation(element['request'], string));
-
-                               // Future<dynamic> isTrue = getLocation(element['request'], string);
-                               //
-                               // if(isTrue != null)
-                               //    return true;
-                               //
-                               //  if(getAdress(requestModel.source).toLowerCase().contains(string.toLowerCase()))
-                               //    return true;
-
-                                // print('you answer is ${getAdress(requestModel.source).then((value) {
-                                //   return value.toLowerCase().contains(string.toLowerCase());
-                                // }).then((value) => print(value))}');
-
-                                // if(getAdress(requestModel.source).then((value) {
-                                //   return value.toLowerCase().contains(string.toLowerCase());
-                                // }) != null)
-                                //   return true;
-
-                                // Future.delayed(Duration(milliseconds: 100),() async{
-                                //   String adress = await getAdress(requestModel.source);
-                                //   if(adress.toLowerCase().contains(string.toLowerCase()))
-                                //     return true;
-                                // });
-
-                                getAdress(requestModel.source).then((value) {
-                                  print('your value is ${value.toLowerCase()}');
-                                  if(value.toLowerCase().contains(string.toLowerCase()))
-                                    return true;
-                                });
-                                // getAdress(requestModel.destination).then((value) {
-                                //   if(value.toLowerCase().contains(string.toLowerCase()))
-                                //     return true;
-                                // });
+                                if (element['request'].sourceString
+                                    .toLowerCase()
+                                    .contains(string.toLowerCase()))
+                                  return true;
                                 return false;
                               }).toList();
                               isFilter = true;
@@ -353,7 +322,7 @@ class _RequestFragmentState extends State<RequestFragment> {
   Widget buildRequestCard(
       RequestModel requestModel, UserModel userModel, QuoteModel quoteModel) {
     String status = RequestStatus.pending;
-    String paymentStatus = 'pending';
+    String paymentStatus = '';
     if (quoteModel != null) {
       print('Quet function ${quoteModel.paymentStatus}');
       paymentStatus = quoteModel.paymentStatus;

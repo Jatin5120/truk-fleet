@@ -49,9 +49,12 @@ class _RegisterUIState extends State<RegisterUI> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _companyNameController = TextEditingController();
+  final TextEditingController _upiController = TextEditingController();
+  final TextEditingController _gstController = TextEditingController();
+  final TextEditingController _companyNumberController =
+      TextEditingController();
   final TextEditingController _cityController = TextEditingController();
   final TextEditingController _stateController = TextEditingController();
-  final TextEditingController _upiController = TextEditingController();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool isLoading = true;
@@ -127,19 +130,24 @@ class _RegisterUIState extends State<RegisterUI> {
                             String company = _companyNameController.text.trim();
                             if (widget.type == LoginType.company) {
                               String upi = _upiController.text.trim();
+                              String gst = _gstController.text.trim();
+                              String companyNumber =
+                                  _companyNumberController.text.trim();
                               UserModel userModel = UserModel(
-                                  city: city,
-                                  upiId: upi,
-                                  company: company,
-                                  email: email,
-                                  joining:
-                                      DateTime.now().millisecondsSinceEpoch,
-                                  mobile: mobile,
-                                  name: name,
-                                  state: state,
-                                  token: 'na',
-                                  uid: uid,
-                                  notification: false);
+                                city: city,
+                                upiId: upi,
+                                company: company,
+                                email: email,
+                                joining: DateTime.now().millisecondsSinceEpoch,
+                                mobile: mobile,
+                                name: name,
+                                state: state,
+                                token: 'na',
+                                uid: uid,
+                                notification: false,
+                                gst: gst,
+                                regNumber: companyNumber,
+                              );
                               widget.registerInterface.registerAgent(userModel);
                             } else {
                               String trukId = Helper.generateTrukId();
@@ -212,8 +220,11 @@ class _RegisterUIState extends State<RegisterUI> {
                     ),
                   ),
                   SizedBox(
-                    height: height * 0.15,
+                    height: 50,
                   ),
+                  // SizedBox(
+                  //   height: height * 0.15,
+                  // ),
                   Text(
                     AppLocalizations.getLocalizationValue(
                         locale, LocaleKey.registerTitle),
@@ -242,7 +253,7 @@ class _RegisterUIState extends State<RegisterUI> {
                   ),
                   TextFormField(
                     controller: _emailController,
-                    validator: (input) => input.isValidEmail()
+                    validator: (input) => input.trim().isValidEmail()
                         ? null
                         : AppLocalizations.getLocalizationValue(
                             locale, LocaleKey.invalidEmail),
@@ -255,7 +266,7 @@ class _RegisterUIState extends State<RegisterUI> {
                   SizedBox(
                     height: 15,
                   ),
-                  if (widget.type == LoginType.company)
+                  if (widget.type == LoginType.company) ...[
                     TextFormField(
                       controller: _upiController,
                       validator: (input) => input.isEmpty
@@ -267,10 +278,10 @@ class _RegisterUIState extends State<RegisterUI> {
                         border: OutlineInputBorder(),
                       ),
                     ),
-                  if (widget.type == LoginType.company)
                     SizedBox(
                       height: 15,
                     ),
+                  ],
                   TextFormField(
                     controller: _companyNameController,
                     validator: (value) {
@@ -289,6 +300,44 @@ class _RegisterUIState extends State<RegisterUI> {
                   SizedBox(
                     height: 15,
                   ),
+                  if (widget.type == LoginType.company) ...[
+                    TextFormField(
+                      controller: _companyNumberController,
+                      validator: (value) {
+                        if (value.isEmpty) {
+                          return AppLocalizations.getLocalizationValue(
+                              locale, LocaleKey.requiredText);
+                        }
+                        return null;
+                      },
+                      decoration: InputDecoration(
+                        labelText: AppLocalizations.getLocalizationValue(
+                            locale, LocaleKey.companyNo),
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    TextFormField(
+                      controller: _gstController,
+                      validator: (value) {
+                        if (value.isEmpty) {
+                          return AppLocalizations.getLocalizationValue(
+                              locale, LocaleKey.requiredText);
+                        }
+                        return null;
+                      },
+                      decoration: InputDecoration(
+                        labelText: AppLocalizations.getLocalizationValue(
+                            locale, LocaleKey.gstNo),
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                  ],
                   TextFormField(
                     controller: _cityController,
                     validator: (value) {

@@ -113,6 +113,7 @@ class _CompanyProfileState extends State<CompanyProfile> {
           AppLocalizations.getLocalizationValue(locale, LocaleKey.editProfile),
         ),
         centerTitle: true,
+        elevation: 0,
       ),
       body: Form(
         key: _formKey,
@@ -258,7 +259,7 @@ class _CompanyProfileState extends State<CompanyProfile> {
                   height: 15,
                 ),
                 textFieldWithDetail(
-                  text: pUser.user.company,
+                  text: pUser.user.upiId,
                   hint: "UPI",
                   controller: _upiController,
                   validator: (st) => st.isEmpty

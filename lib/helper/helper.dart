@@ -78,6 +78,9 @@ class Helper {
               content: Text('$subTitle'),
               actions: [
                 ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    primary: secondaryColor,
+                  ),
                   onPressed: () {
                     Navigator.pop(context);
                     onTap();

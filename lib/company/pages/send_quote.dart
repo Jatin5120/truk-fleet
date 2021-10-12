@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
@@ -76,49 +77,55 @@ class _SendQuoteState extends State<SendQuote> {
     if (widget.keyTitle == 'assign') {
       CollectionReference driverRequest = FirebaseFirestore.instance
           .collection(FirebaseHelper.driverRegistered);
-      CollectionReference driver = FirebaseFirestore.instance
+      CollectionReference driverCollectionRef = FirebaseFirestore.instance
           .collection(FirebaseHelper.driverCollection);
-      CollectionReference driverA =
+      CollectionReference shipmentCollectionRef =
           FirebaseFirestore.instance.collection(FirebaseHelper.shipment);
-      final snapShot = driver.where('agent', isEqualTo: user.uid).snapshots();
+      final driverSnapShot =
+          driverCollectionRef.where('agent', isEqualTo: user.uid).snapshots();
+      log("QuoteModal-->${widget.quoteModel}");
       print("truk: ${widget.quoteModel.truk}");
       //CollectionReference qqt = FirebaseFirestore.instance.collection(FirebaseHelper.quoteCollection);
       //final qShot = driver.where('bookingId', isEqualTo: widget.).snapshots();
-      await FirebaseFirestore.instance
-          .collection(FirebaseHelper.shipment)
+      await shipmentCollectionRef
           .where('truk', isEqualTo: widget.quoteModel.truk)
           .get()
-          .then((value) async {
-        for (var h in value.docs) {
-          ShipmentModel sm = ShipmentModel.fromSnapshot(h);
-          print("Hi");
-          if (sm.status == RequestStatus.pending) {
-            await FirebaseFirestore.instance
-                .collection(FirebaseHelper.driverCollection)
-                .doc(sm.driver)
-                .get()
-                .then((value) {
-              DriverModel dmm = DriverModel.fromSnapshot(value);
-              setState(() {
-                dm.add(dmm);
-                //istruckLoading=false;
-              });
+          .then(
+        (value) async {
+          for (var h in value.docs) {
+            ShipmentModel sm = ShipmentModel.fromSnapshot(h);
+            print("Hi");
+            if (sm.status == RequestStatus.pending) {
+              await FirebaseFirestore.instance
+                  .collection(FirebaseHelper.driverCollection)
+                  .doc(sm.driver)
+                  .get()
+                  .then((value) {
+                DriverModel dmm = DriverModel.fromSnapshot(value);
+                setState(() {
+                  dm.add(dmm);
+                  //istruckLoading=false;
+                });
 
-              print('DM is --> ${dm}');
-            });
+                print('DM is --> $dm');
+              });
+            }
           }
-        }
-      });
+        },
+      );
       // snapShot.listen((event) {
       //   for (QueryDocumentSnapshot d in event.docs) {
       //     DriverModel dd = DriverModel.fromSnapshot(d);
       //     driverA.where('driver', isEqualTo: dd.uid).get().then((value) {});
       //   }
       // });
-      snapShot.listen((event) {
+      driverSnapShot.listen((event) {
         for (QueryDocumentSnapshot d in event.docs) {
           DriverModel dd = DriverModel.fromSnapshot(d);
-          driverA.where('driver', isEqualTo: dd.uid).get().then((value) {
+          shipmentCollectionRef
+              .where('driver', isEqualTo: dd.uid)
+              .get()
+              .then((value) {
             int c = 0;
             print("dlen:${value.docs.length}");
             if (value.docs.isEmpty) {
@@ -164,7 +171,9 @@ class _SendQuoteState extends State<SendQuote> {
       for (DocumentSnapshot doc in event.docs) {
         TrukModel t = TrukModel.fromSnapshot(doc);
         if (t.available && int.parse(t.grossWeight) >= totalWeight) {
-          trucksA.add(t);
+          setState(() {
+            trucksA.add(t);
+          });
         }
         if (!t.available) {
           sReference.where('truk', isEqualTo: t.trukNumber).get().then((value) {
@@ -544,7 +553,9 @@ class _SendQuoteState extends State<SendQuote> {
                                     ),
                                     child: Text(
                                       AppLocalizations.getLocalizationValue(
-                                          locale, LocaleKey.addTruk),
+                                        locale,
+                                        LocaleKey.addTruk,
+                                      ),
                                       style: TextStyle(
                                           fontSize: 20, color: Colors.white),
                                     ),

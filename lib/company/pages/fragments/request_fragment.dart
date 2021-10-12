@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -97,25 +99,26 @@ class _RequestFragmentState extends State<RequestFragment> {
     setState(() {});
   }
 
-   Future<String> getAdress(LatLng lateLng) async{
+  Future<String> getAdress(LatLng lateLng) async {
     final coordinates = Coordinates(lateLng.latitude, lateLng.longitude);
-    var address =  await Geocoder.local.findAddressesFromCoordinates(coordinates);
+    var address =
+        await Geocoder.local.findAddressesFromCoordinates(coordinates);
     String street = address.first.featureName;
     String area = address.first.subLocality;
     String pincode = address.first.postalCode;
     String city = address.first.subAdminArea;
     return '$street, $area, $city, $pincode';
   }
-  getLocation(RequestModel requestModel, String string) async{
+
+  getLocation(RequestModel requestModel, String string) async {
     bool isTrack = false;
     var address = await getAdress(requestModel.source);
-    if (address.toLowerCase().contains(string.toLowerCase())){
-      isTrack =  true;
+    if (address.toLowerCase().contains(string.toLowerCase())) {
+      isTrack = true;
     }
     print('IsTrack is $isTrack');
     return isTrack;
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -144,15 +147,15 @@ class _RequestFragmentState extends State<RequestFragment> {
                   children: [
                     Expanded(
                       child: TextFormField(
-                        onChanged: (string) async{
+                        onChanged: (string) async {
                           if (string.trim().length <= 0 || string.isEmpty) {
                             setState(() {
                               isFilter = false;
                               filteredList = [];
                             });
                           } else {
-                            setState(()  {
-                              filteredList =  pRequest.requests.where((element) {
+                            setState(() {
+                              filteredList = pRequest.requests.where((element) {
                                 if (element['request']
                                         .bookingId
                                         .toString()
@@ -170,12 +173,14 @@ class _RequestFragmentState extends State<RequestFragment> {
                                     .contains(string.toLowerCase()))
                                   return true;
 
-                                if (element['request'].destinationString
+                                if (element['request']
+                                    .destinationString
                                     .toLowerCase()
                                     .contains(string.toLowerCase()))
                                   return true;
 
-                                if (element['request'].sourceString
+                                if (element['request']
+                                    .sourceString
                                     .toLowerCase()
                                     .contains(string.toLowerCase()))
                                   return true;
@@ -269,10 +274,13 @@ class _RequestFragmentState extends State<RequestFragment> {
                               pageBuilder: (context, anim1, anim2) => dialog,
                               barrierDismissible: true,
                               barrierLabel: '',
-                              transitionBuilder: (context, anim1, anim2, child) {
+                              transitionBuilder:
+                                  (context, anim1, anim2, child) {
                                 return Transform.scale(
                                   scale: anim1.value,
-                                  origin: Offset(MediaQuery.of(context).size.width * 0.5, -200),
+                                  origin: Offset(
+                                      MediaQuery.of(context).size.width * 0.5,
+                                      -200),
                                   child: child,
                                 );
                               },
@@ -305,6 +313,7 @@ class _RequestFragmentState extends State<RequestFragment> {
                         // print('QuoteModel is ${requestModel.bookingId}');
                         // print('condition is ${element.bookingId == requestModel.bookingId}');
                         if (element.bookingId == requestModel.bookingId) {
+                          log("Element --> ${element.truk}");
                           quoteModel = element;
                           break;
                         }
@@ -389,16 +398,17 @@ class _RequestFragmentState extends State<RequestFragment> {
                   Row(
                     children: [
                       buildQuoteButton(() {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => SendQuote(
-                                keyTitle: 'quote',
-                                quoteModel: quoteModel,
-                                requestModel: requestModel,
-                                requestUser: userModel,
-                              ),
-                            ));
+                        log("Quote --> $quoteModel");
+                        // Navigator.push(
+                        //     context,
+                        //     MaterialPageRoute(
+                        //       builder: (context) => SendQuote(
+                        //         keyTitle: 'quote',
+                        //         quoteModel: quoteModel,
+                        //         requestModel: requestModel,
+                        //         requestUser: userModel,
+                        //       ),
+                        //     ));
                       }, 'Quote', status),
                       quoteModel == null
                           ? Container()
@@ -452,8 +462,7 @@ class _RequestFragmentState extends State<RequestFragment> {
                 SizedBox(height: 8),
                 Align(
                   alignment: Alignment.centerRight,
-                  child:
-                  buildAssignDriverButton(
+                  child: buildAssignDriverButton(
                     status,
                     () {
                       Navigator.push(

@@ -12,11 +12,14 @@ import 'package:truk_fleet/models/shipment_model.dart';
 import 'package:truk_fleet/models/user_model.dart';
 
 class Email {
-
-  static String mailToken = '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';
-  static const String driverAssignedTemplateID = "d-abb7173c4c264e74a85aa69b6a145ab7";
-  static const String shipmentStartTemplateID = "d-153e98f8cac54374b1c9d3357e64516e";
-  static const String shipmentCompleteTemplateID = "d-9644068b03e9448daa384f4843f85ffa";
+  static String mailToken =
+      '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';
+  static const String driverAssignedTemplateID =
+      "d-abb7173c4c264e74a85aa69b6a145ab7";
+  static const String shipmentStartTemplateID =
+      "d-153e98f8cac54374b1c9d3357e64516e";
+  static const String shipmentCompleteTemplateID =
+      "d-9644068b03e9448daa384f4843f85ffa";
   sendShipmentCompleteMail(ShipmentModel model, inv, context) async {
     showDialog(
         context: context,
@@ -69,7 +72,7 @@ class Email {
             sg.Personalization([toAddress], dynamicTemplateData: dd);
         final email = sg.Email([personalization], fromAddress, subject,
             templateId: shipmentCompleteTemplateID);
-            // templateId: "d-9644068b03e9448daa384f4843f85ffa");
+        // templateId: "d-9644068b03e9448daa384f4843f85ffa");
         mailer.send(email).then((result) {
           // ...
           print('mail sent: ${result.asError.error.toString()}');
@@ -129,7 +132,7 @@ class Email {
               sg.Personalization([toAddress], dynamicTemplateData: dd);
           final email = sg.Email([personalization], fromAddress, subject,
               templateId: shipmentStartTemplateID);
-              // templateId: "d-153e98f8cac54374b1c9d3357e64516e");
+          // templateId: "d-153e98f8cac54374b1c9d3357e64516e");
           mailer.send(email).then((result) {
             // ...
             print('mail sent: ${result.asError.error.toString()}');
@@ -201,10 +204,15 @@ class Email {
                 sg.Personalization([toAddress], dynamicTemplateData: dd);
             final email = sg.Email([personalization], fromAddress, subject,
                 templateId: driverAssignedTemplateID);
-                // templateId: "d-abb7173c4c264e74a85aa69b6a145ab7");
+            // templateId: "d-abb7173c4c264e74a85aa69b6a145ab7");
             mailer.send(email).then((result) {
               // ...
-              print('mail sent: ${result.asError.error.toString()}');
+              if (result.isValue)
+                print('mail sent: ${result.asValue}');
+              else if (result.isError)
+                print('mail sent: ${result.asError}');
+              else
+                print("Something Unknown");
             });
           } catch (e) {
             print("Error: $e");

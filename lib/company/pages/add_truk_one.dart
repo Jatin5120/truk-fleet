@@ -39,17 +39,25 @@ class _AddTruckState extends State<AddTruck> {
     "Multi Axle"
   ];
 
-  Widget detailTextField(
-      {String labelText,
-      TextEditingController controller,
-      String Function(String) validator}) {
+  Widget detailTextField({
+    String labelText,
+    TextEditingController controller,
+    String Function(String) validator,
+    bool isNumber = false,
+    bool isDone = false,
+  }) {
     return Container(
       padding: EdgeInsets.only(left: 20, right: 20, bottom: 10),
       child: TextFormField(
         validator: validator,
         controller: controller,
-        decoration:
-            InputDecoration(labelText: labelText, border: OutlineInputBorder()),
+        decoration: InputDecoration(
+          labelText: labelText,
+          border: OutlineInputBorder(),
+        ),
+        maxLength: isNumber ? 10 : null,
+        keyboardType: isNumber ? TextInputType.phone : TextInputType.text,
+        textInputAction: isDone ? TextInputAction.done : TextInputAction.next,
       ),
     );
   }
@@ -96,8 +104,13 @@ class _AddTruckState extends State<AddTruck> {
     locale = AppLocalizations.of(context).locale;
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.getLocalizationValue(
-            locale, LocaleKey.trukDetails)),
+        title: Text(
+          AppLocalizations.getLocalizationValue(
+            locale,
+            LocaleKey.trukDetails,
+          ),
+        ),
+        elevation: 0,
       ),
       body: Form(
         key: _formKey,
@@ -125,7 +138,10 @@ class _AddTruckState extends State<AddTruck> {
                 ),
                 detailTextField(
                   labelText: AppLocalizations.getLocalizationValue(
-                      locale, LocaleKey.mobile),
+                    locale,
+                    LocaleKey.mobile,
+                  ),
+                  isNumber: true,
                   controller: mobileNumberController,
                   validator: (value) => value.isEmpty
                       ? AppLocalizations.getLocalizationValue(
@@ -149,12 +165,17 @@ class _AddTruckState extends State<AddTruck> {
                       AppLocalizations.getLocalizationValue(
                           locale, LocaleKey.trukModel),
                     ),
-                    onChanged: (value) =>
-                        setState(() => trukModelController.text = value),
+                    onChanged: (value) {
+                      setState(() => trukModelController.text = value);
+                      FocusScope.of(context).unfocus();
+                      FocusScope.of(context).nextFocus();
+                    },
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
                       labelText: AppLocalizations.getLocalizationValue(
-                          locale, LocaleKey.trukModel),
+                        locale,
+                        LocaleKey.trukModel,
+                      ),
                     ),
                     items: trukModelList
                         .map(
@@ -189,9 +210,15 @@ class _AddTruckState extends State<AddTruck> {
                   child: DropdownButtonFormField(
                     hint: Text(
                       AppLocalizations.getLocalizationValue(
-                          locale, LocaleKey.trukType),
+                        locale,
+                        LocaleKey.trukType,
+                      ),
                     ),
-                    onChanged: (value) => setState(() => trukBodyType = value),
+                    onChanged: (value) {
+                      setState(() => trukBodyType = value);
+                      FocusScope.of(context).unfocus();
+                      FocusScope.of(context).nextFocus();
+                    },
                     value: trukBodyType ?? LocaleKey.closedTruk,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
@@ -256,6 +283,7 @@ class _AddTruckState extends State<AddTruck> {
                   labelText: AppLocalizations.getLocalizationValue(
                       locale, LocaleKey.permitType),
                   controller: permitTypeController,
+                  isDone: true,
                   validator: (value) => value.isEmpty
                       ? AppLocalizations.getLocalizationValue(
                           locale, LocaleKey.requiredText)

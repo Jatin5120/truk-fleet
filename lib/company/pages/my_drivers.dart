@@ -254,15 +254,21 @@ class _MyDriversState extends State<MyDrivers> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-            AppLocalizations.getLocalizationValue(locale, LocaleKey.myDriver)),
+          AppLocalizations.getLocalizationValue(
+            locale,
+            LocaleKey.myDriver,
+          ),
+        ),
+        elevation: 0,
         actions: [
           InkWell(
             onTap: () {
               Navigator.push(
-                  context,
-                  CupertinoPageRoute(
-                    builder: (context) => PendingDriver(),
-                  ));
+                context,
+                CupertinoPageRoute(
+                  builder: (context) => PendingDriver(),
+                ),
+              );
             },
             child: Padding(
               padding: const EdgeInsets.only(right: 8, left: 8),

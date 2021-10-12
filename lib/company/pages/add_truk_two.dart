@@ -6,6 +6,7 @@ import 'package:focused_menu/modals.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:truk_fleet/company/controller/truk_controller.dart';
+import 'package:truk_fleet/company/pages/send_quote.dart';
 import 'package:truk_fleet/locale/app_localization.dart';
 import 'package:truk_fleet/locale/locale_keys.dart';
 import 'package:photo_view/photo_view.dart';
@@ -336,7 +337,8 @@ class _MoreTrukDetailsState extends State<MoreTrukDetails> {
             style: ElevatedButton.styleFrom(
               primary: primaryColor,
               shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(5)),
+                borderRadius: BorderRadius.circular(5),
+              ),
             ),
             child: Text(
               AppLocalizations.getLocalizationValue(locale, LocaleKey.done),
@@ -345,6 +347,12 @@ class _MoreTrukDetailsState extends State<MoreTrukDetails> {
             onPressed: () {
               Navigator.pop(context);
               Navigator.pop(context);
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => SendQuote(),
+                ),
+              );
             },
           ),
         )

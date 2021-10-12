@@ -128,7 +128,9 @@ class _SendQuoteState extends State<SendQuote> {
               }
             }
             if (c == 1) {
-              driverAList.add(dd);
+              setState(() {
+                driverAList.add(dd);
+              });
             }
           });
         }
@@ -546,9 +548,10 @@ class _SendQuoteState extends State<SendQuote> {
                                     ),
                                     onPressed: () {
                                       Navigator.of(context).push(
-                                          CupertinoPageRoute(
-                                              builder: (context) =>
-                                                  AddTruck()));
+                                        CupertinoPageRoute(
+                                          builder: (context) => AddTruck(),
+                                        ),
+                                      );
                                     },
                                   ),
                                 )
@@ -687,13 +690,16 @@ class _SendQuoteState extends State<SendQuote> {
                                       AppLocalizations.getLocalizationValue(
                                           locale, LocaleKey.addDriver),
                                       style: TextStyle(
-                                          fontSize: 20, color: Colors.white),
+                                        fontSize: 20,
+                                        color: Colors.white,
+                                      ),
                                     ),
                                     onPressed: () {
                                       Navigator.of(context).push(
-                                          CupertinoPageRoute(
-                                              builder: (context) =>
-                                                  DriverDetails()));
+                                        CupertinoPageRoute(
+                                          builder: (context) => DriverDetails(),
+                                        ),
+                                      );
                                     },
                                   ),
                                 )
@@ -741,7 +747,8 @@ class _SendQuoteState extends State<SendQuote> {
                                           )
                                           .toList(),
                                   decoration: InputDecoration(
-                                      border: OutlineInputBorder()),
+                                    border: OutlineInputBorder(),
+                                  ),
                                 ),
                         ),
                     ],

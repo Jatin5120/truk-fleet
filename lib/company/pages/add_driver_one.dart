@@ -24,19 +24,26 @@ class _DriverDetailsState extends State<DriverDetails> {
   bool isLoading = false;
   Locale locale;
 
-  Widget detailTextField(
-      {String labelText,
-      bool enable = true,
-      TextEditingController controller,
-      String Function(String) validator}) {
+  Widget detailTextField({
+    String labelText,
+    bool enable = true,
+    TextEditingController controller,
+    String Function(String) validator,
+    bool isNumber = false,
+    bool isDone = false,
+  }) {
     return Container(
       padding: EdgeInsets.only(left: 20, right: 20, bottom: 10),
       child: TextFormField(
         enabled: enable,
         controller: controller,
         validator: validator,
-        decoration:
-            InputDecoration(labelText: labelText, border: OutlineInputBorder()),
+        decoration: InputDecoration(
+          labelText: labelText,
+          border: OutlineInputBorder(),
+        ),
+        keyboardType: isNumber ? TextInputType.number : TextInputType.text,
+        textInputAction: isDone ? TextInputAction.done : TextInputAction.next,
       ),
     );
   }
@@ -57,9 +64,14 @@ class _DriverDetailsState extends State<DriverDetails> {
     locale = AppLocalizations.of(context).locale;
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.getLocalizationValue(
-            locale, LocaleKey.driverDetails)),
+        title: Text(
+          AppLocalizations.getLocalizationValue(
+            locale,
+            LocaleKey.driverDetails,
+          ),
+        ),
         centerTitle: true,
+        elevation: 0,
       ),
       body: Form(
         key: _formKey,
@@ -94,7 +106,10 @@ class _DriverDetailsState extends State<DriverDetails> {
                       ),
                       detailTextField(
                         labelText: AppLocalizations.getLocalizationValue(
-                            locale, LocaleKey.mobile),
+                          locale,
+                          LocaleKey.mobile,
+                        ),
+                        isNumber: true,
                         controller: _mobileController,
                         validator: (value) => value.isEmpty
                             ? AppLocalizations.getLocalizationValue(
@@ -103,7 +118,9 @@ class _DriverDetailsState extends State<DriverDetails> {
                       ),
                       detailTextField(
                         labelText: AppLocalizations.getLocalizationValue(
-                            locale, LocaleKey.adharPan),
+                          locale,
+                          LocaleKey.adharPan,
+                        ),
                         controller: _adhaarController,
                         validator: (value) => value.isEmpty
                             ? AppLocalizations.getLocalizationValue(
@@ -114,6 +131,7 @@ class _DriverDetailsState extends State<DriverDetails> {
                         labelText: AppLocalizations.getLocalizationValue(
                             locale, LocaleKey.licenseNo),
                         controller: _dlController,
+                        isDone: true,
                         validator: (value) => value.isEmpty
                             ? AppLocalizations.getLocalizationValue(
                                 locale, LocaleKey.requiredText)

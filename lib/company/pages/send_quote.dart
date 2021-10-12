@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:loading_overlay/loading_overlay.dart';
-import 'package:sendgrid_mailer/sendgrid_mailer.dart' as sg;
 import 'package:provider/provider.dart';
 import 'package:truk_fleet/company/controller/add_driver_controller.dart';
 import 'package:truk_fleet/company/controller/request_controller.dart';

@@ -12,6 +12,11 @@ import 'package:truk_fleet/models/shipment_model.dart';
 import 'package:truk_fleet/models/user_model.dart';
 
 class Email {
+
+  static String mailToken = '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';
+  static const String driverAssignedTemplateID = "d-abb7173c4c264e74a85aa69b6a145ab7";
+  static const String shipmentStartTemplateID = "d-153e98f8cac54374b1c9d3357e64516e";
+  static const String shipmentCompleteTemplateID = "d-9644068b03e9448daa384f4843f85ffa";
   sendShipmentCompleteMail(ShipmentModel model, inv, context) async {
     showDialog(
         context: context,
@@ -50,8 +55,8 @@ class Email {
         }
       });
       try {
-        final mailer = sg.Mailer(
-            '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');
+        final mailer = sg.Mailer(mailToken);
+        // final mailer = sg.Mailer('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');
         final toAddress = sg.Address(userMail);
         final fromAddress = sg.Address('info@trukapp.com');
         final subject = 'DRIVER ASSIGNED';
@@ -63,7 +68,8 @@ class Email {
         final personalization =
             sg.Personalization([toAddress], dynamicTemplateData: dd);
         final email = sg.Email([personalization], fromAddress, subject,
-            templateId: "d-9644068b03e9448daa384f4843f85ffa");
+            templateId: shipmentCompleteTemplateID);
+            // templateId: "d-9644068b03e9448daa384f4843f85ffa");
         mailer.send(email).then((result) {
           // ...
           print('mail sent: ${result.asError.error.toString()}');
@@ -109,8 +115,8 @@ class Email {
       });
       try {
         try {
-          final mailer = sg.Mailer(
-              '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');
+          final mailer = sg.Mailer(mailToken);
+          // final mailer = sg.Mailer('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');
           final toAddress = sg.Address(userMail);
           final fromAddress = sg.Address('info@trukapp.com');
           final subject = 'DRIVER ASSIGNED';
@@ -122,7 +128,8 @@ class Email {
           final personalization =
               sg.Personalization([toAddress], dynamicTemplateData: dd);
           final email = sg.Email([personalization], fromAddress, subject,
-              templateId: "d-153e98f8cac54374b1c9d3357e64516e");
+              templateId: shipmentStartTemplateID);
+              // templateId: "d-153e98f8cac54374b1c9d3357e64516e");
           mailer.send(email).then((result) {
             // ...
             print('mail sent: ${result.asError.error.toString()}');
@@ -178,8 +185,9 @@ class Email {
         dr = DriverModel.fromSnapshot(d);
         d.reference.update({'cstatus': false}).then((value) async {
           try {
-            final mailer = sg.Mailer(
-                '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');
+            final mailer = sg.Mailer(mailToken);
+            // final mailer = sg.Mailer('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');
+
             final toAddress = sg.Address(userMail);
             final fromAddress = sg.Address('info@trukapp.com');
             final subject = 'DRIVER ASSIGNED';
@@ -192,7 +200,8 @@ class Email {
             final personalization =
                 sg.Personalization([toAddress], dynamicTemplateData: dd);
             final email = sg.Email([personalization], fromAddress, subject,
-                templateId: "d-abb7173c4c264e74a85aa69b6a145ab7");
+                templateId: driverAssignedTemplateID);
+                // templateId: "d-abb7173c4c264e74a85aa69b6a145ab7");
             mailer.send(email).then((result) {
               // ...
               print('mail sent: ${result.asError.error.toString()}');

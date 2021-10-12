@@ -60,7 +60,7 @@ Map<String, String> english() {
     "noData": "No Data",
     "noMaterial": "No Material Added",
     "noNotification": "No Notification",
-    "noQuotesRequested": "No Quotes Requested",
+    "noQuotesRequested": "No Quotes Requests",
     "notEnoughMoney": "Not Enough Balance",
     "onDemand": "On-Demand",
     "ONLINE": "Pre-Paid Order",

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:truk_fleet/firebase_helper/firebase_helper.dart';
 import 'package:truk_fleet/locale/app_localization.dart';
 import 'package:truk_fleet/locale/locale_keys.dart';
 import 'package:truk_fleet/models/user_model.dart';
@@ -118,11 +119,14 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
             ),
             ListTile(
-              onTap: () {
+              onTap: () async{
+                var insurance = await FirebaseHelper().getCompanyInsurance() ;
                 Navigator.push(
                   context,
                   CupertinoPageRoute(
-                    builder: (context) => TCPage(),
+                    builder: (context) => TCPage(
+                      data: insurance,
+                    ),
                   ),
                 );
               },

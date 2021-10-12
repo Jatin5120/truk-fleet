@@ -34,6 +34,8 @@ class FirebaseHelper {
   static const String trukDocumentCollection = "TrukDocument";
   static const String payoutCollection = "PendingPayout";
   static const String invoiceCollection = "invoice";
+  static const String insuranceCollection = "Insurance";
+
   static FirebaseAuth _auth = FirebaseAuth.instance;
   User user = _auth.currentUser;
   Future<UserModel> getCurrentUser({String uid, String type}) async {
@@ -195,5 +197,10 @@ class FirebaseHelper {
         'isSeen': true,
       });
     }
+  }
+  Future<String> getCompanyInsurance() async{
+    final ref = await FirebaseFirestore.instance.collection(FirebaseHelper.insuranceCollection).doc('truk_company').get();
+    var data = ref.get('insurance');
+    return data;
   }
 }

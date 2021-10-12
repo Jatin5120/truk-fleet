@@ -103,16 +103,18 @@ class _SendQuoteState extends State<SendQuote> {
                 dm.add(dmm);
                 //istruckLoading=false;
               });
+
+              print('DM is --> ${dm}');
             });
           }
         }
       });
-      snapShot.listen((event) {
-        for (QueryDocumentSnapshot d in event.docs) {
-          DriverModel dd = DriverModel.fromSnapshot(d);
-          driverA.where('driver', isEqualTo: dd.uid).get().then((value) {});
-        }
-      });
+      // snapShot.listen((event) {
+      //   for (QueryDocumentSnapshot d in event.docs) {
+      //     DriverModel dd = DriverModel.fromSnapshot(d);
+      //     driverA.where('driver', isEqualTo: dd.uid).get().then((value) {});
+      //   }
+      // });
       snapShot.listen((event) {
         for (QueryDocumentSnapshot d in event.docs) {
           DriverModel dd = DriverModel.fromSnapshot(d);

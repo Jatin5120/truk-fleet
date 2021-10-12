@@ -452,7 +452,8 @@ class _RequestFragmentState extends State<RequestFragment> {
                 SizedBox(height: 8),
                 Align(
                   alignment: Alignment.centerRight,
-                  child: buildAssignDriverButton(
+                  child:
+                  buildAssignDriverButton(
                     status,
                     () {
                       Navigator.push(

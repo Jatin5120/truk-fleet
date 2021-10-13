@@ -347,12 +347,12 @@ class _MoreTrukDetailsState extends State<MoreTrukDetails> {
             onPressed: () {
               Navigator.pop(context);
               Navigator.pop(context);
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => SendQuote(),
-                ),
-              );
+              // Navigator.pushReplacement(
+              //   context,
+              //   MaterialPageRoute(
+              //     builder: (context) => SendQuote(),
+              //   ),
+              // );
             },
           ),
         )

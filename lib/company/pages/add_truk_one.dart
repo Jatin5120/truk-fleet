@@ -196,6 +196,7 @@ class _AddTruckState extends State<AddTruck> {
                 //       value.isEmpty ? AppLocalizations.getLocalizationValue(locale, LocaleKey.requiredText) : null,
                 // ),
                 detailTextField(
+                  isNumber: true,
                   labelText: AppLocalizations.getLocalizationValue(
                       locale, LocaleKey.grossWeight),
                   controller: grossWeightController,
@@ -244,6 +245,7 @@ class _AddTruckState extends State<AddTruck> {
                   ),
                 ),
                 detailTextField(
+                  isNumber: true,
                   labelText: AppLocalizations.getLocalizationValue(
                       locale, LocaleKey.lengthInFeet),
                   controller: lengthController,
@@ -253,6 +255,7 @@ class _AddTruckState extends State<AddTruck> {
                       : null,
                 ),
                 detailTextField(
+                  isNumber: true,
                   labelText: AppLocalizations.getLocalizationValue(
                       locale, LocaleKey.breadthInFeet),
                   controller: breadthController,
@@ -262,6 +265,7 @@ class _AddTruckState extends State<AddTruck> {
                       : null,
                 ),
                 detailTextField(
+                  isNumber: true,
                   labelText: AppLocalizations.getLocalizationValue(
                       locale, LocaleKey.heightInFeet),
                   controller: heightController,

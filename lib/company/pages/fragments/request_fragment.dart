@@ -399,16 +399,16 @@ class _RequestFragmentState extends State<RequestFragment> {
                     children: [
                       buildQuoteButton(() {
                         log("Quote --> $quoteModel");
-                        // Navigator.push(
-                        //     context,
-                        //     MaterialPageRoute(
-                        //       builder: (context) => SendQuote(
-                        //         keyTitle: 'quote',
-                        //         quoteModel: quoteModel,
-                        //         requestModel: requestModel,
-                        //         requestUser: userModel,
-                        //       ),
-                        //     ));
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => SendQuote(
+                                keyTitle: 'quote',
+                                quoteModel: quoteModel,
+                                requestModel: requestModel,
+                                requestUser: userModel,
+                              ),
+                            ));
                       }, 'Quote', status),
                       quoteModel == null
                           ? Container()

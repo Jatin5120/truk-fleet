@@ -51,7 +51,7 @@ class _ABState extends State<AB> {
     locale = AppLocalizations.of(context).locale;
     return AlertDialog(
       content: Container(
-        height: MediaQuery.of(context).size.height / 4,
+        height: MediaQuery.of(context).size.height / 3.7,
         child: Column(
           children: [
             Container(

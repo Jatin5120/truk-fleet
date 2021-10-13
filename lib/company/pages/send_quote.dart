@@ -560,37 +560,60 @@ class _SendQuoteState extends State<SendQuote> {
                                           fontSize: 20, color: Colors.white),
                                     ),
                                     onPressed: () {
-                                      Navigator.of(context).push(
+                                      Navigator.of(context)
+                                          .push(
                                         CupertinoPageRoute(
                                           builder: (context) => AddTruck(),
                                         ),
-                                      ).then((value) {
+                                      )
+                                          .then((value) {
                                         CollectionReference reference =
-                                        FirebaseFirestore.instance.collection(FirebaseHelper.trukCollection);
+                                            FirebaseFirestore.instance
+                                                .collection(FirebaseHelper
+                                                    .trukCollection);
                                         CollectionReference sReference =
-                                        FirebaseFirestore.instance.collection(FirebaseHelper.shipment);
-                                        final d = reference.where('ownerId', isEqualTo: user.uid).snapshots();
+                                            FirebaseFirestore.instance
+                                                .collection(
+                                                    FirebaseHelper.shipment);
+                                        final d = reference
+                                            .where('ownerId',
+                                                isEqualTo: user.uid)
+                                            .snapshots();
                                         d.listen((event) {
-                                          for (DocumentSnapshot doc in event.docs) {
-                                            TrukModel t = TrukModel.fromSnapshot(doc);
-                                            if (t.available && int.parse(t.grossWeight) >= totalWeight) {
-                                                trucksA.add(t);
+                                          for (DocumentSnapshot doc
+                                              in event.docs) {
+                                            TrukModel t =
+                                                TrukModel.fromSnapshot(doc);
+                                            if (t.available &&
+                                                int.parse(t.grossWeight) >=
+                                                    totalWeight) {
+                                              trucksA.add(t);
                                             }
                                             if (!t.available) {
-                                              sReference.where('truk', isEqualTo: t.trukNumber).get().then((value) {
+                                              sReference
+                                                  .where('truk',
+                                                      isEqualTo: t.trukNumber)
+                                                  .get()
+                                                  .then((value) {
                                                 for (var f in value.docs) {
-                                                  if (f.get('status') == RequestStatus.started ||
-                                                      f.get('status') == RequestStatus.pending) {
+                                                  if (f.get('status') ==
+                                                          RequestStatus
+                                                              .started ||
+                                                      f.get('status') ==
+                                                          RequestStatus
+                                                              .pending) {
                                                     break;
                                                   } else {
-                                                    doc.reference.update({'available': true});
-                                                      trucksA.add(t);
+                                                    doc.reference.update(
+                                                        {'available': true});
+                                                    trucksA.add(t);
                                                   }
                                                 }
                                               });
                                             }
                                           }
-                                        });                                      });
+                                        });
+                                      });
                                     },
                                   ),
                                 )

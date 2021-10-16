@@ -208,9 +208,9 @@ class Email {
             mailer.send(email).then((result) {
               // ...
               if (result.isValue)
-                print('mail sent: ${result.asValue}');
+                print('mail sent: ${result.asValue.toString()}');
               else if (result.isError)
-                print('mail sent: ${result.asError}');
+                print('mail error: ${result.asError.toString()}');
               else
                 print("Something Unknown");
             });

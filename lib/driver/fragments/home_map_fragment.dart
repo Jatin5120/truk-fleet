@@ -121,7 +121,7 @@ class HomepageFragmentState extends State<HomepageFragment>
         .doc(user.uid)
         .get()
         .then((value) async {
-          print('your id is ${model.id}');
+      print('your id is ${model.id}');
       var r = await value.reference.collection(model.id).get();
       int x = r.docs.length;
       await value.reference
@@ -379,7 +379,7 @@ class HomepageFragmentState extends State<HomepageFragment>
                       primary: Colors.blue,
                     ),
                     onPressed: () async {
-                      String fileUrl = model.eWayBillUrl;
+                      String fileUrl = model.ewaybill;
                       if (await canLaunch(fileUrl)) {
                         launch(fileUrl);
                       } else {

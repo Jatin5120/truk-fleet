@@ -18,10 +18,14 @@ final User me = FirebaseAuth.instance.currentUser;
 final FirebaseStorage storage = FirebaseStorage.instance;
 
 class RequestController {
-  Future<void> addQuote(QuoteModel quoteModel, RequestModel requestModel) async {
-    CollectionReference reference = FirebaseFirestore.instance.collection(FirebaseHelper.quoteCollection);
-    CollectionReference referenceRequest = FirebaseFirestore.instance.collection(FirebaseHelper.requestCollection);
-    CollectionReference notificationRef = FirebaseFirestore.instance.collection(FirebaseHelper.notificationCollection);
+  Future<void> addQuote(
+      QuoteModel quoteModel, RequestModel requestModel) async {
+    CollectionReference reference =
+        FirebaseFirestore.instance.collection(FirebaseHelper.quoteCollection);
+    CollectionReference referenceRequest =
+        FirebaseFirestore.instance.collection(FirebaseHelper.requestCollection);
+    CollectionReference notificationRef = FirebaseFirestore.instance
+        .collection(FirebaseHelper.notificationCollection);
     await reference.add(quoteModel.toMap());
     await notificationRef.add(NotificationModel(
       isDriver: false,
@@ -35,37 +39,44 @@ class RequestController {
     });
   }
 
-  Future<void> assignDriver(QuoteModel quoteModel, String driver, {File eWayBill}) async {
-    CollectionReference reference = FirebaseFirestore.instance.collection(FirebaseHelper.quoteCollection);
-    CollectionReference refShipment = FirebaseFirestore.instance.collection(FirebaseHelper.shipment);
+  Future<void> assignDriver(QuoteModel quoteModel, String driver,
+      {File eWayBill}) async {
+    CollectionReference reference =
+        FirebaseFirestore.instance.collection(FirebaseHelper.quoteCollection);
+    CollectionReference refShipment =
+        FirebaseFirestore.instance.collection(FirebaseHelper.shipment);
     await reference.doc(quoteModel.id).update({'status': 'assigned'});
-    String billUrl = await uploadEWayBill(eWayBill, quoteModel.bookingId.toString());
+    String billUrl =
+        await uploadEWayBill(eWayBill, quoteModel.bookingId.toString());
     Map<String, dynamic> m = ShipmentModel(
-            agent: quoteModel.agent,
-            bookingDate: quoteModel.bookingDate,
-            bookingId: quoteModel.bookingId,
-            destination: quoteModel.destination,
-            source: quoteModel.source,
-            driver: driver,
-            insured: quoteModel.insured,
-            load: quoteModel.load,
-            mandate: quoteModel.mandate,
-            materials: quoteModel.materials,
-            mobile: quoteModel.mobile,
-            paymentStatus: quoteModel.paymentStatus,
-            pickupDate: quoteModel.pickupDate,
-            price: quoteModel.price,
-            status: 'pending',
-            truk: quoteModel.truk,
-            trukName: quoteModel.trukName,
-            eWayBillUrl: billUrl,
-            uid: quoteModel.uid)
-        .toMap();
+      agent: quoteModel.agent,
+      bookingDate: quoteModel.bookingDate,
+      bookingId: quoteModel.bookingId,
+      destination: quoteModel.destination,
+      source: quoteModel.source,
+      driver: driver,
+      insured: quoteModel.insured,
+      load: quoteModel.load,
+      mandate: quoteModel.mandate,
+      materials: quoteModel.materials,
+      mobile: quoteModel.mobile,
+      paymentStatus: quoteModel.paymentStatus,
+      pickupDate: quoteModel.pickupDate,
+      price: quoteModel.price,
+      status: 'pending',
+      truk: quoteModel.truk,
+      trukName: quoteModel.trukName,
+      ewaybill: billUrl,
+      uid: quoteModel.uid,
+      commission: 5,
+      //TODO: check for commission
+    ).toMap();
     return refShipment.add(m);
   }
 
   updatePrice(QuoteModel quoteModel, String price) async {
-    CollectionReference quoteRef = FirebaseFirestore.instance.collection(FirebaseHelper.quoteCollection);
+    CollectionReference quoteRef =
+        FirebaseFirestore.instance.collection(FirebaseHelper.quoteCollection);
     await quoteRef.doc(quoteModel.id).update({'price': price});
   }
 
@@ -73,7 +84,8 @@ class RequestController {
     String fileName = "EwayBill - $billNo";
     String ext = file.path.split('/').last.split('.').last;
     print('$fileName.$ext');
-    TaskSnapshot uploadTask = await storage.ref().child('EWaybill/$fileName.$ext').putFile(file);
+    TaskSnapshot uploadTask =
+        await storage.ref().child('EWaybill/$fileName.$ext').putFile(file);
     return await uploadTask.ref.getDownloadURL();
   }
 }
@@ -88,15 +100,18 @@ class MyRequest with ChangeNotifier {
 
   getRequestList() async {
     isLoading = true;
-    CollectionReference reference = FirebaseFirestore.instance.collection(FirebaseHelper.requestCollection);
-    final requestData = reference.orderBy('bookingId', descending: true).snapshots();
+    CollectionReference reference =
+        FirebaseFirestore.instance.collection(FirebaseHelper.requestCollection);
+    final requestData =
+        reference.orderBy('bookingId', descending: true).snapshots();
 
     requestData.listen((event) async {
       requestList = [];
       for (QueryDocumentSnapshot snap in event.docs) {
         RequestModel reqModel = RequestModel.fromSnapshot(snap);
         String user = reqModel.uid;
-        CollectionReference userRef = FirebaseFirestore.instance.collection(FirebaseHelper.userCollection);
+        CollectionReference userRef = FirebaseFirestore.instance
+            .collection(FirebaseHelper.userCollection);
 
         DocumentSnapshot userSnap = await userRef.doc(user).get();
         UserModel model = UserModel.fromSnapshot(userSnap);
@@ -115,11 +130,15 @@ class MyRequest with ChangeNotifier {
 
   getQuoteList() async {
     isQuoteLoading = true;
-    CollectionReference quoteRef = FirebaseFirestore.instance.collection(FirebaseHelper.quoteCollection);
-    Stream<QuerySnapshot> quoteSnap =
-        quoteRef.where('agent', isEqualTo: me.uid).orderBy('bookingDate', descending: true).snapshots();
- final test = await quoteRef.where('mobile', isEqualTo: '+919664722610').get();
- print('Data is --> ${test.docs.length}');
+    CollectionReference quoteRef =
+        FirebaseFirestore.instance.collection(FirebaseHelper.quoteCollection);
+    Stream<QuerySnapshot> quoteSnap = quoteRef
+        .where('agent', isEqualTo: me.uid)
+        .orderBy('bookingDate', descending: true)
+        .snapshots();
+    final test =
+        await quoteRef.where('mobile', isEqualTo: '+919664722610').get();
+    print('Data is --> ${test.docs.length}');
     quoteSnap.listen((ev) {
       print('Your quotelise is ${ev.docs.length}');
       quoteList = [];

@@ -50,7 +50,9 @@ class NotificationHelper {
           .doc(user.uid)
           .update({'token': token});
     }).catchError((err) {
-      Fluttertoast.showToast(msg: err.toString());
+      if(doc != null){
+        Fluttertoast.showToast(msg: err.toString());
+      }
     });
   }
 

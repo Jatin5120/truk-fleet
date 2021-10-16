@@ -139,6 +139,7 @@ class _DriverDetailsState extends State<DriverDetails> {
                       ),
                       InkWell(
                         onTap: () {
+                          FocusScope.of(context).unfocus();
                           showMonthPicker(
                             context: context,
                             firstDate: DateTime(DateTime.now().year - 1, 5),
@@ -180,7 +181,7 @@ class _DriverDetailsState extends State<DriverDetails> {
                           onPressed: isLoading
                               ? () {}
                               : () async {
-                                  if (_formKey.currentState.validate()) {
+                            if (_formKey.currentState.validate()) {
                                     String mobile = _mobileController.text;
                                     String name = _nameController.text;
                                     String dl = _dlController.text;

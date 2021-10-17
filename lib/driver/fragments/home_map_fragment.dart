@@ -3,8 +3,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:map_launcher/map_launcher.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:truk_fleet/driver/pages/inride_page.dart';
 import 'package:truk_fleet/driver/pages/start_trip.dart';
@@ -435,8 +437,13 @@ class HomepageFragmentState extends State<HomepageFragment>
                     ),
                   ),
                   Visibility(
-                    visible:
-                        model.status == RequestStatus.started ? false : true,
+                    visible: model.status == RequestStatus.pending &&
+                        model.paymentStatus.toString().toLowerCase() ==
+                            "cod" &&
+                        model.amountPaid == null
+                        ? true
+                        : false,
+                    // visible: model.status == RequestStatus.started ? false : true,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
@@ -460,6 +467,61 @@ class HomepageFragmentState extends State<HomepageFragment>
                     ),
                   )
                 ],
+              ),
+              Visibility(
+                visible: model.status == RequestStatus.pending &&
+                    model.paymentStatus.toString().toLowerCase() ==
+                        "cod" &&
+                    model.amountPaid == null
+                    ? true
+                    : false,
+                child: SizedBox(
+                  height: 10.0,
+                ),
+              ),
+              ElevatedButton(
+                onPressed: () async{
+                  final cord = Coords(model.source.latitude,
+                      model.source.longitude);
+                  final availableMaps = await MapLauncher.installedMaps;
+                  showModalBottomSheet(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return SafeArea(
+                        child: SingleChildScrollView(
+                          child: Container(
+                            child: Wrap(
+                              children: <Widget>[
+                                for (var map in availableMaps)
+                                  ListTile(
+                                    onTap: () {
+                                      Navigator.pop(context);
+                                      map.showMarker(
+                                        coords: cord,
+                                        title: AppLocalizations
+                                            .getLocalizationValue(locale,
+                                            LocaleKey.pickupLocation),
+                                      );
+                                    },
+                                    title: Text(map.mapName),
+                                    leading: SvgPicture.asset(
+                                      map.icon,
+                                      height: 30.0,
+                                      width: 30.0,
+                                    ),
+                                  ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  );                },
+                style: ElevatedButton.styleFrom(
+                  primary: primaryColor,
+                ),
+                child: Text(AppLocalizations.getLocalizationValue(
+                    locale, LocaleKey.navigateToPickup)),
               )
             ],
           ),

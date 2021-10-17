@@ -62,15 +62,15 @@ class _FleetSelectionState extends State<FleetSelection> {
                     ? selectedTitleTextStyle
                     : unselectedTitleTextStyle),
           ),
-          subtitle: Padding(
-            padding: const EdgeInsets.only(top: 8, bottom: 8.0),
-            child: Text(
-              subtitle,
-              style: selection == index
-                  ? selectedSubtitleTextStyle
-                  : unselectedSubtitleTextStyle,
-            ),
-          ),
+          // subtitle: Padding(
+          //   padding: const EdgeInsets.only(top: 8, bottom: 8.0),
+          //   child: Text(
+          //     subtitle,
+          //     style: selection == index
+          //         ? selectedSubtitleTextStyle
+          //         : unselectedSubtitleTextStyle,
+          //   ),
+          // ),
         ),
       ),
     );
@@ -115,10 +115,12 @@ class _FleetSelectionState extends State<FleetSelection> {
               selectionCard(
                 assetImage: 'assets/images/truckingCompany.png',
                 index: 0,
-                title: AppLocalizations.getLocalizationValue(
-                    locale, LocaleKey.fleetSelectionTitle),
-                subtitle: AppLocalizations.getLocalizationValue(
-                    locale, LocaleKey.fleetSelectionSubtitle),
+                title:'Transport Agent/Fleet Owner',
+                // AppLocalizations.getLocalizationValue(
+                //     locale, LocaleKey.fleetSelectionTitle),
+                subtitle: '',
+                // AppLocalizations.getLocalizationValue(
+                //     locale, LocaleKey.fleetSelectionSubtitle),
                 onTap: () {
                   setState(() {
                     type = LoginType.company;
@@ -131,10 +133,12 @@ class _FleetSelectionState extends State<FleetSelection> {
               selectionCard(
                 assetImage: 'assets/images/driver.png',
                 index: 1,
-                subtitle: AppLocalizations.getLocalizationValue(
-                    locale, LocaleKey.driverSelectionSubtitle),
-                title: AppLocalizations.getLocalizationValue(
-                    locale, LocaleKey.driverSelectionTitle),
+                subtitle:'',
+                // AppLocalizations.getLocalizationValue(
+                //     locale, LocaleKey.driverSelectionSubtitle),
+                title: 'Truk Driver',
+                // AppLocalizations.getLocalizationValue(
+                //     locale, LocaleKey.driverSelectionTitle),
                 onTap: () {
                   setState(() {
                     type = LoginType.driver;

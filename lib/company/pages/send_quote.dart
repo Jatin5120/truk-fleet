@@ -83,8 +83,8 @@ class _SendQuoteState extends State<SendQuote> {
           FirebaseFirestore.instance.collection(FirebaseHelper.shipment);
       final driverSnapShot =
           driverCollectionRef.where('agent', isEqualTo: user.uid).snapshots();
-      log("QuoteModal-->${widget.quoteModel}");
       print("truk: ${widget.quoteModel.truk}");
+      print("truk: ${user.uid}");
       //CollectionReference qqt = FirebaseFirestore.instance.collection(FirebaseHelper.quoteCollection);
       //final qShot = driver.where('bookingId', isEqualTo: widget.).snapshots();
       await shipmentCollectionRef
@@ -92,6 +92,7 @@ class _SendQuoteState extends State<SendQuote> {
           .get()
           .then(
         (value) async {
+          print("SMDriver ---> ${value.docs.length}");
           for (var h in value.docs) {
             ShipmentModel sm = ShipmentModel.fromSnapshot(h);
             print("Hi");

@@ -58,6 +58,8 @@ class _RequestFragmentState extends State<RequestFragment> {
       case LocaleKey.cancelled:
         isFilter = true;
         filteredList = [];
+        print('Enter filter cancelled');
+        print('Enter filter cancelled ${LocaleKey.cancelled}');
         filteredList = myList
             .where(
                 (element) => element['request'].status == LocaleKey.cancelled)
@@ -127,7 +129,8 @@ class _RequestFragmentState extends State<RequestFragment> {
 
     locale = AppLocalizations.of(context).locale;
     myList = pRequest.requests;
-    // print(myList);
+    print('YOur filter list ---> ${filteredList.length}');
+    print('YOur filter list ---> ${filteredList}');
     quotesList = pRequest.quotes;
     return Container(
       height: size.height,

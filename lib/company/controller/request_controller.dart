@@ -68,7 +68,7 @@ class RequestController {
       trukName: quoteModel.trukName,
       ewaybill: billUrl,
       uid: quoteModel.uid,
-      commission: 5,
+      commission: '5',
       //TODO: check for commission
     ).toMap();
     return refShipment.add(m);

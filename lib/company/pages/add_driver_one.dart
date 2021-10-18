@@ -197,7 +197,9 @@ class _DriverDetailsState extends State<DriverDetails> {
                                             mobile: mobile,
                                             name: name,
                                             pan: 'adhaar',
-                                            cstatus: true);
+                                            cstatus: true,
+                                          isAvailable: true,
+                                        );
                                     setState(() {
                                       isLoading = true;
                                     });

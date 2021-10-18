@@ -120,13 +120,20 @@ class _SendQuoteState extends State<SendQuote> {
       //     driverA.where('driver', isEqualTo: dd.uid).get().then((value) {});
       //   }
       // });
+
+      // 1 -> driver or shipment ko filter karege, company ke id basis pe
+      // 2 -> driver check karege kon kon sa available, bilkul free ho, parcel truck
+      // 3 -> isEqualto change to isnotEqalto
+      // 4 ->
+
       driverSnapShot.listen((event) {
         for (QueryDocumentSnapshot d in event.docs) {
           DriverModel dd = DriverModel.fromSnapshot(d);
           shipmentCollectionRef
-              .where('driver', isEqualTo: dd.uid)
+              .where('isAvailable', isEqualTo: true)
               .get()
               .then((value) {
+                print('you value length is --> ${value}');
             int c = 0;
             print("dlen:${value.docs.length}");
             if (value.docs.isEmpty) {
@@ -471,6 +478,7 @@ class _SendQuoteState extends State<SendQuote> {
                         msg: AppLocalizations.getLocalizationValue(
                             locale, LocaleKey.driverAssigned));
                     Navigator.pop(context);
+                    FirebaseFirestore.instance.collection(FirebaseHelper.driverCollection).doc(driverModel.uid).update({'isAvailable' : false});
                     Email().sendDriverAssignedMail(
                         driverModel, context, user.email, quoteModel);
                     Navigator.pop(context);

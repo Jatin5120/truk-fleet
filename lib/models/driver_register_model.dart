@@ -10,6 +10,7 @@ class DriverRegisterModel {
   String name;
   bool cstatus;
   String licenseExpiryDate;
+  bool isAvailable;
   DriverRegisterModel({
     this.agent,
     this.mobile,
@@ -19,7 +20,8 @@ class DriverRegisterModel {
     this.name,
     this.licenseExpiryDate,
     this.id,
-    this.cstatus
+    this.cstatus,
+  this.isAvailable,
   });
 
   DriverRegisterModel copyWith({
@@ -30,7 +32,8 @@ class DriverRegisterModel {
     String dl,
     String name,
     String licenseExpiryDate,
-    bool cstatus
+    bool cstatus,
+    bool isAvailable
   }) {
     return DriverRegisterModel(
       agent: agent ?? this.agent,
@@ -40,7 +43,8 @@ class DriverRegisterModel {
       dl: dl ?? this.dl,
       name: name ?? this.name,
       licenseExpiryDate: licenseExpiryDate ?? this.licenseExpiryDate,
-      cstatus: cstatus ?? this.cstatus
+      cstatus: cstatus ?? this.cstatus,
+        isAvailable : isAvailable ?? this.isAvailable
     );
   }
 
@@ -54,7 +58,8 @@ class DriverRegisterModel {
       'dl': dl,
       'name': name,
       'licenseExpiryDate': licenseExpiryDate,
-      'cstatus': cstatus
+      'cstatus': cstatus,
+      'isAvailable':isAvailable
     };
   }
 
@@ -70,7 +75,8 @@ class DriverRegisterModel {
       dl: map['dl'],
       name: map['name'],
       licenseExpiryDate: map['licenseExpiryDate'],
-      cstatus: map['cstatus']
+      cstatus: map['cstatus'],
+        isAvailable: map['isAvailable']
     );
   }
 
@@ -86,7 +92,8 @@ class DriverRegisterModel {
       dl: map.get('dl'),
       name: map.get('name'),
       licenseExpiryDate: map.get('licenseExpiryDate'),
-      cstatus: map.get('cstatus')
+      cstatus: map.get('cstatus'),
+        isAvailable:map.get('isAvailable')
     );
   }
 }

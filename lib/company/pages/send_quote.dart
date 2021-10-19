@@ -103,6 +103,8 @@ class _SendQuoteState extends State<SendQuote> {
                   .get()
                   .then((value) {
                 DriverModel dmm = DriverModel.fromSnapshot(value);
+                log('DM is ----> $dmm');
+                print('DM is ----> $dmm');
                 setState(() {
                   dm.add(dmm);
                   //istruckLoading=false;
@@ -126,16 +128,15 @@ class _SendQuoteState extends State<SendQuote> {
       // 3 -> isEqualto change to isnotEqalto
       // 4 ->
 
-      driverSnapShot.listen((event) {
+      driverSnapShot.listen((event) async {
+        print('Your event is ${event.docs.length}');
         for (QueryDocumentSnapshot d in event.docs) {
           DriverModel dd = DriverModel.fromSnapshot(d);
-          shipmentCollectionRef
-              .where('isAvailable', isEqualTo: true)
+          await shipmentCollectionRef
+              // .where('isAvailable', isEqualTo: true)
               .get()
               .then((value) {
-                print('you value length is --> ${value}');
             int c = 0;
-            print("dlen:${value.docs.length}");
             if (value.docs.isEmpty) {
               c = 1;
             }
@@ -147,6 +148,8 @@ class _SendQuoteState extends State<SendQuote> {
             if (c == 1) {
               setState(() {
                 driverAList.add(dd);
+                print('total drivers length is ${driverAList}');
+                print('total drivers length is ${dd.uid}');
               });
             }
           });
@@ -478,7 +481,10 @@ class _SendQuoteState extends State<SendQuote> {
                         msg: AppLocalizations.getLocalizationValue(
                             locale, LocaleKey.driverAssigned));
                     Navigator.pop(context);
-                    FirebaseFirestore.instance.collection(FirebaseHelper.driverCollection).doc(driverModel.uid).update({'isAvailable' : false});
+                    FirebaseFirestore.instance
+                        .collection(FirebaseHelper.driverCollection)
+                        .doc(driverModel.uid)
+                        .update({'isAvailable': false});
                     Email().sendDriverAssignedMail(
                         driverModel, context, user.email, quoteModel);
                     Navigator.pop(context);

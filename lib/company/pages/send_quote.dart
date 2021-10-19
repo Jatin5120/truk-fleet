@@ -73,6 +73,7 @@ class _SendQuoteState extends State<SendQuote> {
   List<QuoteModel> qSmodel = [];
   List<DriverModel> dm = [];
   List<DriverModel> driverAList = [];
+
   getPin() async {
     if (widget.keyTitle == 'assign') {
       CollectionReference driverRequest = FirebaseFirestore.instance
@@ -81,10 +82,12 @@ class _SendQuoteState extends State<SendQuote> {
           .collection(FirebaseHelper.driverCollection);
       CollectionReference shipmentCollectionRef =
           FirebaseFirestore.instance.collection(FirebaseHelper.shipment);
+
       final driverSnapShot =
           driverCollectionRef.where('agent', isEqualTo: user.uid).snapshots();
       print("truk: ${widget.quoteModel.truk}");
       print("truk: ${user.uid}");
+
       //CollectionReference qqt = FirebaseFirestore.instance.collection(FirebaseHelper.quoteCollection);
       //final qShot = driver.where('bookingId', isEqualTo: widget.).snapshots();
       await shipmentCollectionRef
@@ -95,7 +98,6 @@ class _SendQuoteState extends State<SendQuote> {
           print("SMDriver ---> ${value.docs.length}");
           for (var h in value.docs) {
             ShipmentModel sm = ShipmentModel.fromSnapshot(h);
-            print("Hi");
             if (sm.status == RequestStatus.pending) {
               await FirebaseFirestore.instance
                   .collection(FirebaseHelper.driverCollection)
@@ -122,7 +124,7 @@ class _SendQuoteState extends State<SendQuote> {
       // });
 
       // 1 -> driver or shipment ko filter karege, company ke id basis pe
-      // 2 -> driver check karege kon kon sa available, bilkul free ho, parcel truck
+      // 2 -> driver check karege kon kon sa available, bilkul free ho, partial truck
       // 3 -> isEqualto change to isnotEqalto
       // 4 ->
 
@@ -133,7 +135,7 @@ class _SendQuoteState extends State<SendQuote> {
               .where('isAvailable', isEqualTo: true)
               .get()
               .then((value) {
-                print('you value length is --> ${value}');
+            print('you value length is --> ${value}');
             int c = 0;
             print("dlen:${value.docs.length}");
             if (value.docs.isEmpty) {
@@ -478,7 +480,10 @@ class _SendQuoteState extends State<SendQuote> {
                         msg: AppLocalizations.getLocalizationValue(
                             locale, LocaleKey.driverAssigned));
                     Navigator.pop(context);
-                    FirebaseFirestore.instance.collection(FirebaseHelper.driverCollection).doc(driverModel.uid).update({'isAvailable' : false});
+                    FirebaseFirestore.instance
+                        .collection(FirebaseHelper.driverCollection)
+                        .doc(driverModel.uid)
+                        .update({'isAvailable': false});
                     Email().sendDriverAssignedMail(
                         driverModel, context, user.email, quoteModel);
                     Navigator.pop(context);

@@ -349,139 +349,153 @@ class _RequestFragmentState extends State<RequestFragment> {
     }
     return Card(
       elevation: 8,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: Container(
-        padding: const EdgeInsets.all(10),
-        child: Row(
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+        child: Column(
           children: [
-            Expanded(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "${userModel.name}, $paymentStatus",
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
-                  ),
-                  SizedBox(height: 5),
-                  FutureBuilder<String>(
-                      future: Helper().setLocationText(requestModel.source),
-                      builder: (context, snapshot) {
-                        if (!snapshot.hasData) {
-                          return Text('Address...');
-                        }
-                        return Text(
-                          "${snapshot.data.split(',')[2].trimLeft()}" ?? "",
-                          textAlign: TextAlign.start,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(fontSize: 12),
-                        );
-                      }),
-                  FutureBuilder<String>(
-                      future:
-                          Helper().setLocationText(requestModel.destination),
-                      builder: (context, snapshot) {
-                        if (!snapshot.hasData) {
-                          return Text('|');
-                        }
-                        return Text(
-                          "|\n${snapshot.data.split(',')[2].trimLeft()}" ?? "",
-                          textAlign: TextAlign.start,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(fontSize: 12),
-                        );
-                      }),
-                  SizedBox(height: 5),
-                  Text(
-                    "${AppLocalizations.getLocalizationValue(locale, LocaleKey.quantity)} - $weight KG",
-                    style: TextStyle(fontSize: 12, color: Colors.orange),
-                  ),
-                  SizedBox(height: 5),
-                  Row(
-                    children: [
-                      buildQuoteButton(() {
-                        log("Quote --> $quoteModel");
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => SendQuote(
-                                keyTitle: 'quote',
-                                quoteModel: quoteModel,
-                                requestModel: requestModel,
-                                requestUser: userModel,
-                              ),
-                            ));
-                      }, 'Quote', status),
-                      quoteModel == null
-                          ? Container()
-                          : Expanded(
-                              child: Center(
-                                child: Text(
-                                  "\u20B9 ${quoteModel.price}",
-                                  style: TextStyle(fontSize: 18),
-                                ),
-                              ),
-                            )
-                    ],
-                  )
-                ],
-              ),
+            Row(
+              children: [
+                Text(
+                  "${userModel.name}",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
+                ),
+                Spacer(),
+              ],
             ),
-            Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   "ID ${requestModel.bookingId}",
                   style: TextStyle(fontSize: 12),
                 ),
-                SizedBox(
-                  height: 5,
-                ),
                 Text(
                   "${requestModel.pickupDate}",
                   style: TextStyle(fontSize: 12),
                 ),
-                SizedBox(
-                  height: 5,
+              ],
+            ),
+            Row(
+              children: [
+                FutureBuilder<String>(
+                  future: Helper().setLocationText(requestModel.source),
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return Text('Address...');
+                    }
+                    return Text(
+                      "${snapshot.data.split(',')[2].trimLeft()}" ?? "",
+                      textAlign: TextAlign.start,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(fontSize: 12),
+                    );
+                  },
                 ),
-                Text(
-                  AppLocalizations.getLocalizationValue(
-                      locale,
-                      requestModel.truk.toLowerCase().contains('closed')
-                          ? LocaleKey.closedTruk
-                          : LocaleKey.openTruk),
-                  style: TextStyle(fontSize: 12, color: Colors.orange),
+                Expanded(child: Icon(Icons.arrow_right_alt_rounded)),
+                FutureBuilder<String>(
+                  future: Helper().setLocationText(requestModel.destination),
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return Text('|');
+                    }
+                    return Text(
+                      "|\n${snapshot.data.split(',')[2].trimLeft()}" ?? "",
+                      textAlign: TextAlign.start,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(fontSize: 12),
+                    );
+                  },
                 ),
-                SizedBox(
-                  height: 5,
-                ),
-                Text(
-                  "${AppLocalizations.getLocalizationValue(locale, LocaleKey.insurance)} : ${requestModel.insured ? AppLocalizations.getLocalizationValue(locale, LocaleKey.yes) : AppLocalizations.getLocalizationValue(locale, LocaleKey.no)}",
-                  style: TextStyle(fontSize: 12),
-                ),
-                SizedBox(height: 8),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: buildAssignDriverButton(
-                    status,
-                    () {
-                      Navigator.push(
-                        context,
-                        CupertinoPageRoute(
-                          builder: (context) => SendQuote(
-                            keyTitle: 'assign',
-                            quoteModel: quoteModel,
-                            requestModel: requestModel,
-                            requestUser: userModel,
-                          ),
-                        ),
-                      );
-                    },
+              ],
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(height: 5),
+                      Text(
+                        "${AppLocalizations.getLocalizationValue(locale, LocaleKey.quantity)} - $weight KG",
+                        style: TextStyle(fontSize: 12, color: Colors.orange),
+                      ),
+                      SizedBox(height: 5),
+                      Row(
+                        children: [
+                          buildQuoteButton(() {
+                            log("Quote --> $quoteModel");
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => SendQuote(
+                                    keyTitle: 'quote',
+                                    quoteModel: quoteModel,
+                                    requestModel: requestModel,
+                                    requestUser: userModel,
+                                  ),
+                                ));
+                          }, 'Quote', status),
+                          quoteModel == null
+                              ? Container()
+                              : Expanded(
+                                  child: Center(
+                                    child: Text(
+                                      "\u20B9 ${quoteModel.price}",
+                                      style: TextStyle(fontSize: 18),
+                                    ),
+                                  ),
+                                )
+                        ],
+                      )
+                    ],
                   ),
-                )
+                ),
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                      AppLocalizations.getLocalizationValue(
+                          locale,
+                          requestModel.truk.toLowerCase().contains('closed')
+                              ? LocaleKey.closedTruk
+                              : LocaleKey.openTruk),
+                      style: TextStyle(fontSize: 12, color: Colors.orange),
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Text(
+                      "${AppLocalizations.getLocalizationValue(locale, LocaleKey.insurance)} : ${requestModel.insured ? AppLocalizations.getLocalizationValue(locale, LocaleKey.yes) : AppLocalizations.getLocalizationValue(locale, LocaleKey.no)}",
+                      style: TextStyle(fontSize: 12),
+                    ),
+                    SizedBox(height: 8),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: buildAssignDriverButton(
+                        status,
+                        () {
+                          Navigator.push(
+                            context,
+                            CupertinoPageRoute(
+                              builder: (context) => SendQuote(
+                                keyTitle: 'assign',
+                                quoteModel: quoteModel,
+                                requestModel: requestModel,
+                                requestUser: userModel,
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    )
+                  ],
+                ),
               ],
             ),
           ],

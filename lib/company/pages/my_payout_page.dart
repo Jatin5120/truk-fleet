@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:truk_fleet/firebase_helper/firebase_helper.dart';
 import 'package:truk_fleet/locale/app_localization.dart';
@@ -20,6 +21,7 @@ class _MyPayoutPageState extends State<MyPayoutPage> {
   int payoutReceived = 0;
   int remainingPayout = 0;
   bool isLoading = true;
+
   getData() async {
     await FirebaseFirestore.instance
         .collection(FirebaseHelper.shipment)
@@ -69,8 +71,11 @@ class _MyPayoutPageState extends State<MyPayoutPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-            AppLocalizations.getLocalizationValue(locale, LocaleKey.myPayout)),
+          AppLocalizations.getLocalizationValue(locale, LocaleKey.myPayout),
+          style: TextStyle(color: primaryColor),
+        ),
         centerTitle: true,
+        elevation: 0,
       ),
       body: isLoading
           ? Center(
@@ -78,252 +83,126 @@ class _MyPayoutPageState extends State<MyPayoutPage> {
                 color: primaryColor,
               ),
             )
-          : buildPendingPayoutWidget(),
+          : PendingPayout(
+              totalIncome: totalIncome,
+              cod: cod,
+              online: online,
+              payoutReceived: payoutReceived,
+              remainingPayout: remainingPayout,
+            ),
     );
   }
+}
 
-  Widget buildPendingPayoutWidget() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      child: Container(
-        width: double.infinity,
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+class PendingPayout extends StatefulWidget {
+  const PendingPayout({
+    Key key,
+    @required this.totalIncome,
+    @required this.cod,
+    @required this.online,
+    @required this.payoutReceived,
+    @required this.remainingPayout,
+  }) : super(key: key);
+
+  final int totalIncome;
+  final int cod;
+  final int online;
+  final int payoutReceived;
+  final int remainingPayout;
+
+  @override
+  State<PendingPayout> createState() => _PendingPayoutState();
+}
+
+class _PendingPayoutState extends State<PendingPayout> {
+  List<Map<String, dynamic>> _payouts;
+
+  @override
+  void initState() {
+    super.initState();
+    _payouts = [
+      {
+        'title': 'Net Income',
+        'value': widget.totalIncome,
+        'icon': Icons.account_balance_wallet_rounded,
+      },
+      {
+        'title': 'COD',
+        'value': widget.cod,
+        'icon': Icons.local_atm_rounded,
+      },
+      {
+        'title': 'Online payments',
+        'value': widget.online,
+        'icon': Icons.paid_outlined,
+      },
+      {
+        'title': 'Payment Received',
+        'value': widget.payoutReceived,
+        'icon': Icons.price_check_rounded,
+      },
+      {
+        'title': 'Payment Due',
+        'value': widget.remainingPayout,
+        'icon': Icons.payments_outlined,
+      },
+    ];
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: const EdgeInsets.all(8.0),
+      width: double.infinity,
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            for (Map<String, dynamic> payout in _payouts) ...[
               Card(
-                elevation: 3.5,
-                child: ListTile(
-                  leading: Container(
-                    width: 60,
-                    height: 60,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(40),
-                        color: primaryColor),
-                    child: Icon(
-                      Icons.account_balance_wallet,
-                      color: Colors.white,
-                    ),
-                  ),
-                  title: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        RichText(
-                          text: TextSpan(children: [
-                            TextSpan(
-                              text: 'Net Income',
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ]),
-                        ),
-                      ],
-                    ),
-                  ),
-                  subtitle: RichText(
-                    text: TextSpan(children: [
-                      TextSpan(
-                        text: '$totalIncome',
-                        style: TextStyle(
-                            color: primaryColor,
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ]),
-                  ),
+                elevation: 10,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
                 ),
-              ),
-              Card(
-                elevation: 3.5,
+                margin: EdgeInsets.only(top: 16),
                 child: ListTile(
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
                   leading: Container(
-                    width: 60,
-                    height: 60,
+                    width: 56,
+                    height: 56,
                     decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(40),
-                        color: primaryColor),
+                      shape: BoxShape.circle,
+                      color: primaryColor,
+                    ),
                     child: Icon(
-                      Icons.account_balance_wallet,
+                      payout['icon'],
                       color: Colors.white,
                     ),
                   ),
-                  title: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        RichText(
-                          text: TextSpan(children: [
-                            TextSpan(
-                              text: 'COD',
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ]),
-                        ),
-                      ],
+                  title: Text(
+                    payout['title'],
+                    style: TextStyle(
+                      color: Colors.grey.shade700,
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
-                  subtitle: RichText(
-                    text: TextSpan(children: [
-                      TextSpan(
-                        text: '$cod',
-                        style: TextStyle(
-                            color: primaryColor,
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ]),
-                  ),
-                ),
-              ),
-              Card(
-                elevation: 3.5,
-                child: ListTile(
-                  leading: Container(
-                    width: 60,
-                    height: 60,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(40),
-                        color: primaryColor),
-                    child: Icon(
-                      Icons.account_balance_wallet,
-                      color: Colors.white,
+                  subtitle: Text(
+                    'Rs. ${payout['value']} /-',
+                    style: TextStyle(
+                      color: primaryColor,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
                     ),
-                  ),
-                  title: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        RichText(
-                          text: TextSpan(children: [
-                            TextSpan(
-                              text: 'ONLINE PAYMENTS',
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ]),
-                        ),
-                      ],
-                    ),
-                  ),
-                  subtitle: RichText(
-                    text: TextSpan(children: [
-                      TextSpan(
-                        text: '$online',
-                        style: TextStyle(
-                            color: primaryColor,
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ]),
-                  ),
-                ),
-              ),
-              Card(
-                elevation: 3.5,
-                child: ListTile(
-                  leading: Container(
-                    width: 60,
-                    height: 60,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(40),
-                        color: primaryColor),
-                    child: Icon(
-                      Icons.account_balance_wallet,
-                      color: Colors.white,
-                    ),
-                  ),
-                  title: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        RichText(
-                          text: TextSpan(children: [
-                            TextSpan(
-                              text: 'PAYMENT RECEIVED',
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ]),
-                        ),
-                      ],
-                    ),
-                  ),
-                  subtitle: RichText(
-                    text: TextSpan(children: [
-                      TextSpan(
-                        text: '$payoutReceived',
-                        style: TextStyle(
-                            color: primaryColor,
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ]),
-                  ),
-                ),
-              ),
-              Card(
-                elevation: 3.5,
-                child: ListTile(
-                  leading: Container(
-                    width: 60,
-                    height: 60,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(40),
-                        color: primaryColor),
-                    child: Icon(
-                      Icons.account_balance_wallet,
-                      color: Colors.white,
-                    ),
-                  ),
-                  title: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        RichText(
-                          text: TextSpan(children: [
-                            TextSpan(
-                              text: 'Remaining Payments',
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ]),
-                        ),
-                      ],
-                    ),
-                  ),
-                  subtitle: RichText(
-                    text: TextSpan(children: [
-                      TextSpan(
-                        text: '$remainingPayout',
-                        style: TextStyle(
-                            color: primaryColor,
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ]),
                   ),
                 ),
               ),
             ],
-          ),
+          ],
         ),
       ),
     );

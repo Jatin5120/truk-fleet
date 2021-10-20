@@ -135,7 +135,6 @@ class _RequestFragmentState extends State<RequestFragment> {
     return Container(
       height: size.height,
       width: size.width,
-      padding: const EdgeInsets.all(16),
       child: pRequest.requests.length <= 0
           ? NoDataPage(
               text: AppLocalizations.getLocalizationValue(
@@ -146,153 +145,158 @@ class _RequestFragmentState extends State<RequestFragment> {
                 SizedBox(
                   height: 10,
                 ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: TextFormField(
-                        onChanged: (string) async {
-                          if (string.trim().length <= 0 || string.isEmpty) {
-                            setState(() {
-                              isFilter = false;
-                              filteredList = [];
-                            });
-                          } else {
-                            setState(() {
-                              filteredList = pRequest.requests.where((element) {
-                                if (element['request']
-                                        .bookingId
-                                        .toString()
-                                        .contains(
-                                            string.trim().toLowerCase()) ||
-                                    element['request']
-                                        .pickupDate
-                                        .contains(string.toLowerCase())) {
-                                  return true;
-                                }
+                Padding(
+                  padding: const EdgeInsets.only(left: 16.0, right: 8.0),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: TextFormField(
+                          onChanged: (string) async {
+                            if (string.trim().length <= 0 || string.isEmpty) {
+                              setState(() {
+                                isFilter = false;
+                                filteredList = [];
+                              });
+                            } else {
+                              setState(() {
+                                filteredList =
+                                    pRequest.requests.where((element) {
+                                  if (element['request']
+                                          .bookingId
+                                          .toString()
+                                          .contains(
+                                              string.trim().toLowerCase()) ||
+                                      element['request']
+                                          .pickupDate
+                                          .contains(string.toLowerCase())) {
+                                    return true;
+                                  }
 
-                                if (element['user']
-                                    .name
-                                    .toLowerCase()
-                                    .contains(string.toLowerCase()))
-                                  return true;
+                                  if (element['user']
+                                      .name
+                                      .toLowerCase()
+                                      .contains(string.toLowerCase()))
+                                    return true;
 
-                                if (element['request']
-                                    .destinationString
-                                    .toLowerCase()
-                                    .contains(string.toLowerCase()))
-                                  return true;
+                                  if (element['request']
+                                      .destinationString
+                                      .toLowerCase()
+                                      .contains(string.toLowerCase()))
+                                    return true;
 
-                                if (element['request']
-                                    .sourceString
-                                    .toLowerCase()
-                                    .contains(string.toLowerCase()))
-                                  return true;
-                                return false;
-                              }).toList();
-                              isFilter = true;
-                            });
-                          }
-                        },
-                        decoration: InputDecoration(
-                          hintText: AppLocalizations.getLocalizationValue(
-                              locale, LocaleKey.searchHint),
-                          border: OutlineInputBorder(),
-                          labelText: AppLocalizations.getLocalizationValue(
-                              locale, LocaleKey.search),
+                                  if (element['request']
+                                      .sourceString
+                                      .toLowerCase()
+                                      .contains(string.toLowerCase()))
+                                    return true;
+                                  return false;
+                                }).toList();
+                                isFilter = true;
+                              });
+                            }
+                          },
+                          decoration: InputDecoration(
+                            hintText: AppLocalizations.getLocalizationValue(
+                                locale, LocaleKey.searchHint),
+                            border: OutlineInputBorder(),
+                            labelText: AppLocalizations.getLocalizationValue(
+                                locale, LocaleKey.search),
+                          ),
                         ),
                       ),
-                    ),
-                    IconButton(
-                        icon: Icon(Icons.filter_alt_rounded),
-                        onPressed: () {
-                          Widget dialog = AlertDialog(
-                            backgroundColor: Colors.white,
-                            elevation: 8,
-                            title: Text(
-                              "Filter Requests",
-                              style: TextStyle(
-                                fontFamily: 'Maven',
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
+                      IconButton(
+                          icon: Icon(Icons.filter_alt_rounded),
+                          onPressed: () {
+                            Widget dialog = AlertDialog(
+                              backgroundColor: Colors.white,
+                              elevation: 8,
+                              title: Text(
+                                "Filter Requests",
+                                style: TextStyle(
+                                  fontFamily: 'Maven',
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-                            ),
-                            content: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: <Widget>[
-                                RadioListTile(
-                                  activeColor: Colors.green,
-                                  value: 'all',
-                                  title: Text("All"),
-                                  groupValue: _radioValue,
-                                  onChanged: (a) {
-                                    _handleRadioValueChange(a);
-                                    Navigator.pop(context);
-                                  },
-                                ),
-                                RadioListTile(
-                                  activeColor: Colors.green,
-                                  value: LocaleKey.pending,
-                                  title: Text("Pending"),
-                                  groupValue: _radioValue,
-                                  onChanged: (a) {
-                                    _handleRadioValueChange(a);
-                                    Navigator.pop(context);
-                                  },
-                                ),
-                                RadioListTile(
-                                  activeColor: Colors.green,
-                                  value: LocaleKey.accepted,
-                                  title: Text("Accepted"),
-                                  groupValue: _radioValue,
-                                  onChanged: (a) {
-                                    _handleRadioValueChange(a);
-                                    Navigator.pop(context);
-                                  },
-                                ),
-                                RadioListTile(
-                                  activeColor: Colors.green,
-                                  value: LocaleKey.rejected,
-                                  title: Text("Rejected"),
-                                  groupValue: _radioValue,
-                                  onChanged: (a) {
-                                    _handleRadioValueChange(a);
-                                    Navigator.pop(context);
-                                  },
-                                ),
-                                RadioListTile(
-                                  activeColor: Colors.green,
-                                  value: LocaleKey.cancelled,
-                                  title: Text("Cancelled"),
-                                  groupValue: _radioValue,
-                                  onChanged: (a) {
-                                    _handleRadioValueChange(a);
-                                    Navigator.pop(context);
-                                  },
-                                ),
-                              ],
-                            ),
-                          );
-                          showGeneralDialog(
-                              context: context,
-                              pageBuilder: (context, anim1, anim2) => dialog,
-                              barrierDismissible: true,
-                              barrierLabel: '',
-                              transitionBuilder:
-                                  (context, anim1, anim2, child) {
-                                return Transform.scale(
-                                  scale: anim1.value,
-                                  origin: Offset(
-                                      MediaQuery.of(context).size.width * 0.5,
-                                      -200),
-                                  child: child,
-                                );
-                              },
-                              transitionDuration: Duration(milliseconds: 400));
-                        }),
-                  ],
+                              content: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: <Widget>[
+                                  RadioListTile(
+                                    activeColor: Colors.green,
+                                    value: 'all',
+                                    title: Text("All"),
+                                    groupValue: _radioValue,
+                                    onChanged: (a) {
+                                      _handleRadioValueChange(a);
+                                      Navigator.pop(context);
+                                    },
+                                  ),
+                                  RadioListTile(
+                                    activeColor: Colors.green,
+                                    value: LocaleKey.pending,
+                                    title: Text("Pending"),
+                                    groupValue: _radioValue,
+                                    onChanged: (a) {
+                                      _handleRadioValueChange(a);
+                                      Navigator.pop(context);
+                                    },
+                                  ),
+                                  RadioListTile(
+                                    activeColor: Colors.green,
+                                    value: LocaleKey.accepted,
+                                    title: Text("Accepted"),
+                                    groupValue: _radioValue,
+                                    onChanged: (a) {
+                                      _handleRadioValueChange(a);
+                                      Navigator.pop(context);
+                                    },
+                                  ),
+                                  RadioListTile(
+                                    activeColor: Colors.green,
+                                    value: LocaleKey.rejected,
+                                    title: Text("Rejected"),
+                                    groupValue: _radioValue,
+                                    onChanged: (a) {
+                                      _handleRadioValueChange(a);
+                                      Navigator.pop(context);
+                                    },
+                                  ),
+                                  RadioListTile(
+                                    activeColor: Colors.green,
+                                    value: LocaleKey.cancelled,
+                                    title: Text("Cancelled"),
+                                    groupValue: _radioValue,
+                                    onChanged: (a) {
+                                      _handleRadioValueChange(a);
+                                      Navigator.pop(context);
+                                    },
+                                  ),
+                                ],
+                              ),
+                            );
+                            showGeneralDialog(
+                                context: context,
+                                pageBuilder: (context, anim1, anim2) => dialog,
+                                barrierDismissible: true,
+                                barrierLabel: '',
+                                transitionBuilder:
+                                    (context, anim1, anim2, child) {
+                                  return Transform.scale(
+                                    scale: anim1.value,
+                                    origin: Offset(
+                                        MediaQuery.of(context).size.width * 0.5,
+                                        -200),
+                                    child: child,
+                                  );
+                                },
+                                transitionDuration:
+                                    Duration(milliseconds: 400));
+                          }),
+                    ],
+                  ),
                 ),
                 SizedBox(
-                  height: 10,
+                  height: 16,
                 ),
                 Expanded(
                   child: ListView.builder(
@@ -340,7 +344,7 @@ class _RequestFragmentState extends State<RequestFragment> {
       paymentStatus = quoteModel.paymentStatus;
       status = quoteModel.status;
       if (status == RequestStatus.assigned) {
-        return Container();
+        return SizedBox.shrink();
       }
     }
     double weight = 0;
@@ -348,11 +352,11 @@ class _RequestFragmentState extends State<RequestFragment> {
       weight += val.quantity;
     }
     return Card(
-      margin: EdgeInsets.all(8),
+      margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       elevation: 12,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
         child: Column(
           children: [
             Row(
@@ -393,7 +397,7 @@ class _RequestFragmentState extends State<RequestFragment> {
                         return Text('Address...');
                       }
                       return Text(
-                        "${snapshot.data.split(',')[2].trimLeft()}" ?? "",
+                        snapshot.data.split(',')[2].trimLeft() ?? "",
                         textAlign: TextAlign.start,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
@@ -402,10 +406,11 @@ class _RequestFragmentState extends State<RequestFragment> {
                     },
                   ),
                   Expanded(
-                      child: Icon(
-                    Icons.arrow_right_alt_rounded,
-                    color: primaryColor,
-                  )),
+                    child: Icon(
+                      Icons.arrow_right_alt_rounded,
+                      color: primaryColor,
+                    ),
+                  ),
                   FutureBuilder<String>(
                     future: Helper().setLocationText(requestModel.destination),
                     builder: (context, snapshot) {
@@ -450,47 +455,9 @@ class _RequestFragmentState extends State<RequestFragment> {
                     ),
                   ],
                 ),
-                Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text(
-                      AppLocalizations.getLocalizationValue(
-                          locale,
-                          requestModel.truk.toLowerCase().contains('closed')
-                              ? LocaleKey.closedTruk
-                              : LocaleKey.openTruk),
-                      style: TextStyle(fontSize: 12, color: Colors.orange),
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Text(
-                      "${AppLocalizations.getLocalizationValue(locale, LocaleKey.insurance)} : ${requestModel.insured ? AppLocalizations.getLocalizationValue(locale, LocaleKey.yes) : AppLocalizations.getLocalizationValue(locale, LocaleKey.no)}",
-                      style: TextStyle(fontSize: 12),
-                    ),
-                    SizedBox(height: 8),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: buildAssignDriverButton(
-                        status,
-                        () {
-                          Navigator.push(
-                            context,
-                            CupertinoPageRoute(
-                              builder: (context) => SendQuote(
-                                keyTitle: 'assign',
-                                quoteModel: quoteModel,
-                                requestModel: requestModel,
-                                requestUser: userModel,
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    )
-                  ],
+                Text(
+                  "${AppLocalizations.getLocalizationValue(locale, LocaleKey.insurance)} : ${requestModel.insured ? AppLocalizations.getLocalizationValue(locale, LocaleKey.yes) : AppLocalizations.getLocalizationValue(locale, LocaleKey.no)}",
+                  style: TextStyle(fontSize: 12),
                 ),
               ],
             ),
@@ -498,6 +465,7 @@ class _RequestFragmentState extends State<RequestFragment> {
               height: 12,
             ),
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 buildQuoteButton(() {
                   log("Quote --> $quoteModel");
@@ -512,16 +480,12 @@ class _RequestFragmentState extends State<RequestFragment> {
                         ),
                       ));
                 }, 'Quote', status),
-                quoteModel == null
-                    ? Spacer()
-                    : Expanded(
-                        child: Center(
-                          child: Text(
-                            "\u20B9 ${quoteModel.price}",
-                            style: TextStyle(fontSize: 18),
-                          ),
-                        ),
-                      ),
+                if (quoteModel != null) ...[
+                  Text(
+                    "\u20B9 ${quoteModel.price}",
+                    style: TextStyle(fontSize: 16, color: Colors.green),
+                  ),
+                ],
                 buildAssignDriverButton(
                   status,
                   () {
@@ -546,187 +510,22 @@ class _RequestFragmentState extends State<RequestFragment> {
     );
   }
 
-  // Widget buildRequestCard(
-  //     RequestModel requestModel, UserModel userModel, QuoteModel quoteModel) {
-  //   String status = RequestStatus.pending;
-  //   String paymentStatus = '';
-  //   if (quoteModel != null) {
-  //     print('Quet function ${quoteModel.paymentStatus}');
-  //     paymentStatus = quoteModel.paymentStatus;
-  //     status = quoteModel.status;
-  //     if (status == RequestStatus.assigned) {
-  //       return Container();
-  //     }
-  //   }
-  //   double weight = 0;
-  //   for (MaterialModel val in requestModel.materials) {
-  //     weight += val.quantity;
-  //   }
-  //   return Card(
-  //     elevation: 8,
-  //     child: Container(
-  //       padding: const EdgeInsets.all(10),
-  //       child: Row(
-  //         children: [
-  //           Expanded(
-  //             child: Column(
-  //               mainAxisSize: MainAxisSize.min,
-  //               crossAxisAlignment: CrossAxisAlignment.start,
-  //               children: [
-  //                 Text(
-  //                   "${userModel.name}, $paymentStatus",
-  //                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
-  //                 ),
-  //                 SizedBox(height: 5),
-  //                 FutureBuilder<String>(
-  //                     future: Helper().setLocationText(requestModel.source),
-  //                     builder: (context, snapshot) {
-  //                       if (!snapshot.hasData) {
-  //                         return Text('Address...');
-  //                       }
-  //                       return Text(
-  //                         "${snapshot.data.split(',')[2].trimLeft()}" ?? "",
-  //                         textAlign: TextAlign.start,
-  //                         maxLines: 1,
-  //                         overflow: TextOverflow.ellipsis,
-  //                         style: TextStyle(fontSize: 12),
-  //                       );
-  //                     }),
-  //                 FutureBuilder<String>(
-  //                     future:
-  //                         Helper().setLocationText(requestModel.destination),
-  //                     builder: (context, snapshot) {
-  //                       if (!snapshot.hasData) {
-  //                         return Text('|');
-  //                       }
-  //                       return Text(
-  //                         "|\n${snapshot.data.split(',')[2].trimLeft()}" ?? "",
-  //                         textAlign: TextAlign.start,
-  //                         maxLines: 2,
-  //                         overflow: TextOverflow.ellipsis,
-  //                         style: TextStyle(fontSize: 12),
-  //                       );
-  //                     }),
-  //                 SizedBox(height: 5),
-  //                 Text(
-  //                   "${AppLocalizations.getLocalizationValue(locale, LocaleKey.quantity)} - $weight KG",
-  //                   style: TextStyle(fontSize: 12, color: Colors.orange),
-  //                 ),
-  //                 SizedBox(height: 5),
-  //                 Row(
-  //                   children: [
-  //                     buildQuoteButton(() {
-  //                       log("Quote --> $quoteModel");
-  //                       Navigator.push(
-  //                           context,
-  //                           MaterialPageRoute(
-  //                             builder: (context) => SendQuote(
-  //                               keyTitle: 'quote',
-  //                               quoteModel: quoteModel,
-  //                               requestModel: requestModel,
-  //                               requestUser: userModel,
-  //                             ),
-  //                           ));
-  //                     }, 'Quote', status),
-  //                     quoteModel == null
-  //                         ? Container()
-  //                         : Expanded(
-  //                             child: Center(
-  //                               child: Text(
-  //                                 "\u20B9 ${quoteModel.price}",
-  //                                 style: TextStyle(fontSize: 18),
-  //                               ),
-  //                             ),
-  //                           )
-  //                   ],
-  //                 )
-  //               ],
-  //             ),
-  //           ),
-  //           Column(
-  //             mainAxisSize: MainAxisSize.min,
-  //             crossAxisAlignment: CrossAxisAlignment.start,
-  //             mainAxisAlignment: MainAxisAlignment.start,
-  //             children: [
-  //               Text(
-  //                 "ID ${requestModel.bookingId}",
-  //                 style: TextStyle(fontSize: 12),
-  //               ),
-  //               SizedBox(
-  //                 height: 5,
-  //               ),
-  //               Text(
-  //                 "${requestModel.pickupDate}",
-  //                 style: TextStyle(fontSize: 12),
-  //               ),
-  //               SizedBox(
-  //                 height: 5,
-  //               ),
-  //               Text(
-  //                 AppLocalizations.getLocalizationValue(
-  //                     locale,
-  //                     requestModel.truk.toLowerCase().contains('closed')
-  //                         ? LocaleKey.closedTruk
-  //                         : LocaleKey.openTruk),
-  //                 style: TextStyle(fontSize: 12, color: Colors.orange),
-  //               ),
-  //               SizedBox(
-  //                 height: 5,
-  //               ),
-  //               Text(
-  //                 "${AppLocalizations.getLocalizationValue(locale, LocaleKey.insurance)} : ${requestModel.insured ? AppLocalizations.getLocalizationValue(locale, LocaleKey.yes) : AppLocalizations.getLocalizationValue(locale, LocaleKey.no)}",
-  //                 style: TextStyle(fontSize: 12),
-  //               ),
-  //               SizedBox(height: 8),
-  //               Align(
-  //                 alignment: Alignment.centerRight,
-  //                 child: buildAssignDriverButton(
-  //                   status,
-  //                   () {
-  //                     Navigator.push(
-  //                       context,
-  //                       CupertinoPageRoute(
-  //                         builder: (context) => SendQuote(
-  //                           keyTitle: 'assign',
-  //                           quoteModel: quoteModel,
-  //                           requestModel: requestModel,
-  //                           requestUser: userModel,
-  //                         ),
-  //                       ),
-  //                     );
-  //                   },
-  //                 ),
-  //               )
-  //             ],
-  //           ),
-  //         ],
-  //       ),
-  //     ),
-  //   );
-  // }
-
   buildQuoteButton(Function onPressed, String title, String status) {
-    return Container(
-      height: 35,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(5),
-      ),
-      child: ElevatedButton(
-        onPressed: RequestStatus.pending == status ? onPressed : null,
-        style: ElevatedButton.styleFrom(
-          primary: getColor(status),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(5),
-          ),
+    return ElevatedButton(
+      onPressed: RequestStatus.pending == status ? onPressed : null,
+      style: ElevatedButton.styleFrom(
+        primary: getColor(status),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(5),
         ),
-        child: Center(
-          child: Text(
-            getButtonText(status) ?? status,
-            style: TextStyle(
-              color: RequestStatus.pending == status
-                  ? Colors.white
-                  : getColor(status),
-            ),
+      ),
+      child: Center(
+        child: Text(
+          getButtonText(status) ?? status,
+          style: TextStyle(
+            color: RequestStatus.pending == status
+                ? Colors.white
+                : getColor(status),
           ),
         ),
       ),
@@ -734,29 +533,22 @@ class _RequestFragmentState extends State<RequestFragment> {
   }
 
   buildAssignDriverButton(String status, Function onPressed) {
-    return Container(
-      height: 35,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(5),
-      ),
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(5),
-          ),
-          primary: Colors.blue,
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(5),
         ),
-        onPressed:
-            status == RequestStatus.accepted && status != RequestStatus.assigned
-                ? onPressed
-                : null,
-        child: Center(
-          child: Text(
-            AppLocalizations.getLocalizationValue(
-                locale, LocaleKey.assignDriver),
-            style: TextStyle(
-              color: Colors.white,
-            ),
+        primary: Colors.blue,
+      ),
+      onPressed:
+          status == RequestStatus.accepted && status != RequestStatus.assigned
+              ? onPressed
+              : null,
+      child: Center(
+        child: Text(
+          AppLocalizations.getLocalizationValue(locale, LocaleKey.assignDriver),
+          style: TextStyle(
+            color: Colors.white,
           ),
         ),
       ),

@@ -105,8 +105,11 @@ class CompanyDrawerMenuState extends State<CompanyDrawerMenu> {
                 child: InkWell(
                   onTap: () {
                     Navigator.pop(context);
-                    Navigator.of(context).push(CupertinoPageRoute(
-                        builder: (context) => CompanyProfile()));
+                    Navigator.of(context).push(
+                      CupertinoPageRoute(
+                        builder: (context) => CompanyProfile(),
+                      ),
+                    );
                   },
                   child: Text(
                       AppLocalizations.getLocalizationValue(

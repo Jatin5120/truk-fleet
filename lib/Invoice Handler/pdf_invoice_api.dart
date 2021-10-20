@@ -112,8 +112,8 @@ class PdfInvoiceApi {
     final headers = [
       'Material Name',
       'Material Type',
-      'Quantity',
-      'Total',
+      'Quantity (Kg)',
+      'Total (Rs)',
       'Payment Mode'
     ];
     final data = invoice.items.map((item) {
@@ -121,8 +121,8 @@ class PdfInvoiceApi {
         item.name,
         item.type,
         '${item.quantity}',
-        '\$ ${item.total}',
-        '\$ ${item.mode}',
+        '${item.total}',
+        '${item.mode}',
       ];
     }).toList();
 
@@ -217,7 +217,7 @@ class PdfInvoiceApi {
       child: Row(
         children: [
           Expanded(child: Text(title, style: style)),
-          Text(value, style: unite ? style : null),
+          Text('Rs. $value', style: unite ? style : null),
         ],
       ),
     );

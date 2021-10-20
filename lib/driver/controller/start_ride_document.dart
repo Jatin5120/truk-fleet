@@ -52,6 +52,7 @@ class StartRideDocument {
     CollectionReference rr = FirebaseFirestore.instance.collection(FirebaseHelper.shipment);
     await rr.doc(model.id).update({'status': isEnd ? RequestStatus.completed : RequestStatus.started}).then((value) async {
       if(isEnd) {
+        await rr.doc(model.id).update({'driverId':null});
         List<ShipmentModel> sm = [];
         await FirebaseFirestore.instance.collection(FirebaseHelper.shipment)
             .where('truk', isEqualTo: model.truk).get()

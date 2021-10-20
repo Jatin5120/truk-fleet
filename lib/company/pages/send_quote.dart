@@ -134,8 +134,12 @@ class _SendQuoteState extends State<SendQuote> {
         print('Your event is ${event.docs.length}');
         for (QueryDocumentSnapshot d in event.docs) {
           DriverModel dd = DriverModel.fromSnapshot(d);
-          await shipmentCollectionRef
+          // driverA.where('driver', isEqualTo: dd.uid).get().then((value) {
+          // FirebaseFirestore.instance.collection(FirebaseHelper.shipment);
+
+            await shipmentCollectionRef
               // .where('isAvailable', isEqualTo: true)
+                .where('driverId', isEqualTo: dd.uid)
               .get()
               .then((value) {
             int c = 0;

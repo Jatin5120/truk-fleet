@@ -12,8 +12,8 @@ import 'package:truk_fleet/models/shipment_model.dart';
 import 'package:truk_fleet/models/user_model.dart';
 
 class Email {
-  static String mailToken =
-      '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';
+  static String mailToken = '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';
+  
   static const String driverAssignedTemplateID =
       "d-abb7173c4c264e74a85aa69b6a145ab7";
   static const String shipmentStartTemplateID =

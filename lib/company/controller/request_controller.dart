@@ -69,6 +69,7 @@ class RequestController {
       ewaybill: billUrl,
       uid: quoteModel.uid,
       commission: '5',
+        driverId:driver
       //TODO: check for commission
     ).toMap();
     return refShipment.add(m);

@@ -70,7 +70,7 @@ class _AddTruckState extends State<AddTruck> {
       mobileNumberController.text = widget.trukModel.mobileNumber;
       panTinController.text = widget.trukModel.panTin;
       grossWeightController.text =
-          (int.parse(widget.trukModel.grossWeight) / 1000).toString();
+          ((int.parse(widget.trukModel.grossWeight) / 1000).toInt()).toString();
       lengthController.text = widget.trukModel.length;
       breadthController.text = widget.trukModel.breadth;
       heightController.text = widget.trukModel.height;

@@ -58,8 +58,7 @@ class _RequestFragmentState extends State<RequestFragment> {
       case LocaleKey.cancelled:
         isFilter = true;
         filteredList = [];
-        print('Enter filter cancelled');
-        print('Enter filter cancelled ${LocaleKey.cancelled}');
+
         filteredList = myList
             .where(
                 (element) => element['request'].status == LocaleKey.cancelled)

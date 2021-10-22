@@ -61,12 +61,19 @@ class StartRideDocument {
       driverAvaialable.doc(user.uid).delete();
       inRide.doc(user.uid).set({'inRide': true});
     }
+<<<<<<< HEAD
     CollectionReference rr =
         FirebaseFirestore.instance.collection(FirebaseHelper.shipment);
     await rr.doc(model.id).update({
       'status': isEnd ? RequestStatus.completed : RequestStatus.started
     }).then((value) async {
       if (isEnd) {
+=======
+    CollectionReference rr = FirebaseFirestore.instance.collection(FirebaseHelper.shipment);
+    await rr.doc(model.id).update({'status': isEnd ? RequestStatus.completed : RequestStatus.started}).then((value) async {
+      if(isEnd) {
+        await rr.doc(model.id).update({'driverId':null});
+>>>>>>> b93dcb153a835d65e7d5e34ddf74ae6d4494bcb6
         List<ShipmentModel> sm = [];
         await FirebaseFirestore.instance
             .collection(FirebaseHelper.shipment)

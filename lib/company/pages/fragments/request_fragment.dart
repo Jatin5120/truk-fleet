@@ -250,26 +250,26 @@ class _RequestFragmentState extends State<RequestFragment> {
                                       Navigator.pop(context);
                                     },
                                   ),
-                                  RadioListTile(
-                                    activeColor: Colors.green,
-                                    value: LocaleKey.rejected,
-                                    title: Text("Rejected"),
-                                    groupValue: _radioValue,
-                                    onChanged: (a) {
-                                      _handleRadioValueChange(a);
-                                      Navigator.pop(context);
-                                    },
-                                  ),
-                                  RadioListTile(
-                                    activeColor: Colors.green,
-                                    value: LocaleKey.cancelled,
-                                    title: Text("Cancelled"),
-                                    groupValue: _radioValue,
-                                    onChanged: (a) {
-                                      _handleRadioValueChange(a);
-                                      Navigator.pop(context);
-                                    },
-                                  ),
+                                  // RadioListTile(
+                                  //   activeColor: Colors.green,
+                                  //   value: LocaleKey.rejected,
+                                  //   title: Text("Rejected"),
+                                  //   groupValue: _radioValue,
+                                  //   onChanged: (a) {
+                                  //     _handleRadioValueChange(a);
+                                  //     Navigator.pop(context);
+                                  //   },
+                                  // ),
+                                  // RadioListTile(
+                                  //   activeColor: Colors.green,
+                                  //   value: LocaleKey.cancelled,
+                                  //   title: Text("Cancelled"),
+                                  //   groupValue: _radioValue,
+                                  //   onChanged: (a) {
+                                  //     _handleRadioValueChange(a);
+                                  //     Navigator.pop(context);
+                                  //   },
+                                  // ),
                                 ],
                               ),
                             );

@@ -9,15 +9,15 @@ Map<String, String> english() {
     "balance": "Truk Money Balance",
     "bankProof": "Bank Proof",
     "bookingId": "Booking ID",
-    "recievePayment":"Receive Payment",
+    "recievePayment": "Receive Payment",
     "bookingRequested": "Booking Requested",
-    "updateLocation":"Update Location",
+    "updateLocation": "Update Location",
     "chat": "Chat",
     "city": "City",
     "closedTruk": "Closed Truk",
     "COD": "Cash on Delivery",
     "company": "Company",
-    "companyRegistration":"Company Registration",
+    "companyRegistration": "Company Registration",
     "continueBooking": "Continue Booking",
     "delete": "Delete",
     "deleteConfirm": "Do you want to delete?",
@@ -32,14 +32,15 @@ Map<String, String> english() {
     "enterMobile": "Enter your mobile number?",
     "enterOtp": "Enter the OTP sent to you at",
     "enterPickup": "Enter Pick Up Location",
-    "fullTruk": "Full Truk",
+    LocaleKey.fullLoad: "Full Load",
     "generateOtp": "Generate OTP",
     "getStarted": "Get Started",
-    "gstRegistration":"Gst Registration",
+    "gstRegistration": "Gst Registration",
     "height": "Height",
     "home": "Home",
     "insurance": "Insurance",
-    "insuranceText1": "Yes, secure and insure my cargo shipment. I have read, understood and agree to the ",
+    "insuranceText1":
+        "Yes, secure and insure my cargo shipment. I have read, understood and agree to the ",
     "insuranceText2": "Terms and Conditions",
     "invalidAmount": "*Invalid Amount",
     "invalidEmail": "*Invalid Email",
@@ -68,7 +69,7 @@ Map<String, String> english() {
     "order": "Order",
     "orderSummary": "Order Summary",
     "otpSuccessful": "Otp matched successfully.",
-    "partialTruk": "Partial Truk",
+    LocaleKey.partialLoad: "Partial Load",
     "payments": "Payments",
     "paymentSuccess": "Payment Successful",
     "pickupDate": "Pickup Date",
@@ -107,8 +108,10 @@ Map<String, String> english() {
     "vendorName": "Vendor Name",
     "verifyNow": "Verify Now",
     "walkThroughSubTitle1": "Manage your fleet and drivers at your fingertips",
-    "walkThroughSubTitle2": "Find your Truck on Finger tip and Track online from Start to End.",
-    "walkThroughSubTitle3": "Get personalized loads for your vehicles on a daily basis from all over India.",
+    "walkThroughSubTitle2":
+        "Find your Truck on Finger tip and Track online from Start to End.",
+    "walkThroughSubTitle3":
+        "Get personalized loads for your vehicles on a daily basis from all over India.",
     "walkThroughTitle1": "Manage Your Fleet",
     "walkThroughTitle2": "One Tap Online Tracking",
     "walkThroughTitle3": "Attach Your Vehicles",
@@ -196,8 +199,9 @@ Map<String, String> english() {
     "driverOnline": "Online",
     "driverOffline": "Offline",
     "myPayouts": "My Payouts",
-    "paymentConfirmation":"I hereby confirm that above amount is successfully paid by the customer to me",
-    "TC":"This TRUKAPP WEBSITE Terms and Conditions contains the terms and conditions that govern your access to and use of the website (as defined below) and is an agreement between Dockware Global Logistics Pvt. Ltd. (“TRUKAPP,” “we,” “us,” or “our”) and you or the entity you represent (“you” or “your”). This Agreement takes effect when you access the website. These terms and conditions are an electronic record in terms of Information Technology Act, 2000 (“IT Act”) and rules thereunder as applicable and the provisions pertaining to electronic records in various statutes as amended from time to time.You represent and warrant to us that you are competent and possess legal capacity to enter into a Contract (i.e. you have attained at least 18 years of age, you have capacity to enter into agreements as per The Contract Act).\n"
+    "paymentConfirmation":
+        "I hereby confirm that above amount is successfully paid by the customer to me",
+    "TC": "This TRUKAPP WEBSITE Terms and Conditions contains the terms and conditions that govern your access to and use of the website (as defined below) and is an agreement between Dockware Global Logistics Pvt. Ltd. (“TRUKAPP,” “we,” “us,” or “our”) and you or the entity you represent (“you” or “your”). This Agreement takes effect when you access the website. These terms and conditions are an electronic record in terms of Information Technology Act, 2000 (“IT Act”) and rules thereunder as applicable and the provisions pertaining to electronic records in various statutes as amended from time to time.You represent and warrant to us that you are competent and possess legal capacity to enter into a Contract (i.e. you have attained at least 18 years of age, you have capacity to enter into agreements as per The Contract Act).\n"
         " 1.\n 1.1 Generally. You may access the contents of the Website, products, service or feature in accordance with the following terms and conditions. You undertake to comply with these terms and conditions and all laws, rules and regulations applicable to your use of the Website.\n1.2 You undertake and warrant that any information provided by you to TrukApp is correct and valid. In case of any wrong information/impersonation/furnishing of wrong information, you shall be liable for consequences and you shall indemnify TRUKAPP against any such loss, damage, consequences, which may have to be faced by TRUKAPP due to such breach. In case it is found that the information provided is false, TRUKAPP may deny access to the Website immediately without prejudice to any of the terms envisaged under these terms and conditions, TRUKAPP may also initiate any such actions against you as it may deem proper.\n1.3 Your Continued usage of the Website shall operate as legally enforceable binding contract between You and Trukapp."
         "2.\n 2.1. To the Website, products, services or features. We may change or discontinue any or all of the Service Offerings or change or remove functionality of any or all of the Service Offerings from time to time.\n"
         "3.\n 3.1 As a condition of Your use of the Website, You shall not use the Website for any purpose(s) that is unlawful or prohibited by the Terms of Use. You shall not use the Website in any manner that could damage, disable, overburden, or impair any TrukApp server, or the network(s) connected to any TrukApp server, or interfere with any other party's use and enjoyment of any services associated with the Website. You shall not attempt to gain unauthorized access to any section of the Website, other accounts, computer systems or networks connected to any TrukApp server or to any of the services associated with the Website, through hacking, password mining or any other means."
@@ -226,7 +230,7 @@ Map<String, String> english() {
         "The Website makes information of third parties available, including articles, analyst reports, news reports, tools to facilitate calculation, company information and data about financial markets, including any regulatory authority and other financial markets and other data from external sources (the \"Third Party Content\"). You acknowledge and agree that the Third Party Content is not created or endorsed by TrukApp. The provision of Third Party Content is for general informational purposes only and does not constitute a recommendation or solicitation to purchase or sell any securities or shares or to make any other type of investment or investment decision. In addition, the Third Party Content is not intended to provide tax, legal or investment advice. You acknowledge that the Third Party Content provided to You is obtained from sources believed to be reliable, but that no guarantees are made by TrukApp or the providers of the Third Party Content as to its accuracy, completeness, timeliness.\n"
         "By using any Third Party Content, You may leave this Website and be directed to an external website, or to a website maintained by an entity other than TrukApp. If You decide to visit any such site, You do so at Your own risk and it is Your responsibility to take all protective measures to guard against viruses or any other destructive elements. TrukApp makes no warranty or representation regarding, and does not endorse, any linked Websites or the information appearing thereon or any of the products or services described thereon. Links do not imply that TrukApp or this Website sponsors, endorses, is affiliated or associated with, or is legally authorized to use any trademark, trade name, logo or copyright symbol displayed in or accessible through the links, or that any linked site is authorized to use any trademark, trade name, logo or copyright symbol of TrukApp or any of its affiliates or subsidiaries.\n"
         "For the Services provided by Third Party Vendors to TrukApp customers, TrukApp is not liable for the damage of the Goods or delay in delivery at the destination location of the Goods. Once the booking is complete, TrukApp ceases to be liable for any changes or modifications done with mutual understanding of the Customer and the Vendor. TrukApp is a platform to enable transactions between the parties, i.e., the Vendor and Customer. The Vendor in this scenario is the Logistics partner or Truck provider/s or Individual Truck owners or Truck Drivers; The Customer is the person booking the Service.\n",
-    "about_text":"TruKApp is a revolutionary application connecting shippers to the Live Truck Market and enabling hassle free cargo shipment booking across the country. We also provide various other services like Truck Load Identification, fleet management services etc. to Transporters through our cutting edge technologies.\n\n"
+    "about_text": "TruKApp is a revolutionary application connecting shippers to the Live Truck Market and enabling hassle free cargo shipment booking across the country. We also provide various other services like Truck Load Identification, fleet management services etc. to Transporters through our cutting edge technologies.\n\n"
         "It was founded in January 2021 by a group of passionate entrepreneurs from the NIT Warangal Almamater.\n\n"
         "TrukApp is here to simplify logistics right from Intercity to Intracity transportation, Full Truck Load to Partial Truck Load deliveries, Identifying Truck Space for any type of cargo and a fleet management interface to transporters to name a few.\n\n"
         "With the help of Technology, TrukApp provides world class support from the beginning to the end of the cargo delivery life cycle. Our Technologies like real-time cargo tracking, freight security, fleet management, Integrated Payment Gateway etc. enable both Shippers and Transporters to transact on their fingertips.\n\n"

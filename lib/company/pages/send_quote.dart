@@ -137,9 +137,9 @@ class _SendQuoteState extends State<SendQuote> {
           // driverA.where('driver', isEqualTo: dd.uid).get().then((value) {
           // FirebaseFirestore.instance.collection(FirebaseHelper.shipment);
 
-            await shipmentCollectionRef
+          await shipmentCollectionRef
               // .where('isAvailable', isEqualTo: true)
-                .where('driverId', isEqualTo: dd.uid)
+              .where('driverId', isEqualTo: dd.uid)
               .get()
               .then((value) {
             int c = 0;
@@ -914,13 +914,15 @@ class _SendQuoteState extends State<SendQuote> {
             height: 10,
           ),
           createTypes(
-              AppLocalizations.getLocalizationValue(
-                  this.locale, LocaleKey.loadType),
-              AppLocalizations.getLocalizationValue(
-                  this.locale,
-                  widget.requestModel.load.toLowerCase().contains('partial')
-                      ? LocaleKey.partialTruk
-                      : LocaleKey.fullTruk)),
+            AppLocalizations.getLocalizationValue(
+                this.locale, LocaleKey.loadType),
+            AppLocalizations.getLocalizationValue(
+              this.locale,
+              widget.requestModel.load.toLowerCase().contains('partial')
+                  ? LocaleKey.partialLoad
+                  : LocaleKey.fullLoad,
+            ),
+          ),
           SizedBox(
             height: 10,
           ),
@@ -939,17 +941,13 @@ class _SendQuoteState extends State<SendQuote> {
 
   Widget createTypes(String heading, String value) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Expanded(
-          child: Text(
-            '$heading',
-            style: TextStyle(fontSize: 16),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
-        ),
-        SizedBox(
-          width: 10,
+        Text(
+          '$heading',
+          style: TextStyle(fontSize: 16),
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
         ),
         Text(
           '$value',

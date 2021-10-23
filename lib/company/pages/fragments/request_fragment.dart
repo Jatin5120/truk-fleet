@@ -393,7 +393,7 @@ class _RequestFragmentState extends State<RequestFragment> {
                     future: Helper().setLocationText(requestModel.source),
                     builder: (context, snapshot) {
                       if (!snapshot.hasData) {
-                        return Text('Address...');
+                        return Text('Source');
                       }
                       return Text(
                         snapshot.data.split(',')[2].trimLeft() ?? "",
@@ -414,7 +414,7 @@ class _RequestFragmentState extends State<RequestFragment> {
                     future: Helper().setLocationText(requestModel.destination),
                     builder: (context, snapshot) {
                       if (!snapshot.hasData) {
-                        return Text('|');
+                        return Text('Destination');
                       }
                       return Text(
                         "${snapshot.data.split(',')[2].trimLeft()}" ?? "",
@@ -466,19 +466,22 @@ class _RequestFragmentState extends State<RequestFragment> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                buildQuoteButton(() {
-                  log("Quote --> $quoteModel");
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => SendQuote(
-                          keyTitle: 'quote',
-                          quoteModel: quoteModel,
-                          requestModel: requestModel,
-                          requestUser: userModel,
-                        ),
-                      ));
-                }, 'Quote', status),
+                buildQuoteButton(
+                  () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => SendQuote(
+                            keyTitle: 'quote',
+                            quoteModel: quoteModel,
+                            requestModel: requestModel,
+                            requestUser: userModel,
+                          ),
+                        ));
+                  },
+                  'Quote',
+                  status,
+                ),
                 if (quoteModel != null) ...[
                   Text(
                     "\u20B9 ${quoteModel.price}",

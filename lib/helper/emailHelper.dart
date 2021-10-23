@@ -12,14 +12,16 @@ import 'package:truk_fleet/models/shipment_model.dart';
 import 'package:truk_fleet/models/user_model.dart';
 
 class Email {
-  static String mailToken = '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';
-  
+  static String mailToken =
+      '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';
+
   static const String driverAssignedTemplateID =
       "d-abb7173c4c264e74a85aa69b6a145ab7";
   static const String shipmentStartTemplateID =
       "d-153e98f8cac54374b1c9d3357e64516e";
   static const String shipmentCompleteTemplateID =
       "d-9644068b03e9448daa384f4843f85ffa";
+
   sendShipmentCompleteMail(ShipmentModel model, inv, context) async {
     showDialog(
         context: context,
@@ -62,9 +64,9 @@ class Email {
         // final mailer = sg.Mailer('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');
         final toAddress = sg.Address(userMail);
         final fromAddress = sg.Address('info@trukapp.com');
-        final subject = 'DRIVER ASSIGNED';
+        final subject = 'SHIPMENT COMPLETED';
         Map<String, dynamic> dd = {
-          'UserName': userName,
+          'userName': userName,
           'destination': dest,
           'invoiceUrl': url,
         };
@@ -109,12 +111,15 @@ class Email {
         .doc(model.driver)
         .update({'cstatus': true}).then((value) async {
       String userMail;
+      String userName;
       await FirebaseFirestore.instance
           .collection(FirebaseHelper.userCollection)
           .doc(model.uid)
           .get()
           .then((value) {
-        userMail = value.get('email');
+        UserModel um = UserModel.fromSnapshot(value);
+        userMail = um.email;
+        userName = um.name;
       });
       try {
         try {
@@ -122,11 +127,12 @@ class Email {
           // final mailer = sg.Mailer('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');
           final toAddress = sg.Address(userMail);
           final fromAddress = sg.Address('info@trukapp.com');
-          final subject = 'DRIVER ASSIGNED';
+          final subject = 'SHIPMENT STARTED';
           Map<String, dynamic> dd = {
-            'Source': source,
-            'OrderNumber': model.bookingId,
-            'ShippingDate': st,
+            'userName': userName,
+            'source': source,
+            'orderNumber': model.bookingId,
+            'shippingDate': st,
           };
           final personalization =
               sg.Personalization([toAddress], dynamicTemplateData: dd);
@@ -195,10 +201,10 @@ class Email {
             final fromAddress = sg.Address('info@trukapp.com');
             final subject = 'DRIVER ASSIGNED';
             Map<String, dynamic> dd = {
-              'Name': userName,
-              'ID': quoteModel.bookingId,
-              'DName': dr.name,
-              'Phone': dr.mobile
+              'userName': userName,
+              'id': quoteModel.bookingId,
+              'driverName': dr.name,
+              'driverPhone': dr.mobile
             };
             final personalization =
                 sg.Personalization([toAddress], dynamicTemplateData: dd);

@@ -39,7 +39,9 @@ class ChatFragmentState extends State<ChatFragment> {
               children: [
                 Center(
                   child: CircleAvatar(
-                      backgroundColor: Colors.grey, foregroundColor: Colors.white, child: Icon(Icons.account_circle)),
+                      backgroundColor: Colors.grey,
+                      foregroundColor: Colors.white,
+                      child: Icon(Icons.account_circle)),
                 ),
                 SizedBox(
                   width: 5,
@@ -60,26 +62,30 @@ class ChatFragmentState extends State<ChatFragment> {
                         Row(
                           children: [
                             FutureBuilder<String>(
-                              future: Helper().setLocationText(chattingListModel.quoteModel.source),
+                              future: Helper().setLocationText(
+                                  chattingListModel.quoteModel.source),
                               builder: (context, snapshot) {
                                 if (!snapshot.hasData) {
                                   return Text('Address...');
                                 }
                                 return Text(
-                                  snapshot.data.split(",")[2] ?? snapshot.data.split(",")[3],
+                                  snapshot.data.split(",")[2] ??
+                                      snapshot.data.split(",")[3],
                                 );
                               },
                             ),
                             Text("-"),
                             Expanded(
                               child: FutureBuilder<String>(
-                                future: Helper().setLocationText(chattingListModel.quoteModel.destination),
+                                future: Helper().setLocationText(
+                                    chattingListModel.quoteModel.destination),
                                 builder: (context, snapshot) {
                                   if (!snapshot.hasData) {
                                     return Text('Address...');
                                   }
                                   return Text(
-                                    snapshot.data.split(",")[2] ?? snapshot.data.split(",")[3],
+                                    snapshot.data.split(",")[2] ??
+                                        snapshot.data.split(",")[3],
                                     maxLines: 1,
                                   );
                                 },
@@ -135,14 +141,16 @@ class ChatFragmentState extends State<ChatFragment> {
             )
           : (pChatList.chattings.length <= 0
               ? NoDataPage(
-                  text: AppLocalizations.getLocalizationValue(locale, LocaleKey.noData),
+                  text: AppLocalizations.getLocalizationValue(
+                      locale, LocaleKey.noData),
                 )
               : ListView.builder(
                   shrinkWrap: true,
                   physics: BouncingScrollPhysics(),
                   itemCount: pChatList.chattings.length,
                   itemBuilder: (context, index) {
-                    final ChattingListModel chattingListModel = pChatList.chattings[index];
+                    final ChattingListModel chattingListModel =
+                        pChatList.chattings[index];
                     return messageTile(chattingListModel);
                   },
                 )),

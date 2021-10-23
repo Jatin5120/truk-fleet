@@ -32,81 +32,74 @@ class ChatListRow extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
         child: Card(
-          elevation: 6,
-          child: Container(
-            padding: const EdgeInsets.all(8),
-            child: Column(
+          elevation: 8,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Row(
+                Container(
+                  height: 64,
+                  width: 64,
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: Colors.grey[400],
+                    shape: BoxShape.circle,
+                  ),
+                  alignment: Alignment.center,
+                  child: Image.asset(
+                    'assets/images/no_data.png',
+                    fit: BoxFit.contain,
+                  ),
+                ),
+                SizedBox(
+                  width: 16,
+                ),
+                Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
-                      height: 60,
-                      width: 60,
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: Colors.grey,
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      child: Center(
-                        child: Image.asset(
-                          'assets/images/no_data.png',
-                          fit: BoxFit.contain,
-                        ),
-                      ),
+                    Text(
+                      'ID: ${model.quoteModel.bookingId}',
                     ),
                     SizedBox(
-                      width: 5,
+                      height: 4,
                     ),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'ID : ${model.quoteModel.bookingId}',
-                          ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          Text(
-                            '${AppLocalizations.getLocalizationValue(locale, LocaleKey.date)} : ${model.quoteModel.pickupDate}',
-                          ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                        ],
-                      ),
+                    Text(
+                      '${model.quoteModel.pickupDate}',
+                      // '${AppLocalizations.getLocalizationValue(locale, LocaleKey.date)} : ${model.quoteModel.pickupDate}',
                     ),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: ElevatedButton(
-                        onPressed:
-                            model.quoteModel.status == RequestStatus.accepted ||
-                                    model.quoteModel.status ==
-                                        RequestStatus.assigned ||
-                                    model.quoteModel.status ==
-                                        RequestStatus.cancelled
-                                ? null
-                                : onPriceUpdate,
-                        style: ElevatedButton.styleFrom(
-                          primary: primaryColor,
-                        ),
-                        child: Center(
-                          child: Text(
-                            "${AppLocalizations.getLocalizationValue(locale, LocaleKey.fare)} ${AppLocalizations.getLocalizationValue(locale, LocaleKey.update)}",
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ),
-                      ),
+                    SizedBox(
+                      height: 12,
+                    ),
+                    Text(
+                      '\u20B9 ${model.quoteModel.price}',
+                      style: TextStyle(fontSize: 18, color: primaryColor),
                     ),
                   ],
                 ),
-                Center(
-                  child: Text(
-                    '\u20B9 ${model.quoteModel.price}',
-                    style: TextStyle(fontSize: 18, color: primaryColor),
-                  ),
-                ),
+
+                /// --------- [Fare Update Button] -----------------
+
+                // Spacer(),
+                // ElevatedButton(
+                //   onPressed: model.quoteModel.status ==
+                //               RequestStatus.accepted ||
+                //           model.quoteModel.status == RequestStatus.assigned ||
+                //           model.quoteModel.status == RequestStatus.cancelled
+                //       ? null
+                //       : onPriceUpdate,
+                //   style: ElevatedButton.styleFrom(
+                //     primary: primaryColor,
+                //   ),
+                //   child: Text(
+                //     "${AppLocalizations.getLocalizationValue(locale, LocaleKey.fare)} ${AppLocalizations.getLocalizationValue(locale, LocaleKey.update)}",
+                //     style: TextStyle(color: Colors.white),
+                //   ),
+                // ),
               ],
             ),
           ),

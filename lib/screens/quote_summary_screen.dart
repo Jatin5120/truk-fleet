@@ -35,19 +35,28 @@ class _QuoteSummaryScreenState extends State<QuoteSummaryScreen> {
   final User user = FirebaseAuth.instance.currentUser;
   Locale locale;
   var advance;
-  getAdvance () async {
-    await FirebaseFirestore.instance.collection(FirebaseHelper.quoteCollection).where('bookingId',isEqualTo: widget.quoteModel.bookingId).get().then((value){
-      for(var d in value.docs){
+  getAdvance() async {
+    await FirebaseFirestore.instance
+        .collection(FirebaseHelper.quoteCollection)
+        .where('bookingId', isEqualTo: widget.quoteModel.bookingId)
+        .get()
+        .then((value) {
+      for (var d in value.docs) {
         setState(() {
-          advance=d.get('advance');
+          advance = d.get('advance');
         });
       }
     });
   }
+
   @override
   void initState() {
-    Helper().setLocationText(widget.quoteModel.source).then((value) => setState(() => sourceAddress = value));
-    Helper().setLocationText(widget.quoteModel.destination).then((value) => setState(() => destinationAddress = value));
+    Helper()
+        .setLocationText(widget.quoteModel.source)
+        .then((value) => setState(() => sourceAddress = value));
+    Helper()
+        .setLocationText(widget.quoteModel.destination)
+        .then((value) => setState(() => destinationAddress = value));
     getAdvance();
     super.initState();
   }
@@ -62,9 +71,12 @@ class _QuoteSummaryScreenState extends State<QuoteSummaryScreen> {
     print(advance);
     locale = AppLocalizations.of(context).locale;
     final Size size = MediaQuery.of(context).size;
-    final EdgeInsetsGeometry padding = EdgeInsets.only(left: 16, right: 16, top: 20);
-    final TextStyle style = TextStyle(fontSize: 16, fontWeight: FontWeight.w500);
-    String title = AppLocalizations.getLocalizationValue(locale, LocaleKey.orderSummary);
+    final EdgeInsetsGeometry padding =
+        EdgeInsets.only(left: 16, right: 16, top: 20);
+    final TextStyle style =
+        TextStyle(fontSize: 16, fontWeight: FontWeight.w500);
+    String title =
+        AppLocalizations.getLocalizationValue(locale, LocaleKey.orderSummary);
     if (!widget.onlyView) {
       title = AppLocalizations.getLocalizationValue(locale, LocaleKey.quotes);
     }
@@ -82,23 +94,35 @@ class _QuoteSummaryScreenState extends State<QuoteSummaryScreen> {
             children: [
               Container(
                 padding: padding,
-                child: Text(AppLocalizations.getLocalizationValue(locale, LocaleKey.shipmentDetails), style: style),
+                child: Text(
+                    AppLocalizations.getLocalizationValue(
+                        locale, LocaleKey.shipmentDetails),
+                    style: style),
               ),
               buildMaterialContainer(size),
               buildTypes(size),
               Container(
                 padding: padding,
-                child: Text(AppLocalizations.getLocalizationValue(locale, LocaleKey.pickupLocation), style: style),
+                child: Text(
+                    AppLocalizations.getLocalizationValue(
+                        locale, LocaleKey.pickupLocation),
+                    style: style),
               ),
               createLocationBlock(size, 0),
               Container(
                 padding: padding,
-                child: Text(AppLocalizations.getLocalizationValue(locale, LocaleKey.dropLocation), style: style),
+                child: Text(
+                    AppLocalizations.getLocalizationValue(
+                        locale, LocaleKey.dropLocation),
+                    style: style),
               ),
               createLocationBlock(size, 1),
               Container(
                 padding: padding,
-                child: Text(AppLocalizations.getLocalizationValue(locale, LocaleKey.pickupDate), style: style),
+                child: Text(
+                    AppLocalizations.getLocalizationValue(
+                        locale, LocaleKey.pickupDate),
+                    style: style),
               ),
               createDateBlock(),
               SizedBox(
@@ -176,7 +200,8 @@ class _QuoteSummaryScreenState extends State<QuoteSummaryScreen> {
                         },
                       ),
                       Expanded(
-                        child: Text("${PaymentType.paymentKeys[PaymentType.online]}(Discount of 200)"),
+                        child: Text(
+                            "${PaymentType.paymentKeys[PaymentType.online]}(Discount of 200)"),
                       ),
                     ],
                   ),
@@ -249,26 +274,35 @@ class _QuoteSummaryScreenState extends State<QuoteSummaryScreen> {
       child: Column(
         children: [
           createTypes(
-              AppLocalizations.getLocalizationValue(this.locale, LocaleKey.mandateType),
-              AppLocalizations.getLocalizationValue(this.locale,
-                  widget.quoteModel.mandate.toLowerCase().contains('ondemand') ? LocaleKey.onDemand : LocaleKey.lease)),
+              AppLocalizations.getLocalizationValue(
+                  this.locale, LocaleKey.mandateType),
+              AppLocalizations.getLocalizationValue(
+                  this.locale,
+                  widget.quoteModel.mandate.toLowerCase().contains('ondemand')
+                      ? LocaleKey.onDemand
+                      : LocaleKey.lease)),
           SizedBox(
             height: 10,
           ),
           createTypes(
-              AppLocalizations.getLocalizationValue(this.locale, LocaleKey.loadType),
+              AppLocalizations.getLocalizationValue(
+                  this.locale, LocaleKey.loadType),
               AppLocalizations.getLocalizationValue(
                   this.locale,
                   widget.quoteModel.load.toLowerCase().contains('partial')
-                      ? LocaleKey.partialTruk
-                      : LocaleKey.fullTruk)),
+                      ? LocaleKey.partialLoad
+                      : LocaleKey.fullLoad)),
           SizedBox(
             height: 10,
           ),
           createTypes(
-              AppLocalizations.getLocalizationValue(this.locale, LocaleKey.trukType),
-              AppLocalizations.getLocalizationValue(this.locale,
-                  widget.quoteModel.truk.toLowerCase().contains('closed') ? LocaleKey.closedTruk : LocaleKey.openTruk)),
+              AppLocalizations.getLocalizationValue(
+                  this.locale, LocaleKey.trukType),
+              AppLocalizations.getLocalizationValue(
+                  this.locale,
+                  widget.quoteModel.truk.toLowerCase().contains('closed')
+                      ? LocaleKey.closedTruk
+                      : LocaleKey.openTruk)),
         ],
       ),
     );
@@ -312,6 +346,7 @@ class _QuoteSummaryScreenState extends State<QuoteSummaryScreen> {
       ),
     );
   }
+
   Widget createDateBlock() {
     return Container(
       margin: const EdgeInsets.only(top: 10, left: 16, right: 16),
@@ -321,9 +356,7 @@ class _QuoteSummaryScreenState extends State<QuoteSummaryScreen> {
         borderRadius: BorderRadius.circular(5.0),
         color: const Color(0xfff8f8f8),
       ),
-      child: Text(
-        widget.quoteModel.pickupDate
-      ),
+      child: Text(widget.quoteModel.pickupDate),
     );
   }
 }

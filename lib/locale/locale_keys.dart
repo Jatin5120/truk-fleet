@@ -26,7 +26,7 @@ class LocaleKey {
   static const String enterMobile = "enterMobile";
   static const String enterOtp = "enterOtp";
   static const String enterPickup = "enterPickup";
-  static const String fullTruk = "fullTruk";
+  static const String fullLoad = "fullLoad";
   static const String generateOtp = "generateOtp";
   static const String getStarted = "getStarted";
   static const String height = "height";
@@ -57,12 +57,12 @@ class LocaleKey {
   static const String noQuotesRequested = "noQuotesRequested";
   static const String notEnoughMoney = "notEnoughMoney";
   static const String onDemand = "onDemand";
-  static const String ONLINE = "ONLINE";
+  static const String online = "ONLINE";
   static const String openTruk = "openTruk";
   static const String order = "order";
   static const String orderSummary = "orderSummary";
   static const String otpSuccessful = "otpSuccessful";
-  static const String partialTruk = "partialTruk";
+  static const String partialLoad = "partialLoad";
   static const String payments = "payments";
   static const String paymentSuccess = "paymentSuccess";
   static const String pickupDate = "pickupDate";

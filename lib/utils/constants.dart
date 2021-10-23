@@ -87,14 +87,14 @@ class Constants {
       ];
   List<Map<String, String>> get loadType => [
         {
-          'key': LocaleKey.partialTruk,
+          'key': LocaleKey.partialLoad,
           'value': AppLocalizations.getLocalizationValue(
-              this.locale, LocaleKey.partialTruk)
+              this.locale, LocaleKey.partialLoad)
         },
         {
-          'key': LocaleKey.fullTruk,
+          'key': LocaleKey.fullLoad,
           'value': AppLocalizations.getLocalizationValue(
-              this.locale, LocaleKey.fullTruk)
+              this.locale, LocaleKey.fullLoad)
         }
       ];
   List<Map<String, String>> get trukType => [

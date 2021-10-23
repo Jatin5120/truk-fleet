@@ -17,16 +17,25 @@ class StartRideDocument {
   List<String> labels = ['pickupImage1', 'pickupImage2', 'trukImage', 'selfie'];
   List<Map<String, String>> urls = [];
 
-  Future<void> uploadImages({@required List<File> images, @required ShipmentModel model, bool isEnd = false}) async {
+  Future<void> uploadImages(
+      {@required List<File> images,
+      @required ShipmentModel model,
+      bool isEnd = false}) async {
     x = 0;
-    docCollection = isEnd ? FirebaseHelper.shipmentEndImageCollection : FirebaseHelper.shipmentImageCollection;
-    CollectionReference reference = FirebaseFirestore.instance.collection(docCollection);
+    docCollection = isEnd
+        ? FirebaseHelper.shipmentEndImageCollection
+        : FirebaseHelper.shipmentImageCollection;
+    CollectionReference reference =
+        FirebaseFirestore.instance.collection(docCollection);
     for (File image in images) {
       String label = labels[x];
       x++;
       String ext = image.path.split('/').last.split('.').last;
       String fileName = Uuid().v4();
-      TaskSnapshot uploadTask = await storage.ref().child('shipmentImages/$fileName.$ext').putFile(image);
+      TaskSnapshot uploadTask = await storage
+          .ref()
+          .child('shipmentImages/$fileName.$ext')
+          .putFile(image);
       String downloadUrl = await uploadTask.ref.getDownloadURL();
       final d = await reference.doc(model.bookingId.toString()).get();
       if (d.exists) {
@@ -39,9 +48,12 @@ class StartRideDocument {
         });
       }
     }
-    CollectionReference inRide = FirebaseFirestore.instance.collection('InRide');
-    CollectionReference driverAvaialable = FirebaseFirestore.instance.collection('DriverAvailable');
-    CollectionReference driverWorking = FirebaseFirestore.instance.collection('DriverWorking');
+    CollectionReference inRide =
+        FirebaseFirestore.instance.collection('InRide');
+    CollectionReference driverAvaialable =
+        FirebaseFirestore.instance.collection('DriverAvailable');
+    CollectionReference driverWorking =
+        FirebaseFirestore.instance.collection('DriverWorking');
     if (isEnd) {
       inRide.doc(user.uid).delete();
       driverWorking.doc(user.uid).delete();
@@ -49,13 +61,24 @@ class StartRideDocument {
       driverAvaialable.doc(user.uid).delete();
       inRide.doc(user.uid).set({'inRide': true});
     }
+<<<<<<< HEAD
+    CollectionReference rr =
+        FirebaseFirestore.instance.collection(FirebaseHelper.shipment);
+    await rr.doc(model.id).update({
+      'status': isEnd ? RequestStatus.completed : RequestStatus.started
+    }).then((value) async {
+      if (isEnd) {
+=======
     CollectionReference rr = FirebaseFirestore.instance.collection(FirebaseHelper.shipment);
     await rr.doc(model.id).update({'status': isEnd ? RequestStatus.completed : RequestStatus.started}).then((value) async {
       if(isEnd) {
         await rr.doc(model.id).update({'driverId':null});
+>>>>>>> b93dcb153a835d65e7d5e34ddf74ae6d4494bcb6
         List<ShipmentModel> sm = [];
-        await FirebaseFirestore.instance.collection(FirebaseHelper.shipment)
-            .where('truk', isEqualTo: model.truk).get()
+        await FirebaseFirestore.instance
+            .collection(FirebaseHelper.shipment)
+            .where('truk', isEqualTo: model.truk)
+            .get()
             .then((value) {
           for (var data in value.docs) {
             if (data.get('status') == RequestStatus.pending ||
@@ -66,13 +89,13 @@ class StartRideDocument {
           }
         });
         if (sm.isEmpty) {
-          await FirebaseFirestore.instance.collection(
-              FirebaseHelper.trukCollection).where(
-              'trukNumber', isEqualTo: model.truk).get().then((value) {
+          await FirebaseFirestore.instance
+              .collection(FirebaseHelper.trukCollection)
+              .where('trukNumber', isEqualTo: model.truk)
+              .get()
+              .then((value) {
             for (var data in value.docs) {
-              data.reference.update({
-                'available': true
-              });
+              data.reference.update({'available': true});
             }
           });
         }

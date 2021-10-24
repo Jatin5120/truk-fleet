@@ -51,6 +51,7 @@ List<String> materialTypes = [
 ];
 
 const List<String> trukModels = [
+  "No Preference",
   "Ashok Leyland DOST",
   "Container 20 Ft.",
   "Container 32 Ft.",

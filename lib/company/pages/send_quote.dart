@@ -379,7 +379,7 @@ class _SendQuoteState extends State<SendQuote> {
       if (_advanceController.text.trim().isNotEmpty) {
         advance = double.parse(_advanceController.text);
       }
-      QuoteModel qt = QuoteModel(
+      QuoteModel quoteModal = QuoteModel(
         agent: user.uid,
         bookingDate: requestModel.bookingDate,
         bookingId: requestModel.bookingId,
@@ -399,7 +399,7 @@ class _SendQuoteState extends State<SendQuote> {
         advance: advance,
       );
       //print(advance);
-      await RequestController().addQuote(qt, requestModel);
+      await RequestController().addQuote(quoteModal, requestModel);
       await FirebaseFirestore.instance
           .collection(FirebaseHelper.trukCollection)
           .where('trukNumber', isEqualTo: trukModel.trukNumber)

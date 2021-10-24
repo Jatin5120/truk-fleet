@@ -30,11 +30,13 @@ class RequestController {
     await notificationRef.add(NotificationModel(
       isDriver: false,
       isVendor: false,
-      message: "You got a new quote on request",
+      message:
+          "You got a new quote on request for id ${requestModel.bookingId}",
       time: DateTime.now().millisecondsSinceEpoch,
+      id: requestModel.bookingId.toString(),
       uid: quoteModel.uid,
     ).toMap());
-    return await referenceRequest.doc(requestModel.id).update({
+    await referenceRequest.doc(requestModel.id).update({
       'status': RequestStatus.quoted,
     });
   }
@@ -49,29 +51,30 @@ class RequestController {
     String billUrl =
         await uploadEWayBill(eWayBill, quoteModel.bookingId.toString());
     Map<String, dynamic> m = ShipmentModel(
-      agent: quoteModel.agent,
-      bookingDate: quoteModel.bookingDate,
-      bookingId: quoteModel.bookingId,
-      destination: quoteModel.destination,
-      source: quoteModel.source,
-      driver: driver,
-      insured: quoteModel.insured,
-      load: quoteModel.load,
-      mandate: quoteModel.mandate,
-      materials: quoteModel.materials,
-      mobile: quoteModel.mobile,
-      paymentStatus: quoteModel.paymentStatus,
-      pickupDate: quoteModel.pickupDate,
-      price: quoteModel.price,
-      status: 'pending',
-      truk: quoteModel.truk,
-      trukName: quoteModel.trukName,
-      ewaybill: billUrl,
-      uid: quoteModel.uid,
-      commission: '5',
-        driverId:driver
-      //TODO: check for commission
-    ).toMap();
+            agent: quoteModel.agent,
+            bookingDate: quoteModel.bookingDate,
+            bookingId: quoteModel.bookingId,
+            destination: quoteModel.destination,
+            source: quoteModel.source,
+            driver: driver,
+            insured: quoteModel.insured,
+            load: quoteModel.load,
+            mandate: quoteModel.mandate,
+            materials: quoteModel.materials,
+            mobile: quoteModel.mobile,
+            paymentStatus: quoteModel.paymentStatus,
+            pickupDate: quoteModel.pickupDate,
+            price: quoteModel.price,
+            status: 'pending',
+            truk: quoteModel.truk,
+            trukName: quoteModel.trukName,
+            ewaybill: billUrl,
+            uid: quoteModel.uid,
+            commission: '5',
+            driverId: driver
+            //TODO: check for commission
+            )
+        .toMap();
     return refShipment.add(m);
   }
 
@@ -139,9 +142,7 @@ class MyRequest with ChangeNotifier {
         .snapshots();
     final test =
         await quoteRef.where('mobile', isEqualTo: '+919664722610').get();
-    print('Data is --> ${test.docs.length}');
     quoteSnap.listen((ev) {
-      print('Your quotelise is ${ev.docs.length}');
       quoteList = [];
       for (QueryDocumentSnapshot q in ev.docs) {
         QuoteModel model = QuoteModel.fromSnapshot(q);

@@ -40,57 +40,56 @@ class _NotificationScreenState extends State<NotificationScreen> {
 
   Widget notificationWidget({String time, String notification}) {
     return Card(
-      elevation: 2.0,
-      color: primaryColor,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      elevation: 8,
+      clipBehavior: Clip.antiAliasWithSaveLayer,
+      color: Colors.white,
+      margin: EdgeInsets.symmetric(horizontal: 16, vertical: 24)
+          .copyWith(bottom: 0),
+      semanticContainer: true,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-        child: Container(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                '$time',
-                style: TextStyle(color: Colors.white, fontSize: 13),
-              ),
-              SizedBox(
-                height: 5,
-              ),
-              Expanded(
-                flex: 0,
-                child: InkWell(
-                  onTap: () {
-                    if (notification.toLowerCase().contains('started')) {
-                      Navigator.of(context).push(CupertinoPageRoute(
-                          builder: (context) => CompanyHomeFragment()));
-                    }
-                    if (notification.toLowerCase().contains('completed')) {
-                      Navigator.of(context).push(CupertinoPageRoute(
-                          builder: (context) => CompanyHomeFragment()));
-                    }
-                    if (notification.toLowerCase().contains('accepted')) {
-                      Navigator.of(context).push(CupertinoPageRoute(
-                          builder: (context) => CompanyHome()));
-                    }
-                  },
-                  child: Container(
-                    padding: EdgeInsets.only(bottom: 10, left: 5, top: 5),
-                    width: width,
-                    child: Text(
-                      '$notification',
-                      style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.white),
-                      overflow: TextOverflow.visible,
-                    ),
+        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            InkWell(
+              onTap: () {
+                if (notification.toLowerCase().contains('started')) {
+                  Navigator.of(context).push(CupertinoPageRoute(
+                      builder: (context) => CompanyHomeFragment()));
+                }
+                if (notification.toLowerCase().contains('completed')) {
+                  Navigator.of(context).push(CupertinoPageRoute(
+                      builder: (context) => CompanyHomeFragment()));
+                }
+                if (notification.toLowerCase().contains('accepted')) {
+                  Navigator.of(context).push(
+                      CupertinoPageRoute(builder: (context) => CompanyHome()));
+                }
+              },
+              child: Container(
+                padding: EdgeInsets.only(bottom: 10, left: 5, top: 5),
+                width: width,
+                child: Text(
+                  '$notification',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w400,
                   ),
+                  overflow: TextOverflow.visible,
                 ),
               ),
-              SizedBox(
-                height: 10,
+            ),
+            Align(
+              alignment: Alignment.bottomRight,
+              child: Text(
+                '$time',
+                style: TextStyle(color: Colors.grey, fontSize: 13),
               ),
-            ],
-          ),
+            )
+          ],
         ),
       ),
     );
@@ -109,7 +108,6 @@ class _NotificationScreenState extends State<NotificationScreen> {
       body: Container(
         height: size.height,
         width: size.width,
-        margin: const EdgeInsets.only(top: 30),
         child: StreamBuilder<QuerySnapshot>(
           stream: FirebaseFirestore.instance
               .collection(FirebaseHelper.notificationCollection)
@@ -166,34 +164,24 @@ class _NotificationScreenState extends State<NotificationScreen> {
                     NotificationModel.fromSnap(snapshot.data.docs[index]);
                 if (userType == LoginType.company) {
                   if (notificationModel.isVendor) {
-                    return Column(
-                      children: [
-                        notificationWidget(
-                          notification: notificationModel.message,
-                          time: Helper().getFormattedDate(
-                            notificationModel.time,
-                          ),
-                        ),
-                        Divider()
-                      ],
+                    return notificationWidget(
+                      notification: notificationModel.message,
+                      time: Helper().getFormattedDate(
+                        notificationModel.time,
+                      ),
                     );
                   } else
-                    return Container();
+                    return SizedBox.fromSize();
                 } else {
                   if (notificationModel.isDriver) {
-                    return Column(
-                      children: [
-                        notificationWidget(
-                          notification: notificationModel.message,
-                          time: Helper().getFormattedDate(
-                            notificationModel.time,
-                          ),
-                        ),
-                        Divider()
-                      ],
+                    return notificationWidget(
+                      notification: notificationModel.message,
+                      time: Helper().getFormattedDate(
+                        notificationModel.time,
+                      ),
                     );
                   } else
-                    return Container();
+                    return SizedBox.fromSize();
                 }
               },
             );

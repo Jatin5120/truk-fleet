@@ -198,8 +198,12 @@ class FirebaseHelper {
       });
     }
   }
-  Future<String> getCompanyInsurance() async{
-    final ref = await FirebaseFirestore.instance.collection(FirebaseHelper.insuranceCollection).doc('truk_company').get();
+
+  Future<String> getCompanyInsurance() async {
+    final ref = await FirebaseFirestore.instance
+        .collection(FirebaseHelper.insuranceCollection)
+        .doc('truk_company')
+        .get();
     var data = ref.get('insurance');
     return data;
   }

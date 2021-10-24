@@ -91,17 +91,17 @@ class _MyTrucksState extends State<MyTrucks> {
             return ListView.builder(
               itemCount: snapshot.data.docs.length,
               itemBuilder: (context, index) {
-                TrukModel model =
-                    TrukModel.fromSnapshot(snapshot.data.docs[index]);
+                TrukModal modal =
+                    TrukModal.fromSnapshot(snapshot.data.docs[index]);
 
                 return truckDetail(
-                  trukBodyType: model.trukType,
-                  trukID: model.trukNumber,
-                  trukName: model.trukName,
+                  trukBodyType: modal.trukType,
+                  trukID: modal.trukNumber,
+                  trukName: modal.trukName,
                   journeyStatus: 'Pending',
                   route: 'Pending',
                   status: 'Pending',
-                  trukModel: model,
+                  trukModal: modal,
                 );
               },
             );
@@ -118,7 +118,7 @@ class _MyTrucksState extends State<MyTrucks> {
       String route,
       String status,
       String journeyStatus,
-      TrukModel trukModel}) {
+      TrukModal trukModal}) {
     Widget placeHolder = Image.asset(
       'assets/images/no_data.png',
       fit: BoxFit.contain,
@@ -144,7 +144,7 @@ class _MyTrucksState extends State<MyTrucks> {
                 CupertinoPageRoute(
                   builder: (context) => AddTruck(
                     isEdit: true,
-                    trukModel: trukModel,
+                    trukModal: trukModal,
                   ),
                 ),
               );
@@ -159,7 +159,7 @@ class _MyTrucksState extends State<MyTrucks> {
                 context,
                 CupertinoPageRoute(
                   builder: (context) => MoreTrukDetails(
-                    trukNumber: trukModel.trukNumber.toUpperCase(),
+                    trukNumber: trukModal.trukNumber.toUpperCase(),
                   ),
                 ),
               );

@@ -36,7 +36,7 @@ class RideModel {
   String paymentType;
   String tripStatus;
   String driver;
-  TrukModel trukModel;
+  TrukModal trukModel;
   RideModel(
       {this.uid,
       this.mobile,
@@ -77,7 +77,7 @@ class RideModel {
       String paymentType,
       String tripStatus,
       String driver,
-      TrukModel trukModel}) {
+      TrukModal trukModel}) {
     return RideModel(
         uid: uid ?? this.uid,
         mobile: mobile ?? this.mobile,
@@ -133,7 +133,8 @@ class RideModel {
         source: Helper.stringToLatlng(map['source']),
         destination: Helper.stringToLatlng(map['destination']),
         price: map['price'],
-        materials: List<MaterialModel>.from(map['materials']?.map((x) => MaterialModel.fromMap(x))),
+        materials: List<MaterialModel>.from(
+            map['materials']?.map((x) => MaterialModel.fromMap(x))),
         truk: map['truk'],
         pickupDate: map['pickupDate'],
         bookingId: map['bookingId'],
@@ -146,7 +147,7 @@ class RideModel {
         paymentType: map['paymentType'],
         tripStatus: map['tripStatus'],
         driver: map['driver'],
-        trukModel: TrukModel.fromMap(map['trukDetails']));
+        trukModel: TrukModal.fromMap(map['trukDetails']));
   }
 
   factory RideModel.fromSnapshot(QueryDocumentSnapshot map) {
@@ -157,7 +158,8 @@ class RideModel {
         mobile: map.get('mobile'),
         source: Helper.stringToLatlng(map.get('source')),
         destination: Helper.stringToLatlng(map.get('destination')),
-        materials: List<MaterialModel>.from(map.get('materials')?.map((x) => MaterialModel.fromMap(x))),
+        materials: List<MaterialModel>.from(
+            map.get('materials')?.map((x) => MaterialModel.fromMap(x))),
         truk: map.get('truk'),
         pickupDate: map.get('pickupDate'),
         bookingId: map.get('bookingId'),
@@ -171,6 +173,6 @@ class RideModel {
         paymentType: map.get('paymentType'),
         tripStatus: map.get('tripStatus'),
         driver: map.get('driver'),
-        trukModel: TrukModel.fromMap(map.get('trukDetails')));
+        trukModel: TrukModal.fromMap(map.get('trukDetails')));
   }
 }

@@ -4,8 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:truk_fleet/helper/helper.dart';
 
+import 'package:truk_fleet/helper/helper.dart';
 import 'package:truk_fleet/models/material_model.dart';
 
 class ShipmentModel {
@@ -25,6 +25,7 @@ class ShipmentModel {
   String load;
   String mandate;
   String trukName;
+  String trukModel;
   String agent;
   String driver;
   String paymentStatus;
@@ -32,7 +33,6 @@ class ShipmentModel {
   String amountPaid;
   String ewaybill;
   String driverId;
-
   ShipmentModel({
     @required this.uid,
     this.id,
@@ -50,6 +50,9 @@ class ShipmentModel {
     @required this.load,
     @required this.mandate,
     @required this.trukName,
+    this.trukModel,
+    //TODO: make trukModel required
+    // @required this.trukModel,
     @required this.agent,
     @required this.driver,
     @required this.paymentStatus,
@@ -76,10 +79,11 @@ class ShipmentModel {
     String load,
     String mandate,
     String trukName,
+    String trukModel,
     String agent,
     String driver,
     String paymentStatus,
-    double commission,
+    String commission,
     String amountPaid,
     String ewaybill,
     String driverId,
@@ -101,6 +105,7 @@ class ShipmentModel {
       load: load ?? this.load,
       mandate: mandate ?? this.mandate,
       trukName: trukName ?? this.trukName,
+      trukModel: trukModel ?? this.trukModel,
       agent: agent ?? this.agent,
       driver: driver ?? this.driver,
       paymentStatus: paymentStatus ?? this.paymentStatus,
@@ -119,7 +124,7 @@ class ShipmentModel {
       'source': "${source.latitude},${source.longitude}",
       'destination': "${destination.latitude},${destination.longitude}",
       'price': price,
-      'materials': materials?.map((x) => x?.toMap())?.toList(),
+      'materials': materials?.map((x) => x.toMap())?.toList(),
       'truk': truk,
       'pickupDate': pickupDate,
       'bookingId': bookingId,
@@ -129,6 +134,7 @@ class ShipmentModel {
       'load': load,
       'mandate': mandate,
       'trukName': trukName,
+      'trukModel': trukModel,
       'agent': agent,
       'driver': driver,
       'paymentStatus': paymentStatus,
@@ -158,6 +164,7 @@ class ShipmentModel {
       load: map['load'],
       mandate: map['mandate'],
       trukName: map['trukName'],
+      trukModel: map['trukModel'],
       agent: map['agent'],
       driver: map['driver'],
       paymentStatus: map['paymentStatus'],
@@ -172,31 +179,33 @@ class ShipmentModel {
     if (map == null) return null;
 
     return ShipmentModel(
-        uid: map.get('uid'),
-        id: map.id,
-        mobile: map.get('mobile'),
-        source: Helper.stringToLatlng(map.get('source')),
-        destination: Helper.stringToLatlng(map.get('destination')),
-        price: map.get('price'),
-        materials: List<MaterialModel>.from(
-            map.get('materials')?.map((x) => MaterialModel.fromMap(x))),
-        truk: map.get('truk'),
-        pickupDate: map.get('pickupDate'),
-        bookingId: map.get('bookingId'),
-        status: map.get('status'),
-        bookingDate: map.get('bookingDate'),
-        insured: map.get('insured'),
-        load: map.get('load'),
-        mandate: map.get('mandate'),
-        trukName: map.get('trukName'),
-        agent: map.get('agent'),
-        driver: map.get('driver'),
-        paymentStatus: map.get('paymentStatus'),
-        commission: map.get('commission'),
-        ewaybill: (map.data() as Map<String, dynamic>).containsKey('ewaybill')
-            ? map.get('ewaybill')
-            : "NA",
-        amountPaid: map.get('amountPaid'),
+      uid: map.get('uid'),
+      id: map.id,
+      mobile: map.get('mobile'),
+      source: Helper.stringToLatlng(map.get('source')),
+      destination: Helper.stringToLatlng(map.get('destination')),
+      price: map.get('price'),
+      materials: List<MaterialModel>.from(
+          map.get('materials')?.map((x) => MaterialModel.fromMap(x))),
+      truk: map.get('truk'),
+      pickupDate: map.get('pickupDate'),
+      bookingId: map.get('bookingId'),
+      status: map.get('status'),
+      bookingDate: map.get('bookingDate'),
+      insured: map.get('insured'),
+      load: map.get('load'),
+      mandate: map.get('mandate'),
+      trukName: map.get('trukName'),
+      //TODO: uncomment from snapshot
+      // trukModel: map.get('trukModel'),
+      agent: map.get('agent'),
+      driver: map.get('driver'),
+      paymentStatus: map.get('paymentStatus'),
+      commission: map.get('commission'),
+      ewaybill: (map.data() as Map<String, dynamic>).containsKey('ewaybill')
+          ? map.get('ewaybill')
+          : "NA",
+      amountPaid: map.get('amountPaid'),
       driverId: map.get('driverId'),
     );
   }
@@ -208,7 +217,7 @@ class ShipmentModel {
 
   @override
   String toString() {
-    return 'ShipmentModel(uid: $uid, id: $id, mobile: $mobile, source: $source, destination: $destination, price: $price, materials: $materials, truk: $truk, pickupDate: $pickupDate, bookingId: $bookingId, status: $status, bookingDate: $bookingDate, insured: $insured, load: $load, mandate: $mandate, trukName: $trukName, agent: $agent, driver: $driver, paymentStatus: $paymentStatus, commission: $commission, amountPaid: $amountPaid, ewaybill: $ewaybill, driverId: $driverId)';
+    return 'ShipmentModel(uid: $uid, id: $id, mobile: $mobile, source: $source, destination: $destination, price: $price, materials: $materials, truk: $truk, pickupDate: $pickupDate, bookingId: $bookingId, status: $status, bookingDate: $bookingDate, insured: $insured, load: $load, mandate: $mandate, trukName: $trukName, trukModel: $trukModel, agent: $agent, driver: $driver, paymentStatus: $paymentStatus, commission: $commission, amountPaid: $amountPaid, ewaybill: $ewaybill, driverId: $driverId)';
   }
 
   @override
@@ -232,6 +241,7 @@ class ShipmentModel {
         other.load == load &&
         other.mandate == mandate &&
         other.trukName == trukName &&
+        other.trukModel == trukModel &&
         other.agent == agent &&
         other.driver == driver &&
         other.paymentStatus == paymentStatus &&
@@ -259,12 +269,13 @@ class ShipmentModel {
         load.hashCode ^
         mandate.hashCode ^
         trukName.hashCode ^
+        trukModel.hashCode ^
         agent.hashCode ^
         driver.hashCode ^
         paymentStatus.hashCode ^
         commission.hashCode ^
         amountPaid.hashCode ^
         ewaybill.hashCode ^
-    driverId.hashCode;
+        driverId.hashCode;
   }
 }

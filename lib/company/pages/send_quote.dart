@@ -55,7 +55,7 @@ class _SendQuoteState extends State<SendQuote> {
   String destinationAddress = '';
   bool isLoading = false;
   bool istruckLoading = true;
-  TrukModel trukModel;
+  TrukModal trukModel;
   DriverModel driverModel;
   final User user = FirebaseAuth.instance.currentUser;
   Locale locale;
@@ -63,9 +63,9 @@ class _SendQuoteState extends State<SendQuote> {
   var x = 0.0;
   String spin;
   String dpin;
-  List<TrukModel> trucks = [];
+  List<TrukModal> trucks = [];
 
-  List<TrukModel> trucksA = [];
+  List<TrukModal> trucksA = [];
 
   List<ShipmentModel> sModel = [];
   List<QuoteModel> qmodel = [];
@@ -186,7 +186,7 @@ class _SendQuoteState extends State<SendQuote> {
     final q = qreference.where('agent', isEqualTo: user.uid).snapshots();
     d.listen((event) {
       for (DocumentSnapshot doc in event.docs) {
-        TrukModel t = TrukModel.fromSnapshot(doc);
+        TrukModal t = TrukModal.fromSnapshot(doc);
         if (t.available && int.parse(t.grossWeight) >= totalWeight) {
           setState(() {
             trucksA.add(t);
@@ -241,9 +241,9 @@ class _SendQuoteState extends State<SendQuote> {
             .doc(sh.truk)
             .get()
             .then((value) {
-          TrukModel tm = TrukModel.fromSnapshot(value);
+          TrukModal tm = TrukModal.fromSnapshot(value);
           if ((double.parse(tm.grossWeight) - x) >= totalWeight) {
-            for (TrukModel t in trucksA) {
+            for (TrukModal t in trucksA) {
               if (t.trukNumber == tm.trukNumber) {
                 i = 1;
                 break;
@@ -297,9 +297,9 @@ class _SendQuoteState extends State<SendQuote> {
             .doc(sh.truk)
             .get()
             .then((value) {
-          TrukModel tm = TrukModel.fromSnapshot(value);
+          TrukModal tm = TrukModal.fromSnapshot(value);
           if ((double.parse(tm.grossWeight) - x) >= totalWeight) {
-            for (TrukModel t in trucksA) {
+            for (TrukModal t in trucksA) {
               if (t.trukNumber == tm.trukNumber) {
                 i = 1;
                 print("Hi");
@@ -603,8 +603,8 @@ class _SendQuoteState extends State<SendQuote> {
                                         d.listen((event) {
                                           for (DocumentSnapshot doc
                                               in event.docs) {
-                                            TrukModel t =
-                                                TrukModel.fromSnapshot(doc);
+                                            TrukModal t =
+                                                TrukModal.fromSnapshot(doc);
                                             if (t.available &&
                                                 int.parse(t.grossWeight) >=
                                                     totalWeight) {
@@ -638,7 +638,7 @@ class _SendQuoteState extends State<SendQuote> {
                                     },
                                   ),
                                 )
-                              : DropdownButtonFormField<TrukModel>(
+                              : DropdownButtonFormField<TrukModal>(
                                   onChanged: (value) {
                                     print(value);
                                     setState(() {
@@ -659,7 +659,7 @@ class _SendQuoteState extends State<SendQuote> {
                                   isExpanded: true,
                                   items: trucksA
                                       .map(
-                                        (e) => DropdownMenuItem<TrukModel>(
+                                        (e) => DropdownMenuItem<TrukModal>(
                                           value: e,
                                           child: Text(
                                               "${e.trukNumber} - ${AppLocalizations.getLocalizationValue(locale, e.trukType.toLowerCase().contains('closed') ? LocaleKey.closedTruk : LocaleKey.openTruk)}"),

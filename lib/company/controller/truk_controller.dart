@@ -8,18 +8,18 @@ import 'package:truk_fleet/models/truk_model.dart';
 
 class TrukController {
   final User user = FirebaseAuth.instance.currentUser;
-  Future<void> addTruk(TrukModel trukModel) async {
+  Future<void> addTruk(TrukModal trukModal) async {
     CollectionReference reference =
         FirebaseFirestore.instance.collection(FirebaseHelper.trukCollection);
-    String id = trukModel.trukNumber;
-    await reference.doc(id).set(trukModel.toMap());
+    String id = trukModal.trukNumber;
+    await reference.doc(id).set(trukModal.toMap());
   }
 
-  Future<void> updateTruk(TrukModel trukModel) async {
+  Future<void> updateTruk(TrukModal trukModal) async {
     CollectionReference reference =
         FirebaseFirestore.instance.collection(FirebaseHelper.trukCollection);
-    String id = trukModel.trukNumber;
-    await reference.doc(id).update(trukModel.toMap());
+    String id = trukModal.trukNumber;
+    await reference.doc(id).update(trukModal.toMap());
   }
 
   //delete Truk

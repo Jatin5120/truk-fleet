@@ -10,8 +10,8 @@ import 'package:truk_fleet/company/pages/add_truk_two.dart';
 
 class AddTruck extends StatefulWidget {
   final bool isEdit;
-  final TrukModel trukModel;
-  AddTruck({this.trukModel, this.isEdit = false});
+  final TrukModal trukModal;
+  AddTruck({this.trukModal, this.isEdit = false});
   @override
   _AddTruckState createState() => _AddTruckState();
 }
@@ -21,18 +21,22 @@ class _AddTruckState extends State<AddTruck> {
   final TextEditingController trukOwnerNameController = TextEditingController();
   final TextEditingController mobileNumberController = TextEditingController();
   final TextEditingController panTinController = TextEditingController();
+  final TextEditingController trukModelController = TextEditingController();
+  final TextEditingController axelTypeController = TextEditingController();
   final TextEditingController grossWeightController = TextEditingController();
   final TextEditingController lengthController = TextEditingController();
   final TextEditingController breadthController = TextEditingController();
   final TextEditingController heightController = TextEditingController();
   final TextEditingController trukNumberController = TextEditingController();
   final TextEditingController permitTypeController = TextEditingController();
-  final TextEditingController trukModelController = TextEditingController();
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   String trukBodyType = LocaleKey.closedTruk;
+
   bool isLoading = false;
   Locale locale;
-  List<String> trukModelList = [
+  List<String> axelTypeList = [
     "Single Axle",
     "Double Axle",
     "Triple Axle",
@@ -46,8 +50,8 @@ class _AddTruckState extends State<AddTruck> {
     bool isNumber = false,
     bool isDone = false,
   }) {
-    return Container(
-      padding: EdgeInsets.only(left: 20, right: 20, bottom: 10),
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
       child: TextFormField(
         validator: validator,
         controller: controller,
@@ -66,18 +70,19 @@ class _AddTruckState extends State<AddTruck> {
   void initState() {
     super.initState();
     if (widget.isEdit) {
-      trukOwnerNameController.text = widget.trukModel.ownerName;
-      mobileNumberController.text = widget.trukModel.mobileNumber;
-      panTinController.text = widget.trukModel.panTin;
+      trukOwnerNameController.text = widget.trukModal.ownerName;
+      mobileNumberController.text = widget.trukModal.mobileNumber;
+      axelTypeController.text = widget.trukModal.trukName;
+      trukModelController.text = widget.trukModal.trukModel;
+      panTinController.text = widget.trukModal.panTin;
       grossWeightController.text =
-          ((int.parse(widget.trukModel.grossWeight) / 1000).toInt()).toString();
-      lengthController.text = widget.trukModel.length;
-      breadthController.text = widget.trukModel.breadth;
-      heightController.text = widget.trukModel.height;
-      trukNumberController.text = widget.trukModel.trukNumber;
-      permitTypeController.text = widget.trukModel.permitType;
-      trukModelController.text = widget.trukModel.trukName;
-      trukBodyType = widget.trukModel.trukType.toLowerCase().contains('closed')
+          '${(int.parse(widget.trukModal.grossWeight) ~/ 1000)}';
+      lengthController.text = widget.trukModal.length;
+      breadthController.text = widget.trukModal.breadth;
+      heightController.text = widget.trukModal.height;
+      trukNumberController.text = widget.trukModal.trukNumber;
+      permitTypeController.text = widget.trukModal.permitType;
+      trukBodyType = widget.trukModal.trukType.toLowerCase().contains('closed')
           ? LocaleKey.closedTruk
           : LocaleKey.openTruk;
       setState(() {});
@@ -102,20 +107,22 @@ class _AddTruckState extends State<AddTruck> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     locale = AppLocalizations.of(context).locale;
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          AppLocalizations.getLocalizationValue(
-            locale,
-            LocaleKey.trukDetails,
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(
+            AppLocalizations.getLocalizationValue(
+              locale,
+              LocaleKey.trukDetails,
+            ),
           ),
+          elevation: 0,
         ),
-        elevation: 0,
-      ),
-      body: Form(
-        key: _formKey,
-        child: Container(
+        body: Form(
+          key: _formKey,
           child: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -158,8 +165,7 @@ class _AddTruckState extends State<AddTruck> {
                       : null,
                 ),
                 Padding(
-                  padding:
-                      const EdgeInsets.only(left: 20, right: 20, bottom: 20),
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
                   child: DropdownButtonFormField<String>(
                     hint: Text(
                       AppLocalizations.getLocalizationValue(
@@ -168,16 +174,37 @@ class _AddTruckState extends State<AddTruck> {
                     onChanged: (value) {
                       setState(() => trukModelController.text = value);
                       FocusScope.of(context).unfocus();
-                      FocusScope.of(context).nextFocus();
                     },
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
-                      labelText: AppLocalizations.getLocalizationValue(
-                        locale,
-                        LocaleKey.trukModel,
-                      ),
                     ),
-                    items: trukModelList
+                    items: trukModels
+                        .map(
+                          (e) => DropdownMenuItem<String>(
+                            child: Text(
+                              e,
+                            ),
+                            value: e,
+                          ),
+                        )
+                        .toList(),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                  child: DropdownButtonFormField<String>(
+                    hint: Text(
+                      AppLocalizations.getLocalizationValue(
+                          locale, LocaleKey.axleType),
+                    ),
+                    onChanged: (value) {
+                      setState(() => axelTypeController.text = value);
+                      FocusScope.of(context).unfocus();
+                    },
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                    ),
+                    items: axelTypeList
                         .map(
                           (e) => DropdownMenuItem<String>(
                             child: Text(
@@ -206,8 +233,7 @@ class _AddTruckState extends State<AddTruck> {
                       : null,
                 ),
                 Padding(
-                  padding:
-                      const EdgeInsets.only(left: 20, right: 20, bottom: 20),
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
                   child: DropdownButtonFormField(
                     hint: Text(
                       AppLocalizations.getLocalizationValue(
@@ -293,6 +319,7 @@ class _AddTruckState extends State<AddTruck> {
                           locale, LocaleKey.requiredText)
                       : null,
                 ),
+                SizedBox(height: 48),
                 Container(
                   height: 65,
                   width: size.width,
@@ -307,7 +334,7 @@ class _AddTruckState extends State<AddTruck> {
                         ? () {}
                         : () async {
                             if (_formKey.currentState.validate()) {
-                              if (trukModelController.text.trim().isEmpty) {
+                              if (axelTypeController.text.trim().isEmpty) {
                                 Fluttertoast.showToast(
                                     msg: "Select Truk Model");
                                 return;
@@ -325,29 +352,33 @@ class _AddTruckState extends State<AddTruck> {
                               String length = lengthController.text;
                               String permitType = permitTypeController.text;
                               String panTin = panTinController.text;
-                              String trukName = trukModelController.text;
-                              TrukModel trukModel = TrukModel(
-                                  breadth: breadth,
-                                  driver: 'na',
-                                  ownerId: user.uid,
-                                  grossWeight: grossWeigth,
-                                  height: height,
-                                  length: length,
-                                  mobileNumber: mobile,
-                                  ownerName: ownerName,
-                                  panTin: panTin,
-                                  permitType: permitType,
-                                  trukName: trukName,
-                                  trukNumber: trukNumber,
-                                  trukType: trukBodyType,
-                                  available: true);
+                              String trukName = axelTypeController.text;
+                              String trukModel = trukModelController.text;
+
+                              TrukModal truk = TrukModal(
+                                breadth: breadth,
+                                driver: 'na',
+                                ownerId: user.uid,
+                                grossWeight: grossWeigth,
+                                height: height,
+                                length: length,
+                                mobileNumber: mobile,
+                                ownerName: ownerName,
+                                panTin: panTin,
+                                permitType: permitType,
+                                trukName: trukName,
+                                trukNumber: trukNumber,
+                                trukType: trukBodyType,
+                                trukModel: trukModel,
+                                available: true,
+                              );
                               setState(() {
                                 isLoading = true;
                               });
 
                               widget.isEdit
-                                  ? await TrukController().updateTruk(trukModel)
-                                  : await TrukController().addTruk(trukModel);
+                                  ? await TrukController().updateTruk(truk)
+                                  : await TrukController().addTruk(truk);
                               setState(() {
                                 isLoading = false;
                               });

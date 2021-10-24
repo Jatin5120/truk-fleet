@@ -5,6 +5,7 @@ Map<String, String> english() {
     "about": "About Us",
     "accept": "Accept",
     "addMaterial": "Add Material",
+    LocaleKey.axleType: "Axle Type",
     "backAgain": "Press back again to exit",
     "balance": "Truk Money Balance",
     "bankProof": "Bank Proof",

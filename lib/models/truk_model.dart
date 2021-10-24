@@ -1,16 +1,21 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
+
 import 'package:truk_fleet/firebase_helper/firebase_helper.dart';
 import 'package:truk_fleet/helper/helper.dart';
 import 'package:truk_fleet/helper/request_status.dart';
 import 'package:truk_fleet/models/material_model.dart';
 import 'package:truk_fleet/models/shipment_model.dart';
 
-class TrukModel {
+class TrukModal {
   String trukName;
   String trukType;
   String trukNumber;
+  String trukModel;
   String driver;
   String ownerName;
   String mobileNumber;
@@ -22,10 +27,12 @@ class TrukModel {
   String permitType;
   String ownerId;
   bool available;
-  TrukModel({
+
+  TrukModal({
     this.trukName,
     this.trukType,
     this.trukNumber,
+    this.trukModel,
     this.driver,
     this.ownerName,
     this.mobileNumber,
@@ -39,36 +46,40 @@ class TrukModel {
     this.available,
   });
 
-  TrukModel copyWith(
-      {String trukName,
-      String trukType,
-      String trukNumber,
-      String driver,
-      String ownerName,
-      String mobileNumber,
-      String panTin,
-      String grossWeight,
-      String length,
-      String breadth,
-      String height,
-      String permitType,
-      String ownerId,
-      bool available}) {
-    return TrukModel(
-        trukName: trukName ?? this.trukName,
-        trukType: trukType ?? this.trukType,
-        trukNumber: trukNumber ?? this.trukNumber,
-        driver: driver ?? this.driver,
-        ownerName: ownerName ?? this.ownerName,
-        mobileNumber: mobileNumber ?? this.mobileNumber,
-        panTin: panTin ?? this.panTin,
-        grossWeight: grossWeight ?? this.grossWeight,
-        length: length ?? this.length,
-        breadth: breadth ?? this.breadth,
-        height: height ?? this.height,
-        permitType: permitType ?? this.permitType,
-        ownerId: ownerId ?? this.ownerId,
-        available: available ?? true);
+  TrukModal copyWith({
+    String trukName,
+    String trukType,
+    String trukNumber,
+    String trukModel,
+    String driver,
+    String ownerName,
+    String mobileNumber,
+    String panTin,
+    String grossWeight,
+    String length,
+    String breadth,
+    String height,
+    String permitType,
+    String ownerId,
+    bool available,
+  }) {
+    return TrukModal(
+      trukName: trukName ?? this.trukName,
+      trukType: trukType ?? this.trukType,
+      trukNumber: trukNumber ?? this.trukNumber,
+      trukModel: trukModel ?? this.trukModel,
+      driver: driver ?? this.driver,
+      ownerName: ownerName ?? this.ownerName,
+      mobileNumber: mobileNumber ?? this.mobileNumber,
+      panTin: panTin ?? this.panTin,
+      grossWeight: grossWeight ?? this.grossWeight,
+      length: length ?? this.length,
+      breadth: breadth ?? this.breadth,
+      height: height ?? this.height,
+      permitType: permitType ?? this.permitType,
+      ownerId: ownerId ?? this.ownerId,
+      available: available ?? this.available,
+    );
   }
 
   Map<String, dynamic> toMap() {
@@ -76,7 +87,8 @@ class TrukModel {
       'trukName': trukName,
       'trukType': trukType,
       'trukNumber': trukNumber,
-      'driver': driver ?? 'na',
+      'trukModel': trukModel,
+      'driver': driver,
       'ownerName': ownerName,
       'mobileNumber': mobileNumber,
       'panTin': panTin,
@@ -86,54 +98,109 @@ class TrukModel {
       'height': height,
       'permitType': permitType,
       'ownerId': ownerId,
-      'available': available
+      'available': available,
     };
   }
 
-  factory TrukModel.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
-
-    return TrukModel(
-        trukName: map['trukName'],
-        trukType: map['trukType'],
-        trukNumber: map['trukNumber'],
-        driver: map['driver'],
-        ownerName: map['ownerName'],
-        mobileNumber: map['mobileNumber'],
-        panTin: map['panTin'],
-        grossWeight: map['grossWeight'],
-        length: map['length'],
-        breadth: map['breadth'],
-        height: map['height'],
-        permitType: map['permitType'],
-        ownerId: map['ownerId'],
-        available: map['available']);
+  factory TrukModal.fromMap(Map<String, dynamic> map) {
+    return TrukModal(
+      trukName: map['trukName'],
+      trukType: map['trukType'],
+      trukNumber: map['trukNumber'],
+      trukModel: map['trukModel'],
+      driver: map['driver'],
+      ownerName: map['ownerName'],
+      mobileNumber: map['mobileNumber'],
+      panTin: map['panTin'],
+      grossWeight: map['grossWeight'],
+      length: map['length'],
+      breadth: map['breadth'],
+      height: map['height'],
+      permitType: map['permitType'],
+      ownerId: map['ownerId'],
+      available: map['available'],
+    );
   }
-  factory TrukModel.fromSnapshot(DocumentSnapshot map) {
+
+  String toJson() => json.encode(toMap());
+
+  factory TrukModal.fromJson(String source) =>
+      TrukModal.fromMap(json.decode(source));
+
+  @override
+  String toString() {
+    return 'TrukModal(trukName: $trukName, trukType: $trukType, trukNumber: $trukNumber, trukModel: $trukModel, driver: $driver, ownerName: $ownerName, mobileNumber: $mobileNumber, panTin: $panTin, grossWeight: $grossWeight, length: $length, breadth: $breadth, height: $height, permitType: $permitType, ownerId: $ownerId, available: $available)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is TrukModal &&
+        other.trukName == trukName &&
+        other.trukType == trukType &&
+        other.trukNumber == trukNumber &&
+        other.trukModel == trukModel &&
+        other.driver == driver &&
+        other.ownerName == ownerName &&
+        other.mobileNumber == mobileNumber &&
+        other.panTin == panTin &&
+        other.grossWeight == grossWeight &&
+        other.length == length &&
+        other.breadth == breadth &&
+        other.height == height &&
+        other.permitType == permitType &&
+        other.ownerId == ownerId &&
+        other.available == available;
+  }
+
+  @override
+  int get hashCode {
+    return trukName.hashCode ^
+        trukType.hashCode ^
+        trukNumber.hashCode ^
+        trukModel.hashCode ^
+        driver.hashCode ^
+        ownerName.hashCode ^
+        mobileNumber.hashCode ^
+        panTin.hashCode ^
+        grossWeight.hashCode ^
+        length.hashCode ^
+        breadth.hashCode ^
+        height.hashCode ^
+        permitType.hashCode ^
+        ownerId.hashCode ^
+        available.hashCode;
+  }
+
+  factory TrukModal.fromSnapshot(DocumentSnapshot map) {
     if (map == null) return null;
 
-    return TrukModel(
-        trukName: map.get('trukName'),
-        trukType: map.get('trukType'),
-        trukNumber: map.get('trukNumber'),
-        driver: map.get('driver'),
-        ownerName: map.get('ownerName'),
-        mobileNumber: map.get('mobileNumber'),
-        panTin: map.get('panTin'),
-        grossWeight: map.get('grossWeight'),
-        length: map.get('length'),
-        breadth: map.get('breadth'),
-        height: map.get('height'),
-        permitType: map.get('permitType'),
-        ownerId: map.get('ownerId'),
-        available: map.get('available'));
+    return TrukModal(
+      trukName: map.get('trukName'),
+      trukType: map.get('trukType'),
+      trukNumber: map.get('trukNumber'),
+      //TODO: Uncomment fromsnapshot
+      // trukModel: map.get('trukModel'),
+      driver: map.get('driver'),
+      ownerName: map.get('ownerName'),
+      mobileNumber: map.get('mobileNumber'),
+      panTin: map.get('panTin'),
+      grossWeight: map.get('grossWeight'),
+      length: map.get('length'),
+      breadth: map.get('breadth'),
+      height: map.get('height'),
+      permitType: map.get('permitType'),
+      ownerId: map.get('ownerId'),
+      available: map.get('available'),
+    );
   }
 }
 
 class MyTruksProvider with ChangeNotifier {
-  List<TrukModel> trukList = [];
+  List<TrukModal> trukList = [];
   bool isTrukLoading = true;
-  List<TrukModel> get truks => trukList;
+  List<TrukModal> get truks => trukList;
   final User user = FirebaseAuth.instance.currentUser;
 
   getTrukList() async {
@@ -143,7 +210,7 @@ class MyTruksProvider with ChangeNotifier {
     final d = reference.where('ownerId', isEqualTo: user.uid).snapshots();
     d.listen((event) {
       for (DocumentSnapshot doc in event.docs) {
-        trukList.add(TrukModel.fromSnapshot(doc));
+        trukList.add(TrukModal.fromSnapshot(doc));
       }
       isTrukLoading = false;
       notifyListeners();
@@ -152,8 +219,8 @@ class MyTruksProvider with ChangeNotifier {
 }
 
 class MyATruksProvider {
-  List<TrukModel> trukList = [];
-  List<TrukModel> trukAList = [];
+  List<TrukModal> trukList = [];
+  List<TrukModal> trukAList = [];
   List<ShipmentModel> sModel = [];
   List<ShipmentModel> fsModel = [];
   List<MaterialModel> mModel = [];
@@ -171,7 +238,7 @@ class MyATruksProvider {
     final s = sReference.where('agent', isEqualTo: user.uid).snapshots();
     d.listen((event) {
       for (DocumentSnapshot doc in event.docs) {
-        TrukModel t = TrukModel.fromSnapshot(doc);
+        TrukModal t = TrukModal.fromSnapshot(doc);
         if (t.available && int.parse(t.grossWeight) >= weight) {
           trukAList.add(t);
         }
@@ -218,9 +285,9 @@ class MyATruksProvider {
             .doc(sh.truk)
             .get()
             .then((value) {
-          TrukModel tm = TrukModel.fromSnapshot(value);
+          TrukModal tm = TrukModal.fromSnapshot(value);
           if ((double.parse(tm.grossWeight) - x) >= weight) {
-            for (TrukModel t in trukAList) {
+            for (TrukModal t in trukAList) {
               if (t.trukNumber == tm.trukNumber) {
                 i = 1;
                 break;

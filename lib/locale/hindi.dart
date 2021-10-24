@@ -5,6 +5,7 @@ Map<String, String> hindi() {
     "about": "हमारे बारे में",
     "accept": "स्वीकारें ",
     "addMaterial": "सामग्री जोड़ें",
+    LocaleKey.axleType: "धुरा प्रकार",
     "backAgain": "बाहर निकलने के लिए फिर से दबाएं",
     "balance": "ट्रूक मनी बैलेंस",
     "bookingId": "बुकिंग आईडी",

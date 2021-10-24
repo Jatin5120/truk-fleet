@@ -7,6 +7,7 @@ Map<String, String> telugu() {
     "about": "మా గురించి",
     "accept": "అంగీకరించండి",
     "addMaterial": "మెటీరియల్ జోడించండి",
+    LocaleKey.axleType: "ఇరుసు రకం",
     "backAgain": "నిష్క్రమించడానికి మళ్ళీ తిరిగి నొక్కండి",
     "balance": "ట్రక్ మనీ బ్యాలెన్స్",
     "bookingId": "బుకింగ్ ID",

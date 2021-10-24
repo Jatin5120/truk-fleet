@@ -2,6 +2,7 @@ class LocaleKey {
   static const String about = "about";
   static const String accept = "accept";
   static const String addMaterial = "addMaterial";
+  static const String axleType = "axleType";
   static const String backAgain = "backAgain";
   static const String balance = "balance";
   static const String bookingId = "bookingId";

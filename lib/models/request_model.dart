@@ -152,8 +152,7 @@ class RequestModel {
       materials: List<MaterialModel>.from(
           map.get('materials')?.map((x) => MaterialModel.fromMap(x))),
       truk: map.get('truk'),
-      //TODO: uncomment from snapshot
-      // trukModel: map.get('trukModel'),
+      trukModel: map.get('trukModel'),
       pickupDate: map.get('pickupDate'),
       bookingId: map.get('bookingId'),
       bookingDate: map.get('bookingDate'),

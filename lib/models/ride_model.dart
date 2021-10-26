@@ -36,7 +36,7 @@ class RideModel {
   String paymentType;
   String tripStatus;
   String driver;
-  TrukModal trukModel;
+  TrukModal trukModal;
   RideModel(
       {this.uid,
       this.mobile,
@@ -56,7 +56,7 @@ class RideModel {
       this.paymentType,
       this.tripStatus,
       this.driver,
-      this.trukModel});
+      this.trukModal});
 
   RideModel copyWith(
       {String uid,
@@ -77,7 +77,7 @@ class RideModel {
       String paymentType,
       String tripStatus,
       String driver,
-      TrukModal trukModel}) {
+      TrukModal trukModal}) {
     return RideModel(
         uid: uid ?? this.uid,
         mobile: mobile ?? this.mobile,
@@ -97,7 +97,7 @@ class RideModel {
         paymentType: paymentType ?? this.paymentType,
         tripStatus: tripStatus ?? this.tripStatus,
         driver: driver ?? this.driver,
-        trukModel: trukModel ?? this.trukModel);
+        trukModal: trukModal ?? this.trukModal);
   }
 
   Map<String, dynamic> toMap() {
@@ -120,7 +120,7 @@ class RideModel {
       'paymentType': paymentType,
       'tripStatus': tripStatus,
       'driver': driver,
-      'trukDetails': trukModel.toMap()
+      'trukDetails': trukModal.toMap()
     };
   }
 
@@ -147,7 +147,7 @@ class RideModel {
         paymentType: map['paymentType'],
         tripStatus: map['tripStatus'],
         driver: map['driver'],
-        trukModel: TrukModal.fromMap(map['trukDetails']));
+        trukModal: TrukModal.fromMap(map['trukDetails']));
   }
 
   factory RideModel.fromSnapshot(QueryDocumentSnapshot map) {
@@ -173,6 +173,6 @@ class RideModel {
         paymentType: map.get('paymentType'),
         tripStatus: map.get('tripStatus'),
         driver: map.get('driver'),
-        trukModel: TrukModal.fromMap(map.get('trukDetails')));
+        trukModal: TrukModal.fromMap(map.get('trukDetails')));
   }
 }

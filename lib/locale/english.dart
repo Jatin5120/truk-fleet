@@ -138,7 +138,7 @@ Map<String, String> english() {
     "noShipment": "No Shipment",
     "mobileNotRegistered": "Mobile Number not registered",
     "coupon": "Coupon",
-    "fleetSelectionScreenTitle": "Sign in to Trukapp as :",
+    "fleetSelectionScreenTitle": "Sign in as:",
     "fleetSelectionTitle": "Trucking Company / Agent",
     "fleetSelectionSubtitle": "We provide transportation service",
     "driverSelectionTitle": "Driver",

@@ -307,7 +307,7 @@ class _SendQuoteState extends State<SendQuote> {
             }
             if (i == 0) {
               setState(() {
-                print("$tm");
+                print("Adding --> $tm");
                 trucksA.add(tm);
               });
             }
@@ -587,60 +587,71 @@ class _SendQuoteState extends State<SendQuote> {
                                           builder: (context) => AddTruck(),
                                         ),
                                       )
-                                          .then((value) {
-                                        CollectionReference reference =
-                                            FirebaseFirestore.instance
-                                                .collection(FirebaseHelper
-                                                    .trukCollection);
-                                        CollectionReference sReference =
-                                            FirebaseFirestore.instance
-                                                .collection(
-                                                    FirebaseHelper.shipment);
-                                        final d = reference
-                                            .where('ownerId',
-                                                isEqualTo: user.uid)
-                                            .snapshots();
-                                        d.listen((event) {
-                                          for (DocumentSnapshot doc
-                                              in event.docs) {
-                                            TrukModal t =
-                                                TrukModal.fromSnapshot(doc);
-                                            if (t.available &&
-                                                int.parse(t.grossWeight) >=
-                                                    totalWeight) {
-                                              trucksA.add(t);
-                                            }
-                                            if (!t.available) {
-                                              sReference
-                                                  .where('truk',
-                                                      isEqualTo: t.trukNumber)
-                                                  .get()
-                                                  .then((value) {
-                                                for (var f in value.docs) {
-                                                  if (f.get('status') ==
-                                                          RequestStatus
-                                                              .started ||
-                                                      f.get('status') ==
-                                                          RequestStatus
-                                                              .pending) {
-                                                    break;
-                                                  } else {
-                                                    doc.reference.update(
-                                                        {'available': true});
-                                                    trucksA.add(t);
-                                                  }
+                                          .then(
+                                        (value) {
+                                          CollectionReference reference =
+                                              FirebaseFirestore.instance
+                                                  .collection(FirebaseHelper
+                                                      .trukCollection);
+                                          CollectionReference sReference =
+                                              FirebaseFirestore.instance
+                                                  .collection(
+                                                      FirebaseHelper.shipment);
+                                          final d = reference
+                                              .where('ownerId',
+                                                  isEqualTo: user.uid)
+                                              .snapshots();
+                                          d.listen(
+                                            (event) {
+                                              for (DocumentSnapshot doc
+                                                  in event.docs) {
+                                                TrukModal t =
+                                                    TrukModal.fromSnapshot(doc);
+                                                if (t.available &&
+                                                    int.parse(t.grossWeight) >=
+                                                        totalWeight) {
+                                                  trucksA.add(t);
                                                 }
-                                              });
-                                            }
-                                          }
-                                        });
-                                      });
+                                                if (!t.available) {
+                                                  sReference
+                                                      .where('truk',
+                                                          isEqualTo:
+                                                              t.trukNumber)
+                                                      .get()
+                                                      .then(
+                                                    (value) {
+                                                      for (var f
+                                                          in value.docs) {
+                                                        if (f.get('status') ==
+                                                                RequestStatus
+                                                                    .started ||
+                                                            f.get('status') ==
+                                                                RequestStatus
+                                                                    .pending) {
+                                                          break;
+                                                        } else {
+                                                          doc.reference.update({
+                                                            'available': true
+                                                          });
+                                                          trucksA.add(t);
+                                                        }
+                                                      }
+                                                    },
+                                                  );
+                                                }
+                                              }
+                                            },
+                                          );
+                                        },
+                                      );
                                     },
                                   ),
                                 )
                               : DropdownButtonFormField<TrukModal>(
+                                  // value: trukModel,
                                   onChanged: (value) {
-                                    print(value);
+                                    print("Before change $trukModel");
+                                    print("onChanged $value");
                                     setState(() {
                                       trukModel = value;
                                     });
@@ -662,12 +673,14 @@ class _SendQuoteState extends State<SendQuote> {
                                         (e) => DropdownMenuItem<TrukModal>(
                                           value: e,
                                           child: Text(
-                                              "${e.trukNumber} - ${AppLocalizations.getLocalizationValue(locale, e.trukType.toLowerCase().contains('closed') ? LocaleKey.closedTruk : LocaleKey.openTruk)}"),
+                                            "${e.trukNumber} - ${AppLocalizations.getLocalizationValue(locale, e.trukType.toLowerCase().contains('closed') ? LocaleKey.closedTruk : LocaleKey.openTruk)} [${e.trukModel}]",
+                                          ),
                                         ),
                                       )
                                       .toList(),
                                   decoration: InputDecoration(
-                                      border: OutlineInputBorder()),
+                                    border: OutlineInputBorder(),
+                                  ),
                                 ),
                         ),
                       if (quoteModel == null)

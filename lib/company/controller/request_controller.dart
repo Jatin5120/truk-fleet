@@ -139,8 +139,6 @@ class MyRequest with ChangeNotifier {
         .where('agent', isEqualTo: me.uid)
         .orderBy('bookingDate', descending: true)
         .snapshots();
-    final test =
-        await quoteRef.where('mobile', isEqualTo: '+919664722610').get();
     quoteSnap.listen((ev) {
       quoteList = [];
       for (QueryDocumentSnapshot q in ev.docs) {

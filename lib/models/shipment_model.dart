@@ -33,7 +33,6 @@ class ShipmentModel {
   String amountPaid;
   String ewaybill;
   String driverId;
-  bool isPaymentPending;
   ShipmentModel({
     @required this.uid,
     this.id,
@@ -61,7 +60,6 @@ class ShipmentModel {
     this.amountPaid,
     @required this.ewaybill,
     @required this.driverId,
-     this.isPaymentPending = true,
   });
 
   ShipmentModel copyWith({
@@ -89,7 +87,6 @@ class ShipmentModel {
     String amountPaid,
     String ewaybill,
     String driverId,
-    bool isPaymentPending,
   }) {
     return ShipmentModel(
       uid: uid ?? this.uid,
@@ -116,7 +113,6 @@ class ShipmentModel {
       amountPaid: amountPaid ?? this.amountPaid,
       ewaybill: ewaybill ?? this.ewaybill,
       driverId: driverId ?? this.driverId,
-      isPaymentPending: isPaymentPending ?? this.isPaymentPending,
     );
   }
 
@@ -146,7 +142,6 @@ class ShipmentModel {
       'amountPaid': amountPaid,
       'ewaybill': ewaybill,
       'driverId': driverId,
-      'isPaymentPending': driverId,
     };
   }
 
@@ -177,7 +172,6 @@ class ShipmentModel {
       amountPaid: map['amountPaid'],
       ewaybill: map['ewaybill'],
       driverId: map['driverId'],
-      isPaymentPending: map['isPaymentPending'],
     );
   }
 
@@ -213,7 +207,6 @@ class ShipmentModel {
           : "NA",
       amountPaid: map.get('amountPaid'),
       driverId: map.get('driverId'),
-      isPaymentPending: map.get('isPaymentPending'),
     );
   }
 
@@ -224,7 +217,7 @@ class ShipmentModel {
 
   @override
   String toString() {
-    return 'ShipmentModel(uid: $uid, id: $id, mobile: $mobile, source: $source, destination: $destination, price: $price, materials: $materials, truk: $truk, pickupDate: $pickupDate, bookingId: $bookingId, status: $status, bookingDate: $bookingDate, insured: $insured, load: $load, mandate: $mandate, trukName: $trukName, trukModel: $trukModel, agent: $agent, driver: $driver, paymentStatus: $paymentStatus, commission: $commission, amountPaid: $amountPaid, ewaybill: $ewaybill, driverId: $driverId, isPaymentPending: $isPaymentPending)';
+    return 'ShipmentModel(uid: $uid, id: $id, mobile: $mobile, source: $source, destination: $destination, price: $price, materials: $materials, truk: $truk, pickupDate: $pickupDate, bookingId: $bookingId, status: $status, bookingDate: $bookingDate, insured: $insured, load: $load, mandate: $mandate, trukName: $trukName, trukModel: $trukModel, agent: $agent, driver: $driver, paymentStatus: $paymentStatus, commission: $commission, amountPaid: $amountPaid, ewaybill: $ewaybill, driverId: $driverId)';
   }
 
   @override
@@ -255,7 +248,6 @@ class ShipmentModel {
         other.commission == commission &&
         other.amountPaid == amountPaid &&
         other.ewaybill == ewaybill &&
-        other.isPaymentPending == isPaymentPending &&
         other.driverId == driverId;
   }
 
@@ -284,7 +276,6 @@ class ShipmentModel {
         commission.hashCode ^
         amountPaid.hashCode ^
         ewaybill.hashCode ^
-    isPaymentPending.hashCode ^
         driverId.hashCode;
   }
 }

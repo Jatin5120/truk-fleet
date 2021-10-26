@@ -51,29 +51,29 @@ class RequestController {
     String billUrl =
         await uploadEWayBill(eWayBill, quoteModel.bookingId.toString());
     Map<String, dynamic> m = ShipmentModel(
-            agent: quoteModel.agent,
-            bookingDate: quoteModel.bookingDate,
-            bookingId: quoteModel.bookingId,
-            destination: quoteModel.destination,
-            source: quoteModel.source,
-            driver: driver,
-            insured: quoteModel.insured,
-            load: quoteModel.load,
-            mandate: quoteModel.mandate,
-            materials: quoteModel.materials,
-            mobile: quoteModel.mobile,
-            paymentStatus: quoteModel.paymentStatus,
-            pickupDate: quoteModel.pickupDate,
-            price: quoteModel.price,
-            status: 'pending',
-            truk: quoteModel.truk,
-            trukName: quoteModel.trukName,
-            ewaybill: billUrl,
-            uid: quoteModel.uid,
-            commission: '5',
-            driverId: driver
-            )
-        .toMap();
+      agent: quoteModel.agent,
+      bookingDate: quoteModel.bookingDate,
+      bookingId: quoteModel.bookingId,
+      destination: quoteModel.destination,
+      source: quoteModel.source,
+      driver: driver,
+      insured: quoteModel.insured,
+      load: quoteModel.load,
+      mandate: quoteModel.mandate,
+      materials: quoteModel.materials,
+      mobile: quoteModel.mobile,
+      paymentStatus: quoteModel.paymentStatus,
+      pickupDate: quoteModel.pickupDate,
+      price: quoteModel.price,
+      status: 'pending',
+      truk: quoteModel.truk,
+      trukName: quoteModel.trukName,
+      ewaybill: billUrl,
+      uid: quoteModel.uid,
+      commission: '5',
+      driverId: driver,
+      trukModel: quoteModel.trukModel,
+    ).toMap();
     return refShipment.add(m);
   }
 

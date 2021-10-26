@@ -50,9 +50,7 @@ class ShipmentModel {
     @required this.load,
     @required this.mandate,
     @required this.trukName,
-    this.trukModel,
-    //TODO: make trukModel required
-    // @required this.trukModel,
+    @required this.trukModel,
     @required this.agent,
     @required this.driver,
     @required this.paymentStatus,
@@ -196,8 +194,7 @@ class ShipmentModel {
       load: map.get('load'),
       mandate: map.get('mandate'),
       trukName: map.get('trukName'),
-      //TODO: uncomment from snapshot
-      // trukModel: map.get('trukModel'),
+      trukModel: map.get('trukModel'),
       agent: map.get('agent'),
       driver: map.get('driver'),
       paymentStatus: map.get('paymentStatus'),

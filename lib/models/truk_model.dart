@@ -180,8 +180,7 @@ class TrukModal {
       trukName: map.get('trukName'),
       trukType: map.get('trukType'),
       trukNumber: map.get('trukNumber'),
-      //TODO: Uncomment fromsnapshot
-      // trukModel: map.get('trukModel'),
+      trukModel: map.get('trukModel'),
       driver: map.get('driver'),
       ownerName: map.get('ownerName'),
       mobileNumber: map.get('mobileNumber'),

@@ -4,9 +4,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-
 import 'package:truk_fleet/helper/helper.dart';
-import 'package:truk_fleet/models/material_model.dart';
+
+import 'material_model.dart';
 
 class ShipmentModel {
   String uid;
@@ -25,7 +25,6 @@ class ShipmentModel {
   String load;
   String mandate;
   String trukName;
-  String trukModel;
   String agent;
   String driver;
   String paymentStatus;
@@ -33,6 +32,10 @@ class ShipmentModel {
   String amountPaid;
   String ewaybill;
   String driverId;
+  String trukModel;
+  bool isPaymentPending;
+  bool isDue;
+
   ShipmentModel({
     @required this.uid,
     this.id,
@@ -50,7 +53,6 @@ class ShipmentModel {
     @required this.load,
     @required this.mandate,
     @required this.trukName,
-    @required this.trukModel,
     @required this.agent,
     @required this.driver,
     @required this.paymentStatus,
@@ -58,6 +60,9 @@ class ShipmentModel {
     this.amountPaid,
     @required this.ewaybill,
     @required this.driverId,
+    @required this.trukModel,
+    @required this.isPaymentPending,
+    this.isDue = true,
   });
 
   ShipmentModel copyWith({
@@ -77,14 +82,16 @@ class ShipmentModel {
     String load,
     String mandate,
     String trukName,
-    String trukModel,
     String agent,
     String driver,
     String paymentStatus,
-    String commission,
+    double commission,
     String amountPaid,
     String ewaybill,
     String driverId,
+    String trukModel,
+    String isPaymentPending,
+    String isDue,
   }) {
     return ShipmentModel(
       uid: uid ?? this.uid,
@@ -103,7 +110,6 @@ class ShipmentModel {
       load: load ?? this.load,
       mandate: mandate ?? this.mandate,
       trukName: trukName ?? this.trukName,
-      trukModel: trukModel ?? this.trukModel,
       agent: agent ?? this.agent,
       driver: driver ?? this.driver,
       paymentStatus: paymentStatus ?? this.paymentStatus,
@@ -111,6 +117,9 @@ class ShipmentModel {
       amountPaid: amountPaid ?? this.amountPaid,
       ewaybill: ewaybill ?? this.ewaybill,
       driverId: driverId ?? this.driverId,
+      trukModel: trukModel ?? this.trukModel,
+      isPaymentPending: isPaymentPending ?? this.isPaymentPending,
+      isDue: isDue ?? this.isDue,
     );
   }
 
@@ -122,7 +131,7 @@ class ShipmentModel {
       'source': "${source.latitude},${source.longitude}",
       'destination': "${destination.latitude},${destination.longitude}",
       'price': price,
-      'materials': materials?.map((x) => x.toMap())?.toList(),
+      'materials': materials?.map((x) => x?.toMap())?.toList(),
       'truk': truk,
       'pickupDate': pickupDate,
       'bookingId': bookingId,
@@ -132,7 +141,6 @@ class ShipmentModel {
       'load': load,
       'mandate': mandate,
       'trukName': trukName,
-      'trukModel': trukModel,
       'agent': agent,
       'driver': driver,
       'paymentStatus': paymentStatus,
@@ -140,6 +148,9 @@ class ShipmentModel {
       'amountPaid': amountPaid,
       'ewaybill': ewaybill,
       'driverId': driverId,
+      'trukModel': trukModel,
+      'isPaymentPending': isPaymentPending,
+      'isDue': isDue,
     };
   }
 
@@ -162,7 +173,6 @@ class ShipmentModel {
       load: map['load'],
       mandate: map['mandate'],
       trukName: map['trukName'],
-      trukModel: map['trukModel'],
       agent: map['agent'],
       driver: map['driver'],
       paymentStatus: map['paymentStatus'],
@@ -170,6 +180,9 @@ class ShipmentModel {
       amountPaid: map['amountPaid'],
       ewaybill: map['ewaybill'],
       driverId: map['driverId'],
+      trukModel: map['trukModel'],
+      isPaymentPending: map['isPaymentPending'],
+      isDue: map['isDue'],
     );
   }
 
@@ -194,7 +207,6 @@ class ShipmentModel {
       load: map.get('load'),
       mandate: map.get('mandate'),
       trukName: map.get('trukName'),
-      trukModel: map.get('trukModel'),
       agent: map.get('agent'),
       driver: map.get('driver'),
       paymentStatus: map.get('paymentStatus'),
@@ -204,6 +216,9 @@ class ShipmentModel {
           : "NA",
       amountPaid: map.get('amountPaid'),
       driverId: map.get('driverId'),
+      trukModel: map.get('trukModel'),
+      isPaymentPending: map.get('isPaymentPending'),
+      isDue: map.get('isDue'),
     );
   }
 
@@ -214,7 +229,8 @@ class ShipmentModel {
 
   @override
   String toString() {
-    return 'ShipmentModel(uid: $uid, id: $id, mobile: $mobile, source: $source, destination: $destination, price: $price, materials: $materials, truk: $truk, pickupDate: $pickupDate, bookingId: $bookingId, status: $status, bookingDate: $bookingDate, insured: $insured, load: $load, mandate: $mandate, trukName: $trukName, trukModel: $trukModel, agent: $agent, driver: $driver, paymentStatus: $paymentStatus, commission: $commission, amountPaid: $amountPaid, ewaybill: $ewaybill, driverId: $driverId)';
+    // return 'ShipmentModel(uid: $uid, id: $id, mobile: $mobile, source: $source, destination: $destination, price: $price, materials: $materials, truk: $truk, pickupDate: $pickupDate, bookingId: $bookingId, status: $status, bookingDate: $bookingDate, insured: $insured, load: $load, mandate: $mandate, trukName: $trukName, agent: $agent, driver: $driver, paymentStatus: $paymentStatus, commission: $commission, amountPaid: $amountPaid, ewaybill: $ewaybill, driverId: $driverId, )';
+    return 'ShipmentModel(uid: $uid, id: $id, mobile: $mobile, source: $source, destination: $destination, price: $price, materials: $materials, truk: $truk, pickupDate: $pickupDate, bookingId: $bookingId, status: $status, bookingDate: $bookingDate, insured: $insured, load: $load, mandate: $mandate, trukName: $trukName, agent: $agent, driver: $driver, paymentStatus: $paymentStatus, commission: $commission, amountPaid: $amountPaid, ewaybill: $ewaybill, driverId: $driverId, trukModel: $trukModel,isPaymentPending: $isPaymentPending,isDue: $isDue)';
   }
 
   @override
@@ -238,41 +254,44 @@ class ShipmentModel {
         other.load == load &&
         other.mandate == mandate &&
         other.trukName == trukName &&
-        other.trukModel == trukModel &&
         other.agent == agent &&
         other.driver == driver &&
         other.paymentStatus == paymentStatus &&
         other.commission == commission &&
         other.amountPaid == amountPaid &&
         other.ewaybill == ewaybill &&
-        other.driverId == driverId;
+        other.isPaymentPending == isPaymentPending &&
+        other.driverId == driverId &&
+        other.trukModel == trukModel &&
+        other.isDue == isDue;
   }
 
   @override
   int get hashCode {
     return uid.hashCode ^
-        id.hashCode ^
-        mobile.hashCode ^
-        source.hashCode ^
-        destination.hashCode ^
-        price.hashCode ^
-        materials.hashCode ^
-        truk.hashCode ^
-        pickupDate.hashCode ^
-        bookingId.hashCode ^
-        status.hashCode ^
-        bookingDate.hashCode ^
-        insured.hashCode ^
-        load.hashCode ^
-        mandate.hashCode ^
-        trukName.hashCode ^
-        trukModel.hashCode ^
-        agent.hashCode ^
-        driver.hashCode ^
-        paymentStatus.hashCode ^
-        commission.hashCode ^
-        amountPaid.hashCode ^
-        ewaybill.hashCode ^
-        driverId.hashCode;
+    id.hashCode ^
+    mobile.hashCode ^
+    source.hashCode ^
+    destination.hashCode ^
+    price.hashCode ^
+    materials.hashCode ^
+    truk.hashCode ^
+    pickupDate.hashCode ^
+    bookingId.hashCode ^
+    status.hashCode ^
+    bookingDate.hashCode ^
+    insured.hashCode ^
+    load.hashCode ^
+    mandate.hashCode ^
+    trukName.hashCode ^
+    agent.hashCode ^
+    driver.hashCode ^
+    paymentStatus.hashCode ^
+    commission.hashCode ^
+    amountPaid.hashCode ^
+    ewaybill.hashCode ^
+    driverId.hashCode ^
+    isPaymentPending.hashCode ^
+    trukModel.hashCode;
   }
 }

@@ -11,6 +11,10 @@ class PdfPage {
     final dueDate = date.add(Duration(days: 7));
 
     final invoice = Invoice(
+        info: InvoiceInfo(
+          date: date,
+          dueDate: dueDate,
+        ),
         supplier: Supplier(
           name: model.agent,
           address: await Helper().setLocationText(model.source),

@@ -23,10 +23,10 @@ class InvoiceInfo {
   final DateTime dueDate;
 
   const InvoiceInfo({
-    @required this.description,
-    @required this.number,
     @required this.date,
     @required this.dueDate,
+    this.description,
+    this.number,
   });
 }
 
@@ -37,11 +37,10 @@ class InvoiceItem {
   final double quantity;
   final String total;
 
-  const InvoiceItem({
-    @required this.quantity,
-    @required this.name,
-    @required this.type,
-    @required this.mode,
-    @required this.total
-  });
+  const InvoiceItem(
+      {@required this.quantity,
+      @required this.name,
+      @required this.type,
+      @required this.mode,
+      @required this.total});
 }

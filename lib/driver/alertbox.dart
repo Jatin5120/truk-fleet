@@ -119,16 +119,9 @@ class _ABState extends State<AB> {
             ),
             ElevatedButton(
               onPressed: () {
-                double payableAmount = double.parse(amount.text);
-                print('payableAmount ${payableAmount}');
-                print('advance ${advance}');
-                if (payableAmount < advance) {
-                  Fluttertoast.showToast(msg: 'Please collect full advance payment');
-                } else {
-                  widget.model.status == 'pending'
-                      ? _pay(widget.model, advance)
-                      : Fluttertoast.showToast(msg: "Trip Already Started");
-                }
+                widget.model.status == 'pending'
+                    ? _pay(widget.model, advance)
+                    : Fluttertoast.showToast(msg: "Trip Already Started");
               },
               style: ElevatedButton.styleFrom(
                 primary: widget.model.status == 'pending'

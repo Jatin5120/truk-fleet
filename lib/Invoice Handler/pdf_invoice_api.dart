@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
@@ -33,12 +35,15 @@ class PdfInvoiceApi {
       ],
       // footer: (context) => buildFooter(invoice),
     ));
-    final file = await PdfApi.saveDocument(name: 'my_invoice.pdf', pdf: pdf);
+    final file =
+        await PdfApi.saveDocument(name: 'truk_invoice_$id.pdf', pdf: pdf);
+    log("Invoice saved");
     String fileName = Uuid().v4();
     TaskSnapshot uploadTask = await FirebaseStorage.instance
         .ref()
         .child('Invoices/$fileName.pdf')
         .putFile(file);
+    log("Invoice uploaded");
     String downloadUrl = await uploadTask.ref.getDownloadURL();
     FirebaseFirestore.instance
         .collection(FirebaseHelper.invoiceCollection)
@@ -62,11 +67,11 @@ class PdfInvoiceApi {
           pw.Column(
             crossAxisAlignment: pw.CrossAxisAlignment.start,
             children: [
-              pw.SvgImage(
-                svg: 'assets/svg/truck_svg.svg',
-                height: PdfPageFormat.a4.height * 0.03,
-                colorFilter: PdfColors.white,
-              ),
+              // pw.SvgImage(
+              //   svg: 'assets/svg/truck_svg.svg',
+              //   height: PdfPageFormat.a4.height * 0.03,
+              //   colorFilter: PdfColors.white,
+              // ),
               pw.Text(
                 'Invoice',
                 style: pw.TextStyle(

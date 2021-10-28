@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_overlay/loading_overlay.dart';
@@ -60,18 +62,19 @@ class _FinalPaymentScreenState extends State<FinalPaymentScreen> {
             child: ElevatedButton(
               onPressed: () async {
                 showDialog(
-                    context: context,
-                    builder: (context) => AlertDialog(
-                          content: Container(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Text("Generating invoice...."),
-                                CircularProgressIndicator()
-                              ],
-                            ),
-                          ),
-                        ));
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    content: Container(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          CircularProgressIndicator(),
+                          Text("Generating invoice . . . ."),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
                 await FirebaseFirestore.instance
                     .collection(FirebaseHelper.userCollection)
                     .doc(widget.model.uid)
@@ -82,16 +85,22 @@ class _FinalPaymentScreenState extends State<FinalPaymentScreen> {
                   });
                 });
                 for (var m in widget.model.materials) {
-                  setState(() {
-                    items.add(InvoiceItem(
-                        quantity: m.quantity,
-                        name: m.materialName,
-                        type: m.materialType,
-                        mode: widget.model.paymentStatus,
-                        total: widget.model.price));
-                  });
+                  setState(
+                    () {
+                      items.add(
+                        InvoiceItem(
+                          quantity: m.quantity,
+                          name: m.materialName,
+                          type: m.materialType,
+                          mode: widget.model.paymentStatus,
+                          total: widget.model.price,
+                        ),
+                      );
+                    },
+                  );
                 }
-                PdfPage().generateInvoice(widget.model, user, items);
+                await PdfPage().generateInvoice(widget.model, user, items);
+                log("Invoice Generated");
                 Navigator.pop(context);
                 String inv;
                 await FirebaseFirestore.instance
@@ -106,6 +115,10 @@ class _FinalPaymentScreenState extends State<FinalPaymentScreen> {
                   }
                 });
                 Email().sendShipmentCompleteMail(widget.model, inv, context);
+                await FirebaseFirestore.instance
+                    .collection(FirebaseHelper.driverCollection)
+                    .doc(widget.model.driverId)
+                    .update({'isAvailable': true});
               },
               style: ElevatedButton.styleFrom(
                 primary: primaryColor,

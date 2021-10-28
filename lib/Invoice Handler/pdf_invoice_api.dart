@@ -2,17 +2,13 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/foundation.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart';
 import 'package:truk_fleet/Invoice%20Handler/pdf_api.dart';
 import 'package:truk_fleet/firebase_helper/firebase_helper.dart';
-import 'package:truk_fleet/utils/constants.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:uuid/uuid.dart';
-import 'Invoice model/customer.dart';
 import 'Invoice model/invoice.dart';
-import 'Invoice model/supplier.dart';
 
 class PdfInvoiceApi {
   static double horizontalPadding = PdfPageFormat.a4.width * 0.05;
@@ -23,18 +19,23 @@ class PdfInvoiceApi {
     final pdf = Document();
 
     pdf.addPage(MultiPage(
+      pageFormat: PdfPageFormat.a4.applyMargin(
+        left: 0,
+        top: 0,
+        right: 0,
+        bottom: 0,
+      ),
       build: (context) => [
         buildHeader(invoice),
         pw.SizedBox(height: PdfPageFormat.cm),
         buildOrderDetails(invoice),
         pw.Divider(),
-        // buildTitle(invoice),
         buildInvoice(invoice),
-        // pw.Divider(),
+        pw.SizedBox(height: PdfPageFormat.cm / 2),
         buildTotal(invoice),
       ],
-      // footer: (context) => buildFooter(invoice),
     ));
+
     final file =
         await PdfApi.saveDocument(name: 'truk_invoice_$id.pdf', pdf: pdf);
     log("Invoice saved");
@@ -61,7 +62,7 @@ class PdfInvoiceApi {
         horizontal: horizontalPadding,
       ),
       child: pw.Row(
-        crossAxisAlignment: pw.CrossAxisAlignment.start,
+        crossAxisAlignment: pw.CrossAxisAlignment.center,
         mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
         children: [
           pw.Column(
@@ -87,13 +88,15 @@ class PdfInvoiceApi {
               pw.Text(
                 invoice.supplier.name,
                 style: pw.TextStyle(
-                  fontSize: 16,
+                  fontSize: 18,
+                  color: PdfColors.white,
                 ),
               ),
               pw.Text(
                 invoice.supplier.address,
                 style: pw.TextStyle(
-                  fontSize: 16,
+                  fontSize: 14,
+                  color: PdfColors.white,
                 ),
               ),
             ],
@@ -102,21 +105,6 @@ class PdfInvoiceApi {
       ),
     );
   }
-  // static pw.Widget buildHeader(Invoice invoice) => pw.Column(
-  //       crossAxisAlignment: pw.CrossAxisAlignment.start,
-  //       children: [
-  //         pw.SizedBox(height: 1 * PdfPageFormat.cm),
-  //         pw.SizedBox(height: 1 * PdfPageFormat.cm),
-  //         pw.Row(
-  //           crossAxisAlignment: pw.CrossAxisAlignment.end,
-  //           mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
-  //           children: [
-  //             buildCustomerAddress(invoice.customer),
-  //             buildInvoiceInfo(invoice.info),
-  //           ],
-  //         ),
-  //       ],
-  //     );
 
   static pw.Widget buildOrderDetails(Invoice invoice) {
     return pw.Container(
@@ -135,6 +123,7 @@ class PdfInvoiceApi {
 
   static pw.Column buildDeliveryAddress(Invoice invoice) {
     return pw.Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         pw.Text(
           'To,',
@@ -151,7 +140,7 @@ class PdfInvoiceApi {
           ),
         ),
         pw.Text(
-          invoice.customer.address.split(',').join('\n'),
+          invoice.customer.address.split(', ').join('\n'),
           style: pw.TextStyle(fontSize: 16),
         ),
       ],
@@ -160,16 +149,8 @@ class PdfInvoiceApi {
 
   static pw.Column buildInvoiceDetails(Invoice invoice) {
     return pw.Column(
+      crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        // pw.Text(
-        //   'Invoice #',
-        //   style: pw.TextStyle(
-        //     fontWeight: pw.FontWeight.bold,
-        //   ),
-        // ),
-        // pw.Text(
-        //   invoice.info.number,
-        // ),
         pw.Text(
           'Date',
           style: pw.TextStyle(
@@ -177,7 +158,7 @@ class PdfInvoiceApi {
           ),
         ),
         pw.Text(
-          invoice.info.date.toString().split('.').first,
+          invoice.info.date.toString().split(' ').first,
         ),
         pw.Text(
           'Due Date',
@@ -186,65 +167,11 @@ class PdfInvoiceApi {
           ),
         ),
         pw.Text(
-          invoice.info.dueDate.toString().split('.').first,
+          invoice.info.dueDate.toString().split(' ').first,
         ),
       ],
     );
   }
-
-  static pw.Widget buildCustomerAddress(Customer customer) => pw.Column(
-        crossAxisAlignment: pw.CrossAxisAlignment.start,
-        children: [
-          pw.Text(customer.name,
-              style: pw.TextStyle(fontWeight: FontWeight.bold)),
-          pw.Text(customer.address),
-        ],
-      );
-
-  // static pw.Widget buildInvoiceInfo(InvoiceInfo info) {
-  //   final titles = <String>[
-  //     'Invoice Number:',
-  //     'Invoice Date:',
-  //   ];
-  //   final data = <String>[
-  //     "invoice-1",
-  //     Utils.formatDate(DateTime.now()),
-  //   ];
-
-  //   return pw.Column(
-  //     crossAxisAlignment: pw.CrossAxisAlignment.start,
-  //     children: List.generate(titles.length, (index) {
-  //       final title = titles[index];
-  //       final value = data[index];
-
-  //       return buildText(title: title, value: value, width: 200);
-  //     }),
-  //   );
-  // }
-
-  static pw.Widget buildSupplierAddress(Supplier supplier) => pw.Column(
-        crossAxisAlignment: pw.CrossAxisAlignment.start,
-        children: [
-          pw.Text(supplier.name,
-              style: pw.TextStyle(fontWeight: FontWeight.bold)),
-          pw.SizedBox(height: 1 * PdfPageFormat.mm),
-          pw.Text(supplier.address),
-        ],
-      );
-
-  // static pw.Widget buildTitle(Invoice invoice) => pw.Column(
-  //       crossAxisAlignment: pw.CrossAxisAlignment.start,
-  //       children: [
-  //         pw.Text(
-  //           'INVOICE',
-  //           style: pw.TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-  //         ),
-  //         pw.SizedBox(height: 0.8 * PdfPageFormat.cm),
-  //         pw.Text(
-  //             "This is system generated invoice and can't be treated as only receipt for any query contact TrukApp support team"),
-  //         pw.SizedBox(height: 0.8 * PdfPageFormat.cm),
-  //       ],
-  //     );
 
   static pw.Widget buildInvoice(Invoice invoice) {
     final headers = [
@@ -271,9 +198,6 @@ class PdfInvoiceApi {
       data: data,
       border: null,
       headerStyle: pw.TextStyle(fontWeight: FontWeight.bold),
-      // headerDecoration: pw.BoxDecoration(
-      //   color: PdfColor.fromInt(0x44FF7101),
-      // ),
       cellHeight: 30,
       cellAlignments: {
         0: pw.Alignment.centerRight,
@@ -303,7 +227,6 @@ class PdfInvoiceApi {
           pw.Expanded(
             flex: 6,
             child: pw.Container(
-              color: PdfColor.fromInt(0x44FF7101),
               child: pw.Text(
                 "This is system generated invoice and can't be treated as only receipt\nFor any query, Kindly contact TrukApp Support Team",
                 style: pw.TextStyle(fontSize: 12),
@@ -312,101 +235,57 @@ class PdfInvoiceApi {
           ),
           pw.Expanded(
             flex: 4,
-            child: pw.Row(
-              mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
-              children: [
-                pw.Column(
-                  crossAxisAlignment: pw.CrossAxisAlignment.start,
-                  children: [
-                    pw.Text(
-                      'Total Quantity',
-                      style: pw.TextStyle(fontSize: 12),
-                    ),
-                    pw.Text(
-                      '$netQuantity',
-                      style: pw.TextStyle(fontSize: 16),
-                    ),
-                  ],
-                ),
-                pw.Column(
-                  crossAxisAlignment: pw.CrossAxisAlignment.end,
-                  children: [
-                    pw.Text(
-                      'Total Amount',
-                      style: pw.TextStyle(fontSize: 12),
-                    ),
-                    pw.Text(
-                      '$netTotal',
-                      style: pw.TextStyle(fontSize: 16),
-                    ),
-                  ],
-                ),
-                // pw.Column(
-                //   crossAxisAlignment: pw.CrossAxisAlignment.start,
-                //   children: [
-                //     buildText(
-                //       title: 'Net total',
-                //       value: netTotal,
-                //       unite: true,
-                //     ),
-                //     pw.SizedBox(height: 2 * PdfPageFormat.mm),
-                //     pw.Container(height: 1, color: PdfColors.grey400),
-                //     pw.SizedBox(height: 0.5 * PdfPageFormat.mm),
-                //     pw.Container(height: 1, color: PdfColors.grey400),
-                //   ],
-                // ),
-              ],
+            child: pw.Container(
+              color: pdfPrimaryColor,
+              padding: pw.EdgeInsets.all(horizontalPadding),
+              child: pw.Row(
+                mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  pw.Column(
+                    crossAxisAlignment: pw.CrossAxisAlignment.start,
+                    children: [
+                      pw.Text(
+                        'Total Quantity',
+                        style: pw.TextStyle(
+                          fontSize: 12,
+                          color: PdfColors.white,
+                        ),
+                      ),
+                      pw.Text(
+                        '$netQuantity',
+                        style: pw.TextStyle(
+                          fontSize: 16,
+                          color: PdfColors.white,
+                        ),
+                      ),
+                    ],
+                  ),
+                  pw.Column(
+                    crossAxisAlignment: pw.CrossAxisAlignment.end,
+                    children: [
+                      pw.Text(
+                        'Total Amount',
+                        style: pw.TextStyle(
+                          fontSize: 12,
+                          color: PdfColors.white,
+                        ),
+                      ),
+                      pw.Text(
+                        '$netTotal',
+                        style: pw.TextStyle(
+                          fontSize: 16,
+                          color: PdfColors.white,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ],
       ),
     );
   }
-
-  // static pw.Widget buildFooter(Invoice invoice) => pw.Column(
-  //       crossAxisAlignment: pw.CrossAxisAlignment.center,
-  //       children: [
-  //         pw.Divider(),
-  //         pw.SizedBox(height: 2 * PdfPageFormat.mm),
-  //         buildSimpleText(title: 'Address', value: invoice.supplier.address),
-  //         pw.SizedBox(height: 1 * PdfPageFormat.mm),
-  //       ],
-  //     );
-
-  // static buildSimpleText({
-  //   @required String title,
-  //   @required String value,
-  // }) {
-  //   final style = pw.TextStyle(fontWeight: FontWeight.bold);
-
-  //   return pw.Row(
-  //     mainAxisSize: pw.MainAxisSize.min,
-  //     crossAxisAlignment: pw.CrossAxisAlignment.end,
-  //     children: [
-  //       pw.Text(title, style: style),
-  //       pw.SizedBox(width: 2 * PdfPageFormat.mm),
-  //       pw.Text(value),
-  //     ],
-  //   );
-  // }
-
-  // static buildText({
-  //   @required String title,
-  //   @required String value,
-  //   double width = double.infinity,
-  //   pw.TextStyle titleStyle,
-  //   bool unite = false,
-  // }) {
-  //   final style = titleStyle ?? pw.TextStyle(fontWeight: FontWeight.bold);
-
-  //   return pw.Container(
-  //     width: width,
-  //     child: pw.Row(
-  //       children: [
-  //         pw.Expanded(child: pw.Text(title, style: style)),
-  //         pw.Text('Rs. $value', style: unite ? style : null),
-  //       ],
-  //     ),
-  //   );
-  // }
 }

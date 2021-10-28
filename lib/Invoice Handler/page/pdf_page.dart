@@ -11,20 +11,21 @@ class PdfPage {
     final dueDate = date.add(Duration(days: 7));
 
     final invoice = Invoice(
-        info: InvoiceInfo(
-          date: date,
-          dueDate: dueDate,
-        ),
-        supplier: Supplier(
-          name: model.agent,
-          address: await Helper().setLocationText(model.source),
-          paymentInfo: model.paymentStatus,
-        ),
-        customer: Customer(
-          name: user,
-          address: await Helper().setLocationText(model.destination),
-        ),
-        items: items);
+      info: InvoiceInfo(
+        date: date,
+        dueDate: dueDate,
+      ),
+      supplier: Supplier(
+        name: user,
+        address: await Helper().setLocationText(model.source),
+        paymentInfo: model.paymentStatus,
+      ),
+      customer: Customer(
+        name: user,
+        address: await Helper().setLocationText(model.destination),
+      ),
+      items: items,
+    );
     await PdfInvoiceApi.generate(invoice, model.id);
   }
 }

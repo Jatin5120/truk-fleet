@@ -16,6 +16,10 @@ class PdfPage {
           address: await Helper().setLocationText(model.source),
           paymentInfo: model.paymentStatus,
         ),
+        info: InvoiceInfo(
+          date: date,
+          dueDate: dueDate,
+        ),
         customer: Customer(
           name: user,
           address: await Helper().setLocationText(model.destination),

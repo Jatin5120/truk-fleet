@@ -10,6 +10,7 @@ import 'package:truk_fleet/helper/helper.dart';
 import 'package:truk_fleet/models/quote_model.dart';
 import 'package:truk_fleet/models/shipment_model.dart';
 import 'package:truk_fleet/models/user_model.dart';
+import 'package:truk_fleet/utils/constants.dart';
 
 class Email {
   static String mailToken =
@@ -59,6 +60,7 @@ class Email {
           url = Uri.parse(data.get('invoice'));
         }
       });
+      await FirebaseFirestore.instance.collection(FirebaseHelper.shipment).doc(Utils.currentShipmentId).update({'driverId':null});
       try {
         final mailer = sg.Mailer(mailToken);
         // final mailer = sg.Mailer('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');

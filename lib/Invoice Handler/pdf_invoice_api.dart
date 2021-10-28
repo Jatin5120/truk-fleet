@@ -62,11 +62,11 @@ class PdfInvoiceApi {
           pw.Column(
             crossAxisAlignment: pw.CrossAxisAlignment.start,
             children: [
-              pw.SvgImage(
-                svg: 'assets/svg/truck_svg.svg',
-                height: PdfPageFormat.a4.height * 0.03,
-                colorFilter: PdfColors.white,
-              ),
+              // pw.SvgImage(
+              //   svg: 'assets/svg/truck_svg.svg',
+              //   height: PdfPageFormat.a4.height * 0.03,
+              //   colorFilter: PdfColors.white,
+              // ),
               pw.Text(
                 'Invoice',
                 style: pw.TextStyle(
@@ -156,15 +156,15 @@ class PdfInvoiceApi {
   static pw.Column buildInvoiceDetails(Invoice invoice) {
     return pw.Column(
       children: [
-        pw.Text(
-          'Invoice #',
-          style: pw.TextStyle(
-            fontWeight: pw.FontWeight.bold,
-          ),
-        ),
-        pw.Text(
-          invoice.info.number,
-        ),
+        // pw.Text(
+        //   'Invoice #',
+        //   style: pw.TextStyle(
+        //     fontWeight: pw.FontWeight.bold,
+        //   ),
+        // ),
+        // pw.Text(
+        //   invoice.info.number,
+        // ),
         pw.Text(
           'Date',
           style: pw.TextStyle(

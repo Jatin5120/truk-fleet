@@ -50,96 +50,94 @@ class _ABState extends State<AB> {
   Widget build(BuildContext context) {
     locale = AppLocalizations.of(context).locale;
     return AlertDialog(
-      content: Container(
-        height: MediaQuery.of(context).size.height / 3.7,
-        child: Column(
-          children: [
-            Container(
-              width: MediaQuery.of(context).size.width / 2,
-              child: TextField(
-                controller: amount,
-                decoration: InputDecoration(
-                  hintText: "Enter Amount",
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            width: MediaQuery.of(context).size.width / 2,
+            child: TextField(
+              controller: amount,
+              decoration: InputDecoration(
+                hintText: "Enter Amount",
+              ),
+              keyboardType: TextInputType.number,
+            ),
+          ),
+          SizedBox(
+            height: 20.0,
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 8, right: 16),
+            child: Row(
+              children: [
+                Expanded(
+                  child: RichText(
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text:
+                              "*** Amount should be between $advance to ${widget.model.price}",
+                          style: TextStyle(
+                              color: Colors.red,
+                              decoration: TextDecoration.none),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
-                keyboardType: TextInputType.number,
-              ),
+              ],
             ),
-            SizedBox(
-              height: 20.0,
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 8, right: 16),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: RichText(
-                      text: TextSpan(
-                        children: [
-                          TextSpan(
-                            text:
-                                "*** Amount should be between $advance to ${widget.model.price}",
-                            style: TextStyle(
-                                color: Colors.red,
-                                decoration: TextDecoration.none),
-                          ),
-                        ],
-                      ),
+          ),
+          SizedBox(
+            height: 10.0,
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 8, right: 16),
+            child: Row(
+              children: [
+                Expanded(
+                  child: RichText(
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text:
+                              "${AppLocalizations.getLocalizationValue(locale, LocaleKey.paymentConfirmation)}",
+                          style: TextStyle(
+                              color: primaryColor,
+                              decoration: TextDecoration.none),
+                        ),
+                      ],
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-            SizedBox(
-              height: 10.0,
+          ),
+          SizedBox(
+            height: 20.0,
+          ),
+          ElevatedButton(
+            onPressed: () {
+              double payableAmount = double.parse(amount.text);
+              print('payableAmount ${payableAmount}');
+              print('advance ${advance}');
+              if (payableAmount < advance) {
+                Fluttertoast.showToast(msg: 'Please collect full advance payment');
+              } else {
+                widget.model.status == 'pending'
+                    ? _pay(widget.model, advance)
+                    : Fluttertoast.showToast(msg: "Trip Already Started");
+              }
+            },
+            style: ElevatedButton.styleFrom(
+              primary: widget.model.status == 'pending'
+                  ? primaryColor
+                  : Colors.grey,
             ),
-            Padding(
-              padding: const EdgeInsets.only(left: 8, right: 16),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: RichText(
-                      text: TextSpan(
-                        children: [
-                          TextSpan(
-                            text:
-                                "${AppLocalizations.getLocalizationValue(locale, LocaleKey.paymentConfirmation)}",
-                            style: TextStyle(
-                                color: primaryColor,
-                                decoration: TextDecoration.none),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 20.0,
-            ),
-            ElevatedButton(
-              onPressed: () {
-                double payableAmount = double.parse(amount.text);
-                print('payableAmount ${payableAmount}');
-                print('advance ${advance}');
-                if (payableAmount < advance) {
-                  Fluttertoast.showToast(msg: 'Please collect full advance payment');
-                } else {
-                  widget.model.status == 'pending'
-                      ? _pay(widget.model, advance)
-                      : Fluttertoast.showToast(msg: "Trip Already Started");
-                }
-              },
-              style: ElevatedButton.styleFrom(
-                primary: widget.model.status == 'pending'
-                    ? primaryColor
-                    : Colors.grey,
-              ),
-              child: Text(AppLocalizations.getLocalizationValue(
-                  locale, LocaleKey.done)),
-            )
-          ],
-        ),
+            child: Text(AppLocalizations.getLocalizationValue(
+                locale, LocaleKey.done)),
+          )
+        ],
       ),
     );
   }

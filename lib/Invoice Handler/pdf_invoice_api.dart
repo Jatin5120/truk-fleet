@@ -161,15 +161,15 @@ class PdfInvoiceApi {
   static pw.Column buildInvoiceDetails(Invoice invoice) {
     return pw.Column(
       children: [
-        pw.Text(
-          'Invoice #',
-          style: pw.TextStyle(
-            fontWeight: pw.FontWeight.bold,
-          ),
-        ),
-        pw.Text(
-          invoice.info.number,
-        ),
+        // pw.Text(
+        //   'Invoice #',
+        //   style: pw.TextStyle(
+        //     fontWeight: pw.FontWeight.bold,
+        //   ),
+        // ),
+        // pw.Text(
+        //   invoice.info.number,
+        // ),
         pw.Text(
           'Date',
           style: pw.TextStyle(

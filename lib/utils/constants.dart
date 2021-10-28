@@ -6,8 +6,11 @@ import 'package:intl/intl.dart';
 class Utils {
   static formatPrice(double price) => '\$ ${price.toStringAsFixed(2)}';
   static formatDate(DateTime date) => DateFormat.yMd().format(date);
-}
 
+
+  static String currentShipmentId = '';
+
+}
 final Color primaryColor = Color(0xffFF7101);
 final Color secondaryColor = Color(0xffFFE8D7);
 final String testApiKey = 'rzp_test_mJh9QWD7lZ8ToY';

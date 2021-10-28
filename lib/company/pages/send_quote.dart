@@ -98,6 +98,7 @@ class _SendQuoteState extends State<SendQuote> {
           print("SMDriver ---> ${value.docs.length}");
           for (var h in value.docs) {
             ShipmentModel sm = ShipmentModel.fromSnapshot(h);
+            // if (sm.status == RequestStatus.completed) {
             if (sm.status == RequestStatus.pending) {
               await FirebaseFirestore.instance
                   .collection(FirebaseHelper.driverCollection)
@@ -136,6 +137,8 @@ class _SendQuoteState extends State<SendQuote> {
           DriverModel dd = DriverModel.fromSnapshot(d);
           // driverA.where('driver', isEqualTo: dd.uid).get().then((value) {
           // FirebaseFirestore.instance.collection(FirebaseHelper.shipment);
+          print('Your driver id is  ${dd.uid}');
+          print('Your driver id is  ${dd.name}');
 
           await shipmentCollectionRef
               // .where('isAvailable', isEqualTo: true)

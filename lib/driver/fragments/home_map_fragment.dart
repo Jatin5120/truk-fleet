@@ -203,7 +203,7 @@ class HomepageFragmentState extends State<HomepageFragment>
                     print(a);
                   }
                 });
-                return buildCardRequests(model);
+                return buildCardRequests(model,snapshot.data.docs[index].id);
               },
             );
           },
@@ -212,7 +212,7 @@ class HomepageFragmentState extends State<HomepageFragment>
     );
   }
 
-  Widget buildCardRequests(ShipmentModel model) {
+  Widget buildCardRequests(ShipmentModel model,String shipmentId) {
     print(
         "pending:${model.status == RequestStatus.pending}  cod::${model.paymentStatus.toString().toLowerCase() == "cod"}  ap::${model.amountPaid == null}");
     return Padding(
@@ -322,6 +322,7 @@ class HomepageFragmentState extends State<HomepageFragment>
                       ),
                       onPressed: model.status == RequestStatus.started
                           ? () {
+                        Utils.currentShipmentId = shipmentId;
                               Navigator.push(
                                 context,
                                 CupertinoPageRoute(
@@ -334,7 +335,8 @@ class HomepageFragmentState extends State<HomepageFragment>
                           : model.status == 'toBeAcceptedByDriver'
                               ? _rejectShipment(model)
                               : () async {
-                                  bool isOnline = await SharedPref().isOnline();
+                        Utils.currentShipmentId = shipmentId;
+                        bool isOnline = await SharedPref().isOnline();
                                   if (!isOnline) {
                                     Fluttertoast.showToast(
                                       msg: 'Please enable your online status',

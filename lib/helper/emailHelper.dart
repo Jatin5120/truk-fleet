@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -35,7 +37,7 @@ class Email {
               ),
             ));
     String dest = await Helper().setLocationText(model.destination);
-    Uri url;
+
     await FirebaseFirestore.instance
         .collection(FirebaseHelper.driverCollection)
         .doc(model.driver)
@@ -52,15 +54,9 @@ class Email {
         userName = um.name;
       });
       await FirebaseFirestore.instance
-          .collection(FirebaseHelper.invoiceCollection)
-          .where('id', isEqualTo: model.uid)
-          .get()
-          .then((value) {
-        for (var data in value.docs) {
-          url = Uri.parse(data.get('invoice'));
-        }
-      });
-      await FirebaseFirestore.instance.collection(FirebaseHelper.shipment).doc(Utils.currentShipmentId).update({'driverId':null});
+          .collection(FirebaseHelper.shipment)
+          .doc(Utils.currentShipmentId)
+          .update({'driverId': null});
       try {
         final mailer = sg.Mailer(mailToken);
         // final mailer = sg.Mailer('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');
@@ -70,7 +66,7 @@ class Email {
         Map<String, dynamic> dd = {
           'userName': userName,
           'destination': dest,
-          'invoiceUrl': url,
+          'invoiceUrl': inv,
         };
         final personalization =
             sg.Personalization([toAddress], dynamicTemplateData: dd);

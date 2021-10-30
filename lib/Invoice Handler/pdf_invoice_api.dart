@@ -27,24 +27,24 @@ class PdfInvoiceApi {
       ),
       build: (context) => [
         buildHeader(invoice),
-        pw.SizedBox(height: PdfPageFormat.cm),
+        pw.SizedBox(height: PdfPageFormat.cm / 2),
         buildOrderDetails(invoice),
         pw.Divider(),
         buildInvoice(invoice),
-        pw.SizedBox(height: PdfPageFormat.cm / 2),
+        pw.SizedBox(height: PdfPageFormat.cm),
         buildTotal(invoice),
       ],
     ));
 
     final file =
         await PdfApi.saveDocument(name: 'truk_invoice_$id.pdf', pdf: pdf);
-    log("Invoice saved");
+
     String fileName = Uuid().v4();
     TaskSnapshot uploadTask = await FirebaseStorage.instance
         .ref()
         .child('Invoices/$fileName.pdf')
         .putFile(file);
-    log("Invoice uploaded");
+
     String downloadUrl = await uploadTask.ref.getDownloadURL();
     FirebaseFirestore.instance
         .collection(FirebaseHelper.invoiceCollection)
@@ -58,49 +58,43 @@ class PdfInvoiceApi {
       height: PdfPageFormat.a4.height * 0.2,
       width: PdfPageFormat.a4.width,
       alignment: pw.Alignment.center,
-      padding: pw.EdgeInsets.symmetric(
-        horizontal: horizontalPadding,
-      ),
+      padding: pw.EdgeInsets.all(horizontalPadding),
       child: pw.Row(
         crossAxisAlignment: pw.CrossAxisAlignment.center,
         mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
         children: [
-          pw.Column(
-            crossAxisAlignment: pw.CrossAxisAlignment.start,
-            children: [
-              // pw.SvgImage(
-              //   svg: 'assets/svg/truck_svg.svg',
-              //   height: PdfPageFormat.a4.height * 0.03,
-              //   colorFilter: PdfColors.white,
-              // ),
-              pw.Text(
-                'Invoice',
-                style: pw.TextStyle(
-                  color: PdfColors.white,
-                  fontSize: 24,
-                ),
+          pw.Expanded(
+            flex: 2,
+            child: pw.Text(
+              'Invoice',
+              style: pw.TextStyle(
+                color: PdfColors.white,
+                fontSize: 24,
               ),
-            ],
+            ),
           ),
-          pw.Column(
-            crossAxisAlignment: pw.CrossAxisAlignment.end,
-            children: [
-              pw.Text(
-                invoice.supplier.name,
-                style: pw.TextStyle(
-                  fontSize: 18,
-                  color: PdfColors.white,
+          pw.Expanded(
+            flex: 3,
+            child: pw.Column(
+              crossAxisAlignment: pw.CrossAxisAlignment.end,
+              children: [
+                pw.Text(
+                  invoice.supplier.name,
+                  style: pw.TextStyle(
+                    fontSize: 18,
+                    color: PdfColors.white,
+                  ),
                 ),
-              ),
-              pw.Text(
-                invoice.supplier.address,
-                style: pw.TextStyle(
-                  fontSize: 14,
-                  color: PdfColors.white,
+                pw.Text(
+                  invoice.supplier.address,
+                  style: pw.TextStyle(
+                    fontSize: 14,
+                    color: PdfColors.white,
+                  ),
                 ),
-              ),
-            ],
-          )
+              ],
+            ),
+          ),
         ],
       ),
     );
@@ -109,7 +103,7 @@ class PdfInvoiceApi {
   static pw.Widget buildOrderDetails(Invoice invoice) {
     return pw.Container(
       width: PdfPageFormat.a4.width,
-      padding: pw.EdgeInsets.all(horizontalPadding),
+      padding: pw.EdgeInsets.all(horizontalPadding / 2),
       child: pw.Row(
         mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
         crossAxisAlignment: pw.CrossAxisAlignment.start,
@@ -228,7 +222,7 @@ class PdfInvoiceApi {
             flex: 6,
             child: pw.Container(
               child: pw.Text(
-                "This is system generated invoice and can't be treated as only receipt\nFor any query, Kindly contact TrukApp Support Team",
+                "This is system generated invoice and can't be treated as only receipt.\nFor any query, Kindly contact TrukApp Support Team",
                 style: pw.TextStyle(fontSize: 12),
               ),
             ),
@@ -237,7 +231,7 @@ class PdfInvoiceApi {
             flex: 4,
             child: pw.Container(
               color: pdfPrimaryColor,
-              padding: pw.EdgeInsets.all(horizontalPadding),
+              padding: pw.EdgeInsets.all(horizontalPadding / 2),
               child: pw.Row(
                 mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,

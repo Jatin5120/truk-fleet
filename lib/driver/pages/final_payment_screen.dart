@@ -100,7 +100,6 @@ class _FinalPaymentScreenState extends State<FinalPaymentScreen> {
                   );
                 }
                 await PdfPage().generateInvoice(widget.model, user, items);
-                log("Invoice Generated");
                 Navigator.pop(context);
                 String inv;
                 await FirebaseFirestore.instance

@@ -76,7 +76,8 @@ class _AddTruckState extends State<AddTruck> {
       trukModelController.text = widget.trukModal.trukModel;
       panTinController.text = widget.trukModal.panTin;
       grossWeightController.text =
-          '${(int.parse(widget.trukModal.grossWeight) ~/ 1000)}';
+          '${(double.parse(widget.trukModal.grossWeight) / 1000)}';
+          // '${(double.parse(widget.trukModal.grossWeight) ~/ 1000)}';
       lengthController.text = widget.trukModal.length;
       breadthController.text = widget.trukModal.breadth;
       heightController.text = widget.trukModal.height;
@@ -346,7 +347,7 @@ class _AddTruckState extends State<AddTruck> {
                                   trukNumberController.text.toUpperCase();
                               String height = heightController.text;
                               String grossWeigth =
-                                  (int.parse(grossWeightController.text) * 1000)
+                                  (double.parse(grossWeightController.text) * 1000)
                                       .toString();
                               String breadth = breadthController.text;
                               String length = lengthController.text;

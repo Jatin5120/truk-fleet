@@ -75,6 +75,7 @@ class _SendQuoteState extends State<SendQuote> {
   List<DriverModel> driverAList = [];
 
   getPin() async {
+    print('Yoour truck is ${widget.requestModel.trukModel}');
     if (widget.keyTitle == 'assign') {
       CollectionReference driverRequest = FirebaseFirestore.instance
           .collection(FirebaseHelper.driverRegistered);
@@ -950,6 +951,13 @@ class _SendQuoteState extends State<SendQuote> {
                   widget.requestModel.truk.toLowerCase().contains('closed')
                       ? LocaleKey.closedTruk
                       : LocaleKey.openTruk)),
+          SizedBox(
+            height: 10,
+          ),
+          createTypes(
+              AppLocalizations.getLocalizationValue(
+                  locale, LocaleKey.trukModel),
+              widget.requestModel.trukModel),
         ],
       ),
     );

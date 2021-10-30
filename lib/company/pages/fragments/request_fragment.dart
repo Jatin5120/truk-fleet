@@ -468,6 +468,7 @@ class _RequestFragmentState extends State<RequestFragment> {
               children: [
                 buildQuoteButton(
                   () {
+                    print('Your truk model is ${requestModel.trukModel}');
                     Navigator.push(
                         context,
                         MaterialPageRoute(

@@ -48,8 +48,7 @@ class RequestController {
     CollectionReference refShipment =
         FirebaseFirestore.instance.collection(FirebaseHelper.shipment);
     await reference.doc(quoteModel.id).update({'status': 'assigned'});
-    String billUrl =
-        await uploadEWayBill(eWayBill, quoteModel.bookingId.toString());
+    // String billUrl = await uploadEWayBill(eWayBill, quoteModel.bookingId.toString());
     Map<String, dynamic> m = ShipmentModel(
       agent: quoteModel.agent,
       bookingDate: quoteModel.bookingDate,
@@ -68,7 +67,8 @@ class RequestController {
       status: 'pending',
       truk: quoteModel.truk,
       trukName: quoteModel.trukName,
-      ewaybill: billUrl,
+      ewaybill: '',
+      // ewaybill: billUrl,
       uid: quoteModel.uid,
       commission: '5',
       driverId: driver,

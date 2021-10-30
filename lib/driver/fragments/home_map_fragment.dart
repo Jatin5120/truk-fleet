@@ -378,23 +378,23 @@ class HomepageFragmentState extends State<HomepageFragment>
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.blue,
-                    ),
-                    onPressed: () async {
-                      String fileUrl = model.ewaybill;
-                      if (await canLaunch(fileUrl)) {
-                        launch(fileUrl);
-                      } else {
-                        Fluttertoast.showToast(msg: "Cannot find Eway Bill");
-                      }
-                    },
-                    child: Text(
-                      "Show Eway Bill",
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
+                  // ElevatedButton(
+                  //   style: ElevatedButton.styleFrom(
+                  //     primary: Colors.blue,
+                  //   ),
+                  //   onPressed: () async {
+                  //     String fileUrl = model.ewaybill;
+                  //     if (await canLaunch(fileUrl)) {
+                  //       launch(fileUrl);
+                  //     } else {
+                  //       Fluttertoast.showToast(msg: "Cannot find Eway Bill");
+                  //     }
+                  //   },
+                  //   child: Text(
+                  //     "Show Eway Bill",
+                  //     style: TextStyle(color: Colors.white),
+                  //   ),
+                  // ),
                   ElevatedButton(
                     onPressed: () {
                       _getLocation(context, model);

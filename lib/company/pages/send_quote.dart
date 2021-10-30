@@ -464,26 +464,28 @@ class _SendQuoteState extends State<SendQuote> {
                               locale, LocaleKey.selectDriver));
                       return;
                     }
-                    Fluttertoast.showToast(msg: "Please select EWay-Bill");
-                    FilePickerResult result = await FilePicker.platform
-                        .pickFiles(
-                            type: FileType.custom, allowedExtensions: ['pdf']);
-                    if (result == null) {
-                      Fluttertoast.showToast(msg: "Please select EWay-Bill");
-                      return;
-                    }
-                    File ff = File(result.files.single.path);
-                    if (ff == null) {
-                      Fluttertoast.showToast(msg: "Please select EWay-Bill");
-                      return;
-                    }
+                    // Fluttertoast.showToast(msg: "Please select EWay-Bill");
+                    // FilePickerResult result = await FilePicker.platform
+                    //     .pickFiles(
+                    //         type: FileType.custom, allowedExtensions: ['pdf']);
+                    // if (result == null) {
+                    //   Fluttertoast.showToast(msg: "Please select EWay-Bill");
+                    //   return;
+                    // }
+                    // File ff = File(result.files.single.path);
+                    // if (ff == null) {
+                    //   Fluttertoast.showToast(msg: "Please select EWay-Bill");
+                    //   return;
+                    // }
                     setState(() {
                       isLoading = true;
                     });
 
                     await RequestController().assignDriver(
                         quoteModel, driverModel.uid,
-                        eWayBill: ff);
+                        eWayBill: null
+                        // eWayBill: ff
+                    );
                     setState(() {
                       isLoading = false;
                     });

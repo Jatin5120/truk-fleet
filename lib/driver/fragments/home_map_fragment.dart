@@ -203,7 +203,7 @@ class HomepageFragmentState extends State<HomepageFragment>
                     print(a);
                   }
                 });
-                return buildCardRequests(model,snapshot.data.docs[index].id);
+                return buildCardRequests(model, snapshot.data.docs[index].id);
               },
             );
           },
@@ -212,7 +212,7 @@ class HomepageFragmentState extends State<HomepageFragment>
     );
   }
 
-  Widget buildCardRequests(ShipmentModel model,String shipmentId) {
+  Widget buildCardRequests(ShipmentModel model, String shipmentId) {
     print(
         "pending:${model.status == RequestStatus.pending}  cod::${model.paymentStatus.toString().toLowerCase() == "cod"}  ap::${model.amountPaid == null}");
     return Padding(
@@ -312,6 +312,42 @@ class HomepageFragmentState extends State<HomepageFragment>
                   SizedBox(
                     width: 15,
                   ),
+                ],
+              ),
+              SizedBox(
+                height: 5,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  // ElevatedButton(
+                  //   style: ElevatedButton.styleFrom(
+                  //     primary: Colors.blue,
+                  //   ),
+                  //   onPressed: () async {
+                  //     String fileUrl = model.ewaybill;
+                  //     if (await canLaunch(fileUrl)) {
+                  //       launch(fileUrl);
+                  //     } else {
+                  //       Fluttertoast.showToast(msg: "Cannot find Eway Bill");
+                  //     }
+                  //   },
+                  //   child: Text(
+                  //     "Show Eway Bill",
+                  //     style: TextStyle(color: Colors.white),
+                  //   ),
+                  // ),
+
+                  ElevatedButton(
+                    onPressed: () {
+                      _getLocation(context, model);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      primary: primaryColor,
+                    ),
+                    child: Text(AppLocalizations.getLocalizationValue(
+                        locale, LocaleKey.updateLocation)),
+                  ),
                   Container(
                     height: 30,
                     child: ElevatedButton(
@@ -322,7 +358,7 @@ class HomepageFragmentState extends State<HomepageFragment>
                       ),
                       onPressed: model.status == RequestStatus.started
                           ? () {
-                        Utils.currentShipmentId = shipmentId;
+                              Utils.currentShipmentId = shipmentId;
                               Navigator.push(
                                 context,
                                 CupertinoPageRoute(
@@ -335,8 +371,8 @@ class HomepageFragmentState extends State<HomepageFragment>
                           : model.status == 'toBeAcceptedByDriver'
                               ? _rejectShipment(model)
                               : () async {
-                        Utils.currentShipmentId = shipmentId;
-                        bool isOnline = await SharedPref().isOnline();
+                                  Utils.currentShipmentId = shipmentId;
+                                  bool isOnline = await SharedPref().isOnline();
                                   if (!isOnline) {
                                     Fluttertoast.showToast(
                                       msg: 'Please enable your online status',
@@ -373,41 +409,6 @@ class HomepageFragmentState extends State<HomepageFragment>
                 ],
               ),
               SizedBox(
-                height: 5,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  // ElevatedButton(
-                  //   style: ElevatedButton.styleFrom(
-                  //     primary: Colors.blue,
-                  //   ),
-                  //   onPressed: () async {
-                  //     String fileUrl = model.ewaybill;
-                  //     if (await canLaunch(fileUrl)) {
-                  //       launch(fileUrl);
-                  //     } else {
-                  //       Fluttertoast.showToast(msg: "Cannot find Eway Bill");
-                  //     }
-                  //   },
-                  //   child: Text(
-                  //     "Show Eway Bill",
-                  //     style: TextStyle(color: Colors.white),
-                  //   ),
-                  // ),
-                  ElevatedButton(
-                    onPressed: () {
-                      _getLocation(context, model);
-                    },
-                    style: ElevatedButton.styleFrom(
-                      primary: primaryColor,
-                    ),
-                    child: Text(AppLocalizations.getLocalizationValue(
-                        locale, LocaleKey.updateLocation)),
-                  )
-                ],
-              ),
-              SizedBox(
                 height: 10.0,
               ),
               Row(
@@ -440,9 +441,9 @@ class HomepageFragmentState extends State<HomepageFragment>
                   ),
                   Visibility(
                     visible: model.status == RequestStatus.pending &&
-                        model.paymentStatus.toString().toLowerCase() ==
-                            "cod" &&
-                        model.amountPaid == null
+                            model.paymentStatus.toString().toLowerCase() ==
+                                "cod" &&
+                            model.amountPaid == null
                         ? true
                         : false,
                     // visible: model.status == RequestStatus.started ? false : true,
@@ -472,9 +473,8 @@ class HomepageFragmentState extends State<HomepageFragment>
               ),
               Visibility(
                 visible: model.status == RequestStatus.pending &&
-                    model.paymentStatus.toString().toLowerCase() ==
-                        "cod" &&
-                    model.amountPaid == null
+                        model.paymentStatus.toString().toLowerCase() == "cod" &&
+                        model.amountPaid == null
                     ? true
                     : false,
                 child: SizedBox(
@@ -482,9 +482,9 @@ class HomepageFragmentState extends State<HomepageFragment>
                 ),
               ),
               ElevatedButton(
-                onPressed: () async{
-                  final cord = Coords(model.source.latitude,
-                      model.source.longitude);
+                onPressed: () async {
+                  final cord =
+                      Coords(model.source.latitude, model.source.longitude);
                   final availableMaps = await MapLauncher.installedMaps;
                   showModalBottomSheet(
                     context: context,
@@ -502,7 +502,7 @@ class HomepageFragmentState extends State<HomepageFragment>
                                         coords: cord,
                                         title: AppLocalizations
                                             .getLocalizationValue(locale,
-                                            LocaleKey.pickupLocation),
+                                                LocaleKey.pickupLocation),
                                       );
                                     },
                                     title: Text(map.mapName),
@@ -518,7 +518,8 @@ class HomepageFragmentState extends State<HomepageFragment>
                         ),
                       );
                     },
-                  );                },
+                  );
+                },
                 style: ElevatedButton.styleFrom(
                   primary: primaryColor,
                 ),

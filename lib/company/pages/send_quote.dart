@@ -138,8 +138,6 @@ class _SendQuoteState extends State<SendQuote> {
           DriverModel dd = DriverModel.fromSnapshot(d);
           // driverA.where('driver', isEqualTo: dd.uid).get().then((value) {
           // FirebaseFirestore.instance.collection(FirebaseHelper.shipment);
-          print('Your driver id is  ${dd.uid}');
-          print('Your driver id is  ${dd.name}');
 
           await shipmentCollectionRef
               // .where('isAvailable', isEqualTo: true)
@@ -158,8 +156,6 @@ class _SendQuoteState extends State<SendQuote> {
             if (c == 1) {
               setState(() {
                 driverAList.add(dd);
-                print('total drivers length is ${driverAList}');
-                print('total drivers length is ${dd.uid}');
               });
             }
           });
@@ -175,9 +171,7 @@ class _SendQuoteState extends State<SendQuote> {
     String dd = await Helper().getPin(widget.requestModel.destination);
     setState(() {
       spin = ss;
-      print(spin);
       dpin = dd;
-      print(dpin);
     });
     CollectionReference reference =
         FirebaseFirestore.instance.collection(FirebaseHelper.trukCollection);
@@ -482,9 +476,8 @@ class _SendQuoteState extends State<SendQuote> {
                     });
 
                     await RequestController().assignDriver(
-                        quoteModel, driverModel.uid,
-                        eWayBill: null
-                        // eWayBill: ff
+                      quoteModel, driverModel.uid,
+                      // eWayBill: ff
                     );
                     setState(() {
                       isLoading = false;

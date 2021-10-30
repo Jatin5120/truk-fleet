@@ -206,6 +206,7 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
           automaticallyImplyLeading: Platform.isAndroid,
           iconTheme: IconThemeData(color: Colors.black),
           backgroundColor: Colors.white,
+          elevation: 0,
           title: Container(
             alignment: Alignment.center,
             child: Image.asset(

@@ -389,20 +389,22 @@ class _RequestFragmentState extends State<RequestFragment> {
               padding: const EdgeInsets.symmetric(vertical: 8),
               child: Row(
                 children: [
-                  FutureBuilder<String>(
-                    future: Helper().setLocationText(requestModel.source),
-                    builder: (context, snapshot) {
-                      if (!snapshot.hasData) {
-                        return Text('Source');
-                      }
-                      return Text(
-                        snapshot.data.split(',')[2].trimLeft() ?? "",
-                        textAlign: TextAlign.start,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(fontSize: 14, color: primaryColor),
-                      );
-                    },
+                  Expanded(
+                    child: FutureBuilder<String>(
+                      future: Helper().setLocationText(requestModel.source),
+                      builder: (context, snapshot) {
+                        if (!snapshot.hasData) {
+                          return Text('Source');
+                        }
+                        return Text(
+                          snapshot.data.split(',')[2].trimLeft() ?? "",
+                          textAlign: TextAlign.start,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(fontSize: 16, color: primaryColor),
+                        );
+                      },
+                    ),
                   ),
                   Expanded(
                     child: Icon(
@@ -410,20 +412,23 @@ class _RequestFragmentState extends State<RequestFragment> {
                       color: primaryColor,
                     ),
                   ),
-                  FutureBuilder<String>(
-                    future: Helper().setLocationText(requestModel.destination),
-                    builder: (context, snapshot) {
-                      if (!snapshot.hasData) {
-                        return Text('Destination');
-                      }
-                      return Text(
-                        "${snapshot.data.split(',')[2].trimLeft()}" ?? "",
-                        textAlign: TextAlign.start,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(fontSize: 14, color: primaryColor),
-                      );
-                    },
+                  Expanded(
+                    child: FutureBuilder<String>(
+                      future:
+                          Helper().setLocationText(requestModel.destination),
+                      builder: (context, snapshot) {
+                        if (!snapshot.hasData) {
+                          return Text('Destination');
+                        }
+                        return Text(
+                          "${snapshot.data.split(',')[2].trimLeft()}" ?? "",
+                          textAlign: TextAlign.end,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(fontSize: 16, color: primaryColor),
+                        );
+                      },
+                    ),
                   ),
                 ],
               ),

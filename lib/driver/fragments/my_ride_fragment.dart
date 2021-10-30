@@ -29,7 +29,7 @@ class _MyRideState extends State<MyRide> with AutomaticKeepAliveClientMixin {
     locale = AppLocalizations.of(context).locale;
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Container(
+      body: SizedBox(
         width: size.width,
         height: size.height,
         child: StreamBuilder<QuerySnapshot>(
@@ -49,20 +49,25 @@ class _MyRideState extends State<MyRide> with AutomaticKeepAliveClientMixin {
             }
             if (snapshot.hasError || !snapshot.hasData) {
               return Center(
-                child: Text(AppLocalizations.getLocalizationValue(locale, LocaleKey.noData)),
+                child: Text(AppLocalizations.getLocalizationValue(
+                    locale, LocaleKey.noData)),
               );
             }
             if (snapshot.data.size <= 0) {
               return NoDataPage(
-                text: AppLocalizations.getLocalizationValue(locale, LocaleKey.noShipment),
+                text: AppLocalizations.getLocalizationValue(
+                    locale, LocaleKey.noShipment),
               );
             }
 
             return ListView.builder(
               physics: BouncingScrollPhysics(),
-              itemCount: snapshot.data.docs.length,
+              itemCount: snapshot.data.docs.length + 1,
               itemBuilder: (context, index) {
-                ShipmentModel model = ShipmentModel.fromSnapshot(snapshot.data.docs[index]);
+                if (index == snapshot.data.docs.length)
+                  return SizedBox(height: 32);
+                ShipmentModel model =
+                    ShipmentModel.fromSnapshot(snapshot.data.docs[index]);
                 return buildCardRequests(model);
               },
             );
@@ -73,109 +78,136 @@ class _MyRideState extends State<MyRide> with AutomaticKeepAliveClientMixin {
   }
 
   Widget buildCardRequests(ShipmentModel model) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      child: Card(
-        elevation: 12,
-        child: Padding(
-          padding: const EdgeInsets.only(left: 5.0, right: 5.0, top: 20, bottom: 10),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  RichText(
-                    text: TextSpan(
-                      children: [
-                        TextSpan(
-                            text: "${model.truk}",
-                            style: TextStyle(fontWeight: FontWeight.w600, color: Colors.black, fontSize: 17)),
-                        TextSpan(
-                          text: "  (${model.trukName})",
-                          style: TextStyle(
-                            fontSize: 16,
+    return Card(
+      elevation: 8,
+      margin: EdgeInsets.symmetric(horizontal: 16).copyWith(top: 32),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                RichText(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                        text: "${model.truk}",
+                        style: TextStyle(
+                            fontWeight: FontWeight.w600,
                             color: Colors.black,
-                            fontWeight: FontWeight.w300,
-                          ),
+                            fontSize: 16),
+                      ),
+                      TextSpan(
+                        text: " (${model.trukName})",
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w300,
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                  Text(model.pickupDate),
-                ],
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text("${AppLocalizations.getLocalizationValue(locale, LocaleKey.trukNumber)} : ${model.truk}"),
-                  Text(
-                    model.trukName,
-                    style: TextStyle(color: primaryColor),
+                ),
+                Text(model.pickupDate),
+              ],
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                    "${AppLocalizations.getLocalizationValue(locale, LocaleKey.trukNumber)} : ${model.truk}"),
+                Text(
+                  model.trukName,
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: FutureBuilder<String>(
+                    future: Helper().setLocationText(model.source),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData) {
+                        return Text('Source');
+                      }
+                      return Text(
+                        "${snapshot.data.split(",")[2] ?? snapshot.data.split(",")[3]}",
+                        textAlign: TextAlign.start,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(fontSize: 16, color: primaryColor),
+                      );
+                    },
                   ),
-                ],
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  FutureBuilder<String>(
-                      future: Helper().setLocationText(model.source),
-                      builder: (context, snapshot) {
-                        if (!snapshot.hasData) {
-                          return Text('Address...');
-                        }
-                        return Text(
-                            "${AppLocalizations.getLocalizationValue(locale, LocaleKey.pickupLocation)}: ${snapshot.data.split(",")[2] ?? snapshot.data.split(",")[3]}");
-                      }),
-                  FutureBuilder<String>(
-                      future: Helper().setLocationText(model.destination),
-                      builder: (context, snapshot) {
-                        if (!snapshot.hasData) {
-                          return Text('Address...');
-                        }
-                        return Text(
-                          "${AppLocalizations.getLocalizationValue(locale, LocaleKey.destination)}: ${snapshot.data.split(",")[2] ?? snapshot.data.split(",")[3]}",
-                        );
-                      }),
-                ],
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "${AppLocalizations.getLocalizationValue(locale, LocaleKey.payments)}: ${AppLocalizations.getLocalizationValue(locale, model.paymentStatus)}",
-                    style: TextStyle(color: Colors.red, fontWeight: FontWeight.w500),
+                ),
+                Expanded(
+                  child: Icon(
+                    Icons.arrow_right_alt_rounded,
+                    color: primaryColor,
                   ),
-                  SizedBox(
-                    width: 15,
+                ),
+                Expanded(
+                  child: FutureBuilder<String>(
+                    future: Helper().setLocationText(model.destination),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData) {
+                        return Text('Destination');
+                      }
+                      return Text(
+                        "${snapshot.data.split(",")[2] ?? snapshot.data.split(",")[3]}",
+                        textAlign: TextAlign.end,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(fontSize: 16, color: primaryColor),
+                      );
+                    },
                   ),
-                  // Container(
-                  //   height: 30,
-                  //   child: RaisedButton(
-                  //     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-                  //     color: primaryColor,
-                  //     onPressed: () {
-                  //       //Navigator.push(context, CupertinoPageRoute(builder: (context) => ,));
-                  //     },
-                  //     child: Text(
-                  //       "Show Trip",
-                  //       style: TextStyle(color: Colors.white),
-                  //     ),
-                  //   ),
-                  // ),
-                ],
-              ),
-            ],
-          ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "${AppLocalizations.getLocalizationValue(locale, LocaleKey.payments)}: ${AppLocalizations.getLocalizationValue(locale, model.paymentStatus)}",
+                  style:
+                      TextStyle(color: Colors.red, fontWeight: FontWeight.w500),
+                ),
+                SizedBox(
+                  width: 15,
+                ),
+                // Container(
+                //   height: 30,
+                //   child: RaisedButton(
+                //     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+                //     color: primaryColor,
+                //     onPressed: () {
+                //       //Navigator.push(context, CupertinoPageRoute(builder: (context) => ,));
+                //     },
+                //     child: Text(
+                //       "Show Trip",
+                //       style: TextStyle(color: Colors.white),
+                //     ),
+                //   ),
+                // ),
+              ],
+            ),
+          ],
         ),
       ),
     );

@@ -143,7 +143,7 @@ class _MyRideState extends State<MyRide> with AutomaticKeepAliveClientMixin {
                         return Text('Source');
                       }
                       return Text(
-                        "${snapshot.data.split(",")[2] ?? snapshot.data.split(",")[3]}",
+                        "${snapshot.data.split(',')[2].trimLeft()}",
                         textAlign: TextAlign.start,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
@@ -166,7 +166,8 @@ class _MyRideState extends State<MyRide> with AutomaticKeepAliveClientMixin {
                         return Text('Destination');
                       }
                       return Text(
-                        "${snapshot.data.split(",")[2] ?? snapshot.data.split(",")[3]}",
+                        "${snapshot.data.split(',')[2].trimLeft()}",
+                        // "${snapshot.data.split(",")[2] ?? snapshot.data.split(",")[3]}",
                         textAlign: TextAlign.end,
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,

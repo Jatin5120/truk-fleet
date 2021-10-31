@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:truk_fleet/firebase_helper/firebase_helper.dart';
+import 'package:truk_fleet/helper/payment_type.dart';
 import 'package:truk_fleet/helper/request_status.dart';
 import 'package:truk_fleet/models/notification_model.dart';
 import 'package:truk_fleet/models/quote_model.dart';
@@ -73,6 +74,8 @@ class RequestController {
       commission: '5',
       driverId: driver,
       trukModel: quoteModel.trukModel,
+      isPaymentPending: quoteModel.paymentStatus == PaymentType.online ? false: true,
+      isDue: true
     ).toMap();
     return refShipment.add(m);
   }

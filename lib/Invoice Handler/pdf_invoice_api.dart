@@ -60,7 +60,7 @@ class PdfInvoiceApi {
       alignment: pw.Alignment.center,
       padding: pw.EdgeInsets.all(horizontalPadding),
       child: pw.Row(
-        crossAxisAlignment: pw.CrossAxisAlignment.center,
+        crossAxisAlignment: pw.CrossAxisAlignment.start,
         mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
         children: [
           pw.Expanded(
@@ -80,13 +80,16 @@ class PdfInvoiceApi {
               children: [
                 pw.Text(
                   invoice.supplier.name,
+                  textAlign: TextAlign.right,
                   style: pw.TextStyle(
                     fontSize: 18,
                     color: PdfColors.white,
+
                   ),
                 ),
                 pw.Text(
                   invoice.supplier.address,
+                  textAlign: TextAlign.right,
                   style: pw.TextStyle(
                     fontSize: 14,
                     color: PdfColors.white,

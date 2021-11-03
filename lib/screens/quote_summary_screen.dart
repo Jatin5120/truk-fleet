@@ -278,9 +278,10 @@ class _QuoteSummaryScreenState extends State<QuoteSummaryScreen> {
                   this.locale, LocaleKey.mandateType),
               AppLocalizations.getLocalizationValue(
                   this.locale,
-                  widget.quoteModel.mandate.toLowerCase().contains('ondemand')
-                      ? LocaleKey.onDemand
-                      : LocaleKey.lease)),
+                LocaleKey.onDemand)),
+                  // widget.quoteModel.mandate.toLowerCase().contains('ondemand')
+                  //     ? LocaleKey.onDemand
+                  //     : LocaleKey.lease)),
           SizedBox(
             height: 10,
           ),

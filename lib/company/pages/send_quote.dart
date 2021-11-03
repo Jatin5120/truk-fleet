@@ -919,9 +919,12 @@ class _SendQuoteState extends State<SendQuote> {
                   this.locale, LocaleKey.mandateType),
               AppLocalizations.getLocalizationValue(
                   this.locale,
-                  widget.requestModel.mandate.toLowerCase().contains('ondemand')
-                      ? LocaleKey.onDemand
-                      : LocaleKey.lease)),
+                  LocaleKey.onDemand
+                  // widget.requestModel.mandate.toLowerCase().contains('ondemand')
+                  //     ? LocaleKey.onDemand
+                  //     : LocaleKey.lease
+              )
+          ),
           SizedBox(
             height: 10,
           ),

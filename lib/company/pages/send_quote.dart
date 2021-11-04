@@ -185,7 +185,8 @@ class _SendQuoteState extends State<SendQuote> {
     d.listen((event) {
       for (DocumentSnapshot doc in event.docs) {
         TrukModal t = TrukModal.fromSnapshot(doc);
-        if (t.available && int.parse(t.grossWeight) >= totalWeight) {
+        if (t.available && double.parse(t.grossWeight) >= totalWeight) {
+        // if (t.available && int.parse(t.grossWeight) >= totalWeight) {
           setState(() {
             trucksA.add(t);
           });
@@ -193,14 +194,18 @@ class _SendQuoteState extends State<SendQuote> {
         if (!t.available) {
           sReference.where('truk', isEqualTo: t.trukNumber).get().then((value) {
             for (var f in value.docs) {
-              if (f.get('status') == RequestStatus.started ||
+              if (
+              f.get('status') == RequestStatus.started ||
                   f.get('status') == RequestStatus.pending) {
-                break;
+                // break;
+                // print('Your name is ');
               } else {
-                doc.reference.update({'available': true});
-                setState(() {
-                  trucksA.add(t);
-                });
+                // print('Your name is is is ${value.docs.length}');
+                // print('Your name hh ${f.get('status')}');
+                // doc.reference.update({'available': true});
+                // setState(() {
+                //   trucksA.add(t);
+                // });
               }
             }
           });

@@ -8,18 +8,42 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:453659943664:android:5aad9808769f09e7e75835",
+        "mobilesdk_app_id": "1:453659943664:android:5fe8c9228d8794d2e75835",
         "android_client_info": {
-          "package_name": "com.augmentik.truk_fleet"
+          "package_name": "com.agumentik.trukapp"
         }
       },
       "oauth_client": [
         {
-          "client_id": "453659943664-dpa5s45md2gl2k4mnqppjrhaemdknpnm.apps.googleusercontent.com",
+          "client_id": "453659943664-51ds6mcifj3ov751ujq9177o1mhrvri2.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.augmentik.truk_fleet",
+            "package_name": "com.agumentik.trukapp",
             "certificate_hash": "fd6a9260b4d7cb041dde2ca9bca7f79565b6711a"
+          }
+        },
+        {
+          "client_id": "453659943664-6bljrbta2ql42lhn2ov10acpacjb4ltd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.agumentik.trukapp",
+            "certificate_hash": "7c63edfd8291cb925dd0c063f6a5fb0ec6a2bab2"
+          }
+        },
+        {
+          "client_id": "453659943664-86323fimjojlu9n226u0oivsc4j74gkb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.agumentik.trukapp",
+            "certificate_hash": "45bebd60f49ea8e96fe5ce57aa350d2024de0d49"
+          }
+        },
+        {
+          "client_id": "453659943664-eh6hpkdr4t2a1ronkhg8t7oul21ppj4m.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.agumentik.trukapp",
+            "certificate_hash": "e424d011229f05f882f4d792417897a41ca538f7"
           }
         },
         {
@@ -38,6 +62,153 @@
             {
               "client_id": "453659943664-21vhjd2fegd6m78tgatvp2u7p1bkrmi8.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "453659943664-4ses30cvq6bb1eelea8o6gcu6d5cka7p.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.truckapp"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:453659943664:android:5aad9808769f09e7e75835",
+        "android_client_info": {
+          "package_name": "com.augmentik.truk_fleet"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "453659943664-abtkrhu362no0ffad0rbbbc9fp42mi9s.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.augmentik.truk_fleet",
+            "certificate_hash": "7c63edfd8291cb925dd0c063f6a5fb0ec6a2bab2"
+          }
+        },
+        {
+          "client_id": "453659943664-dpa5s45md2gl2k4mnqppjrhaemdknpnm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.augmentik.truk_fleet",
+            "certificate_hash": "fd6a9260b4d7cb041dde2ca9bca7f79565b6711a"
+          }
+        },
+        {
+          "client_id": "453659943664-e4qnvbepqirv21iftk2ktmmgvjibmfuo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.augmentik.truk_fleet",
+            "certificate_hash": "e424d011229f05f882f4d792417897a41ca538f7"
+          }
+        },
+        {
+          "client_id": "453659943664-21vhjd2fegd6m78tgatvp2u7p1bkrmi8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCfoC5Dd27NZVDQB-5JeffPagYP_ztB5PY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "453659943664-21vhjd2fegd6m78tgatvp2u7p1bkrmi8.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "453659943664-4ses30cvq6bb1eelea8o6gcu6d5cka7p.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.truckapp"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:453659943664:android:fb3094c8a8b8da2ae75835",
+        "android_client_info": {
+          "package_name": "com.trukapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "453659943664-21vhjd2fegd6m78tgatvp2u7p1bkrmi8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCfoC5Dd27NZVDQB-5JeffPagYP_ztB5PY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "453659943664-21vhjd2fegd6m78tgatvp2u7p1bkrmi8.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "453659943664-4ses30cvq6bb1eelea8o6gcu6d5cka7p.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.truckapp"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:453659943664:android:48639299236a6a44e75835",
+        "android_client_info": {
+          "package_name": "com.trukfleet"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "453659943664-g5sn7gburjue2ig85imp2tosprtp9j56.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.trukfleet",
+            "certificate_hash": "7c63edfd8291cb925dd0c063f6a5fb0ec6a2bab2"
+          }
+        },
+        {
+          "client_id": "453659943664-21vhjd2fegd6m78tgatvp2u7p1bkrmi8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCfoC5Dd27NZVDQB-5JeffPagYP_ztB5PY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "453659943664-21vhjd2fegd6m78tgatvp2u7p1bkrmi8.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "453659943664-4ses30cvq6bb1eelea8o6gcu6d5cka7p.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.truckapp"
+              }
             }
           ]
         }

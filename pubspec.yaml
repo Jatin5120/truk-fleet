@@ -83,6 +83,7 @@ dependencies:
   url_launcher: ^6.0.3
   uuid: ^3.0.3
   flutter_markdown: ^0.6.7
+  change_app_package_name: ^1.0.0
 
 dev_dependencies:
   flutter_test:

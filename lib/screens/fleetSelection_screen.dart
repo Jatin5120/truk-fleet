@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:truk_fleet/auth/login/login_page.dart';
 import 'package:truk_fleet/helper/login_type.dart';
 import 'package:truk_fleet/locale/app_localization.dart';
 import 'package:truk_fleet/locale/locale_keys.dart';
 import 'package:truk_fleet/utils/constants.dart';
+import 'package:background_location/background_location.dart' as backLoc;
 
 class FleetSelection extends StatefulWidget {
   @override
@@ -115,7 +118,7 @@ class _FleetSelectionState extends State<FleetSelection> {
               selectionCard(
                 assetImage: 'assets/images/truckingCompany.png',
                 index: 0,
-                title:'Transport Agent/Fleet Owner',
+                title: 'Transport Agent/Fleet Owner',
                 // AppLocalizations.getLocalizationValue(
                 //     locale, LocaleKey.fleetSelectionTitle),
                 subtitle: '',
@@ -133,7 +136,7 @@ class _FleetSelectionState extends State<FleetSelection> {
               selectionCard(
                 assetImage: 'assets/images/driver.png',
                 index: 1,
-                subtitle:'',
+                subtitle: '',
                 // AppLocalizations.getLocalizationValue(
                 //     locale, LocaleKey.driverSelectionSubtitle),
                 title: 'Truk Driver',
@@ -158,11 +161,29 @@ class _FleetSelectionState extends State<FleetSelection> {
                     primary: primaryColor,
                   ),
                   onPressed: () {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => LoginPage(type),
-                      ),
+                    showDialog(
+                      barrierDismissible: false,
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text(
+                              "TrukApp Partner collects location data to enable identification of tracking shipment even when the app is closed or not in use."),
+                          actions: [
+                            FlatButton(
+                              child: Text("DENY"),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                            FlatButton(
+                              child: Text("ACCEPT"),
+                              onPressed: () {
+                                checkPermission(context);
+                              },
+                            )
+                          ],
+                        );
+                      },
                     );
                   },
                   child: Text(
@@ -177,5 +198,21 @@ class _FleetSelectionState extends State<FleetSelection> {
         ),
       ),
     );
+  }
+
+  Future checkPermission(BuildContext context) async {
+    await Permission.location.request();
+    if (await Permission.location.isGranted) {
+      await Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => LoginPage(type),
+        ),
+      );
+   } else {
+      Navigator.of(context).pop();
+      Fluttertoast.showToast(
+          msg: 'Please allow background location for live tracking');
+    }
   }
 }

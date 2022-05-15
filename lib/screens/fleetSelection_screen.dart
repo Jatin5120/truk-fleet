@@ -201,18 +201,27 @@ class _FleetSelectionState extends State<FleetSelection> {
   }
 
   Future checkPermission(BuildContext context) async {
-    await Permission.location.request();
-    if (await Permission.location.isGranted) {
-      await Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => LoginPage(type),
-        ),
-      );
-   } else {
-      Navigator.of(context).pop();
-      Fluttertoast.showToast(
-          msg: 'Please allow background location for live tracking');
-    }
+   //  await Permission.location.request();
+   //  if (await Permission.location.isGranted) {
+   //    await Navigator.pushReplacement(
+   //      context,
+   //      MaterialPageRoute(
+   //        builder: (context) => LoginPage(type),
+   //      ),
+   //    );
+   // } else {
+   //    Navigator.of(context).pop();
+   //    Fluttertoast.showToast(
+   //        msg: 'Please allow background location for live tracking');
+   //  }
+
+
+
+    await Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => LoginPage(type),
+      ),
+    );
   }
 }

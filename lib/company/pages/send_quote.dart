@@ -13,12 +13,15 @@ import 'package:truk_fleet/company/controller/add_driver_controller.dart';
 import 'package:truk_fleet/company/controller/request_controller.dart';
 import 'package:truk_fleet/driver/models/driver_model.dart';
 import 'package:truk_fleet/firebase_helper/firebase_helper.dart';
+import 'package:truk_fleet/firebase_helper/notification_helper.dart';
 import 'package:truk_fleet/helper/emailHelper.dart';
 import 'package:truk_fleet/helper/helper.dart';
+import 'package:truk_fleet/helper/login_type.dart';
 import 'package:truk_fleet/helper/request_status.dart';
 import 'package:truk_fleet/locale/app_localization.dart';
 import 'package:truk_fleet/locale/locale_keys.dart';
 import 'package:truk_fleet/models/material_model.dart';
+import 'package:truk_fleet/models/notification_model.dart';
 import 'package:truk_fleet/models/quote_model.dart';
 import 'package:truk_fleet/models/request_model.dart';
 import 'package:truk_fleet/models/shipment_model.dart';
@@ -336,6 +339,8 @@ class _SendQuoteState extends State<SendQuote> {
     requestModel = widget.requestModel;
     quoteModel = widget.quoteModel;
     requestUser = widget.requestUser;
+    print("Your user data is here --> ${requestUser.name}");
+    print("Your user data is here --> ${requestUser.token}");
     if (requestModel.status == RequestStatus.pending) {
       quoteModel = null;
     }
@@ -412,6 +417,22 @@ class _SendQuoteState extends State<SendQuote> {
           d.reference.update({'available': false});
         }
       });
+
+
+      NotificationModel data = NotificationModel(
+        id: requestModel.bookingId.toString(),
+        isDriver: false,
+        isSeen: false,
+        isVendor: false,
+        message: "Received Quotation for the order ${requestModel.bookingId}",
+        time: DateTime.now().millisecondsSinceEpoch,
+        uid: requestUser.uid,
+      );
+
+      FirebaseHelper.sendNotification(data);
+
+      NotificationHelper().sendSpecificNotification(title: "Received Quotation for the order ${requestModel.bookingId}",body: "",token: requestUser.token);
+
       setState(() {
         isLoading = false;
       });
@@ -497,6 +518,46 @@ class _SendQuoteState extends State<SendQuote> {
                         .update({'isAvailable': false});
                     Email().sendDriverAssignedMail(
                         driverModel, context, user.email, quoteModel);
+
+                    /// For fleetowner
+
+                    NotificationModel data = NotificationModel(
+                      id: widget.quoteModel.bookingId.toString(),
+                      isDriver: false,
+                      isSeen: false,
+                      isVendor: false,
+                      message: "Driver successfully assigned for the shipment ${widget.quoteModel.bookingId}",
+                      time: DateTime.now().millisecondsSinceEpoch,
+                      uid: widget.quoteModel.agent,
+                    );
+
+                    FirebaseHelper.sendNotification(data);
+
+
+                  UserModel model = await  FirebaseHelper().getCurrentUser(uid: widget.quoteModel.agent,type: LoginType.company);
+
+                    NotificationHelper().sendSpecificNotification(title: "Driver successfully assigned for the shipment ${widget.quoteModel.bookingId}",body: '',token: model.token);
+
+
+                    /// For User
+
+                    NotificationModel res = NotificationModel(
+                      id: widget.quoteModel.bookingId.toString(),
+                      isDriver: false,
+                      isSeen: false,
+                      isVendor: false,
+                      message: "Driver ${driverModel.name} has been assigned to your order ${widget.quoteModel.bookingId}",
+                      time: DateTime.now().millisecondsSinceEpoch,
+                      uid: requestUser.uid,
+                    );
+
+                    FirebaseHelper.sendNotification(res);
+
+
+
+                    NotificationHelper().sendSpecificNotification(title: "Driver ${driverModel.name} has been assigned to your order ${widget.quoteModel.bookingId}",body: '',token: requestUser.token);
+
+
                     Navigator.pop(context);
                   }
                 },
@@ -677,7 +738,8 @@ class _SendQuoteState extends State<SendQuote> {
                                         (e) => DropdownMenuItem<TrukModal>(
                                           value: e,
                                           child: Text(
-                                            "${e.trukNumber} - ${AppLocalizations.getLocalizationValue(locale, e.trukType.toLowerCase().contains('closed') ? LocaleKey.closedTruk : LocaleKey.openTruk)} [${e.trukModel}]",
+                                            "${e.trukNumber} - ${AppLocalizations.getLocalizationValue(locale, e.trukType.toLowerCase().contains('opentruk') ? LocaleKey.openTruk : e.trukType.toLowerCase().contains('trailertruk')? LocaleKey.trailerTruk : LocaleKey.containerTruk)} [${e.trukModel}]",
+                                            // "${e.trukNumber} - ${AppLocalizations.getLocalizationValue(locale, e.trukType.toLowerCase().contains('closed') ? LocaleKey.closedTruk : LocaleKey.openTruk)} [${e.trukModel}]",
                                           ),
                                         ),
                                       )
@@ -951,9 +1013,10 @@ class _SendQuoteState extends State<SendQuote> {
                   this.locale, LocaleKey.trukType),
               AppLocalizations.getLocalizationValue(
                   this.locale,
-                  widget.requestModel.truk.toLowerCase().contains('closed')
-                      ? LocaleKey.closedTruk
-                      : LocaleKey.openTruk)),
+                  widget.requestModel.truk.toLowerCase().contains('opentruk')
+                      ? LocaleKey.openTruk
+                      : widget.requestModel.truk.toLowerCase().contains('trailertruk')? LocaleKey.trailerTruk : LocaleKey.containerTruk
+              )),
           SizedBox(
             height: 10,
           ),

@@ -122,10 +122,20 @@ class Constants {
           'value': AppLocalizations.getLocalizationValue(
               this.locale, LocaleKey.openTruk)
         },
-        {
-          'key': LocaleKey.closedTruk,
-          'value': AppLocalizations.getLocalizationValue(
-              this.locale, LocaleKey.closedTruk)
-        }
+    {
+      'key': LocaleKey.trailerTruk,
+      'value': AppLocalizations.getLocalizationValue(
+          this.locale, LocaleKey.trailerTruk)
+    },
+    {
+      'key': LocaleKey.containerTruk,
+      'value': AppLocalizations.getLocalizationValue(
+          this.locale, LocaleKey.containerTruk)
+    },
+        // {
+        //   'key': LocaleKey.closedTruk,
+        //   'value': AppLocalizations.getLocalizationValue(
+        //       this.locale, LocaleKey.closedTruk)
+        // }
       ];
 }

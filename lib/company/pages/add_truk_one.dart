@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:truk_fleet/company/controller/truk_controller.dart';
+import 'package:truk_fleet/firebase_helper/firebase_helper.dart';
 import 'package:truk_fleet/locale/app_localization.dart';
 import 'package:truk_fleet/locale/locale_keys.dart';
 import 'package:truk_fleet/models/truk_model.dart';
@@ -32,7 +33,7 @@ class _AddTruckState extends State<AddTruck> {
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  String trukBodyType = LocaleKey.closedTruk;
+  String trukBodyType = LocaleKey.openTruk;
 
   bool isLoading = false;
   Locale locale;
@@ -83,9 +84,12 @@ class _AddTruckState extends State<AddTruck> {
       heightController.text = widget.trukModal.height;
       trukNumberController.text = widget.trukModal.trukNumber;
       permitTypeController.text = widget.trukModal.permitType;
-      trukBodyType = widget.trukModal.trukType.toLowerCase().contains('closed')
-          ? LocaleKey.closedTruk
-          : LocaleKey.openTruk;
+      trukBodyType = widget.trukModal.trukType.toLowerCase().contains('opentruk')
+          ? LocaleKey.openTruk
+          : widget.trukModal.trukType.toLowerCase().contains('trailertruk')? LocaleKey.trailerTruk : LocaleKey.containerTruk;
+      // trukBodyType = widget.trukModal.trukType.toLowerCase().contains('closed')
+      //     ? LocaleKey.closedTruk
+      //     : LocaleKey.openTruk;
       setState(() {});
     }
   }
@@ -193,6 +197,66 @@ class _AddTruckState extends State<AddTruck> {
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                  child: Align(
+                      alignment: Alignment.centerRight,
+                      child: InkWell(
+                        onTap: (){
+                          final GlobalKey<FormState> _key = GlobalKey<FormState>();
+
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              TextEditingController modelNameController = TextEditingController();
+                              return AlertDialog(
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: const Text('Cancel'),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      if(_key.currentState.validate()){
+                                        FirebaseHelper.addTrukModel(trukModel: modelNameController.text);
+                                        Fluttertoast.showToast(msg: "Request sented successfully for truk model");
+                                        Navigator.of(context).pop();
+                                      }
+                                    },
+                                    child: const Text('Send'),
+                                  ),
+                                ],
+                                content: Form(
+                                  key: _key,
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      const Text('Please enter your truk model'),
+                                      const SizedBox(height: 20),
+                                      detailTextField(
+                                        isNumber: false,
+                                        labelText:"Enter truk model",
+                                        controller: modelNameController,
+                                        validator: (value) => value.isEmpty
+                                            ? AppLocalizations.getLocalizationValue(
+                                            locale, LocaleKey.requiredText)
+                                            : null,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                          );
+                        },
+                        child: Text('+ Request for add not available truk model',style: TextStyle(
+                          color: Colors.red,
+                        ),),
+                      ))
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
                   child: DropdownButtonFormField<String>(
                     hint: Text(
                       AppLocalizations.getLocalizationValue(
@@ -247,26 +311,40 @@ class _AddTruckState extends State<AddTruck> {
                       FocusScope.of(context).unfocus();
                       FocusScope.of(context).nextFocus();
                     },
-                    value: trukBodyType ?? LocaleKey.closedTruk,
+                    value: trukBodyType ?? LocaleKey.openTruk,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
                       labelText: AppLocalizations.getLocalizationValue(
                           locale, LocaleKey.selectTrukType),
                     ),
                     items: [
-                      DropdownMenuItem(
-                        child: Text(
-                          AppLocalizations.getLocalizationValue(
-                              locale, LocaleKey.closedTruk),
-                        ),
-                        value: LocaleKey.closedTruk,
-                      ),
+                      // DropdownMenuItem(
+                      //   child: Text(
+                      //     AppLocalizations.getLocalizationValue(
+                      //         locale, LocaleKey.closedTruk),
+                      //   ),
+                      //   value: LocaleKey.closedTruk,
+                      // ),
                       DropdownMenuItem(
                         child: Text(
                           AppLocalizations.getLocalizationValue(
                               locale, LocaleKey.openTruk),
                         ),
                         value: LocaleKey.openTruk,
+                      ),
+                      DropdownMenuItem(
+                        child: Text(
+                          AppLocalizations.getLocalizationValue(
+                              locale, LocaleKey.trailerTruk),
+                        ),
+                        value: LocaleKey.trailerTruk,
+                      ),
+                      DropdownMenuItem(
+                        child: Text(
+                          AppLocalizations.getLocalizationValue(
+                              locale, LocaleKey.containerTruk),
+                        ),
+                        value: LocaleKey.containerTruk,
                       ),
                     ],
                   ),

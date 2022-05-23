@@ -67,6 +67,8 @@ Map<String, String> english() {
     "onDemand": "On-Demand",
     "ONLINE": "Pre-Paid Order",
     "openTruk": "Open Truk",
+    "trailerTruk": "Trailer Truck",
+    "containerTruk": "Container Truck",
     "order": "Order",
     "orderSummary": "Order Summary",
     "otpSuccessful": "Otp matched successfully.",

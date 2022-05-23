@@ -66,6 +66,8 @@ Map<String, String> hindi() {
     "onDemand": "मांग पर",
     "ONLINE": "प्री-पेड ऑर्डर",
     "openTruk": "खुला ट्रक",
+    "trailerTruk": "ट्रेलर ट्रक",
+    "containerTruk": "कंटेनर ट्रक",
     "order": "गण",
     "orderSummary": "गण सारांश",
     "otpSuccessful": "ओ.टी.पी. का सफलतापूर्वक मिलान हुआ।",

@@ -68,6 +68,8 @@ Map<String, String> telugu() {
     "onDemand": "కోరిక మేరకు",
     "ONLINE": "ప్రీ-పెయిడ్ ఆర్డర్",
     "openTruk": "ఓపెన్ ట్రక్",
+    "trailerTruk": "ట్రైలర్ ట్రక్",
+    "containerTruk": "కంటైనర్ ట్రక్",
     "order": "ఆర్డర్",
     "orderSummary": "కొనుగోలు వివరణ",
     "otpSuccessful": "Otp విజయవంతంగా సరిపోలింది.",

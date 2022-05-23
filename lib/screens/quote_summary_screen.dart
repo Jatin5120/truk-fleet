@@ -301,9 +301,10 @@ class _QuoteSummaryScreenState extends State<QuoteSummaryScreen> {
                   this.locale, LocaleKey.trukType),
               AppLocalizations.getLocalizationValue(
                   this.locale,
-                  widget.quoteModel.truk.toLowerCase().contains('closed')
-                      ? LocaleKey.closedTruk
-                      : LocaleKey.openTruk)),
+                  widget.quoteModel.truk.toLowerCase().contains('openTruk')
+                      ? LocaleKey.openTruk
+                      : widget.quoteModel.truk.toLowerCase().contains('trailertruk')? LocaleKey.trailerTruk : LocaleKey.containerTruk
+              )),
         ],
       ),
     );

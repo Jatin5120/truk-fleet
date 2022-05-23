@@ -223,7 +223,8 @@ class _MyTrucksState extends State<MyTrucks> {
                       ),
                       TextSpan(
                           text:
-                              '(${AppLocalizations.getLocalizationValue(locale, trukBodyType.toLowerCase().contains("closed") ? LocaleKey.closedTruk : LocaleKey.openTruk)})',
+                              '(${AppLocalizations.getLocalizationValue(locale, trukBodyType.toLowerCase().contains("opentruk") ? LocaleKey.openTruk : trukBodyType.toLowerCase().contains('trailertruk')? LocaleKey.trailerTruk : LocaleKey.containerTruk)})',
+                              // '(${AppLocalizations.getLocalizationValue(locale, trukBodyType.toLowerCase().contains("closed") ? LocaleKey.closedTruk : LocaleKey.openTruk)})',
                           style: TextStyle(
                               color: Colors.black,
                               fontWeight: FontWeight.w400)),

@@ -443,9 +443,9 @@ class _RequestFragmentState extends State<RequestFragment> {
                     Text(
                       AppLocalizations.getLocalizationValue(
                           locale,
-                          requestModel.truk.toLowerCase().contains('closed')
-                              ? LocaleKey.closedTruk
-                              : LocaleKey.openTruk),
+                          requestModel.truk.toLowerCase().contains('opentruk')
+                              ? LocaleKey.openTruk
+                              : requestModel.truk.toLowerCase().contains('trailertruk')? LocaleKey.trailerTruk : LocaleKey.containerTruk),
                       style: TextStyle(
                         fontSize: 12,
                       ),

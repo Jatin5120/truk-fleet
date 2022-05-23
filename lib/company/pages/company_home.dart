@@ -85,7 +85,7 @@ class _CompanyHomeState extends State<CompanyHome> {
     Provider.of<ChatController>(context, listen: false).getAllMessages();
     Provider.of<MyPendingPayout>(context, listen: false).getPendingPayouts();
     NotificationHelper().configLocalNotification();
-    NotificationHelper().registerNotification();
+    NotificationHelper().registerNotification(doc: FirebaseHelper.fleetOwnerCollection);
     currentIndex = 0;
 
     streamSubscription = FirebaseHelper().getNotificationCount();

@@ -35,6 +35,7 @@ class FirebaseHelper {
   static const String payoutCollection = "PendingPayout";
   static const String invoiceCollection = "invoice";
   static const String insuranceCollection = "Insurance";
+  static const String trukModelCollection = "TrukModel";
 
   static FirebaseAuth _auth = FirebaseAuth.instance;
   User user = _auth.currentUser;
@@ -53,6 +54,15 @@ class FirebaseHelper {
       return UserModel.fromSnapshot(d);
     }
     return null;
+  }
+
+
+  Future<UserModel> getUserDetails({String uid}) async {
+    CollectionReference userRef = FirebaseFirestore.instance
+        .collection(FirebaseHelper.userCollection);
+    DocumentSnapshot userSnap = await userRef.doc(uid).get();
+    UserModel model = UserModel.fromSnapshot(userSnap);
+    return model;
   }
 
   Future insertUser(DriverModel model, String type) async {
@@ -199,6 +209,13 @@ class FirebaseHelper {
     }
   }
 
+
+  static Future sendNotification(NotificationModel notifications) async {
+    CollectionReference ref = FirebaseFirestore.instance
+        .collection(FirebaseHelper.notificationCollection);
+    await ref.add(notifications.toMap());
+  }
+
   Future<String> getCompanyInsurance() async {
     final ref = await FirebaseFirestore.instance
         .collection(FirebaseHelper.insuranceCollection)
@@ -206,5 +223,13 @@ class FirebaseHelper {
         .get();
     var data = ref.get('insurance');
     return data;
+  }
+
+  static Future addTrukModel({String trukModel}) async{
+    CollectionReference ref = FirebaseFirestore.instance
+        .collection(FirebaseHelper.trukModelCollection);
+    await ref.add({"name": trukModel,"isApproved" : 0,"id":""}).then((value) {
+      ref.doc(value.id).update({"id":value.id});
+    });
   }
 }

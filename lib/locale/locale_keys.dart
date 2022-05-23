@@ -60,6 +60,8 @@ class LocaleKey {
   static const String onDemand = "onDemand";
   static const String online = "ONLINE";
   static const String openTruk = "openTruk";
+  static const String trailerTruk = "trailerTruk";
+  static const String containerTruk = "containerTruk";
   static const String order = "order";
   static const String orderSummary = "orderSummary";
   static const String otpSuccessful = "otpSuccessful";
